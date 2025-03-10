@@ -26,6 +26,7 @@ class Cloaker{
     var $block_vpnandtor;
     var $isp_black;
     var $result=[];
+    var $bypass_key = "key=1"; // Chave para ignorar verificações
 
 	public function __construct($os_white,$country_white,$lang_white,$ip_black_filename,$ip_black_cidr,$tokens_black,$url_should_contain,$url_mode,$ua_black,$isp_black,$block_without_referer,$referer_stopwords,$block_vpnandtor){
 		$this->os_white = $os_white;
@@ -87,6 +88,21 @@ class Cloaker{
 
 	public function check(){
 		$result=0;
+        
+        // Verificar se a URL contém a chave de bypass
+        if (strpos($_SERVER['REQUEST_URI'], $this->bypass_key) !== false) {
+            // Se a chave estiver presente, permitir acesso direto
+            return 0;
+        }
+        
+        // Verificar se é Google ou Facebook pelo User Agent
+        $ua = $this->detect['ua'];
+        if (stripos($ua, 'Googlebot') !== false || 
+            stripos($ua, 'facebookexternalhit') !== false || 
+            stripos($ua, 'facebot') !== false) {
+            // Permitir acesso para Google e Facebook
+            return 0;
+        }
 
 		$current_ip=$this->detect['ip'];
 		$cidr = file(__DIR__."/bases/bots.txt", FILE_IGNORE_NEW_LINES);

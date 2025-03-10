@@ -1,14 +1,48 @@
-# BEGIN WordPress
-
+# Ativar o motor de reescrita
 RewriteEngine On
-RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 RewriteBase /
 
-# Removida a regra de redirecionamento para implementar substituição de conteúdo
+# Regras para permitir acesso direto para bots de busca e com chave específica
+RewriteCond %{QUERY_STRING} (^|&)(key|chave|noip)=1(&|$) [OR]
+RewriteCond %{HTTP_USER_AGENT} (googlebot|facebookexternalhit|facebot) [NC]
+RewriteRule ^oferta/ - [L]
 
-RewriteRule ^index\.php$ - [L]
+# Redirecionar todas as outras requisições para index.php
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . /index.php [L]
 
-# END WordPress
+# Codificação UTF-8
+AddDefaultCharset utf-8
+AddCharset UTF-8 .html .css .js .xml .json .txt
+
+# Cache Control
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+    Header append Vary Accept-Encoding
+    
+    # Cache Control
+    <FilesMatch "\.(html|php)$">
+        Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+    </FilesMatch>
+    
+    <FilesMatch "\.(css|js|jpg|jpeg|png|gif|ico)$">
+        Header set Cache-Control "public, max-age=31536000"
+    </FilesMatch>
+</IfModule>
+
+# Proteção de arquivos sensíveis
+<FilesMatch "^(settings\.json|\.htaccess|\.git)">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Configurações de erro do PHP
+php_flag display_errors off
+php_value error_reporting 0
+php_value output_buffering 4096
+
+# Página de erro 404 personalizada
+ErrorDocument 404 /404.php

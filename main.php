@@ -48,7 +48,7 @@ function white($use_js_checks)
         $html_content = file_get_contents($content_path);
         if (!empty($html_content)) {
             // Processar o HTML para caminhos relativos
-            $baseurl = '/'.$curfolder[0].'/';
+            $baseurl = $curfolder[0].'/';
             $html_content = rewrite_relative_urls($html_content, $baseurl);
             echo $html_content;
         } else {
@@ -127,7 +127,7 @@ function black($clkrdetect)
             $html_content = file_get_contents($content_path);
             if (!empty($html_content)) {
                 // Processar o HTML para caminhos relativos
-                $baseurl = '/'.$landing.'/';
+                $baseurl = $landing.'/';
                 $html_content = rewrite_relative_urls($html_content, $baseurl);
                 echo $html_content;
             } else {

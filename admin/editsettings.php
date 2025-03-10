@@ -130,7 +130,7 @@ if (isset($_GET['startdate'])&& isset($_GET['enddate'])) {
         </div>
     <a name="top"></a>
 
-    <form action="/admin/savesettings.php?password=<?=$log_password?>" method="post">
+    <form action="savesettings.php?password=<?=$log_password?>" method="post">
         <div class="basic-form-area mg-tb-15">
             <div class="container-fluid">
                 <div class="row">

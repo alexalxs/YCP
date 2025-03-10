@@ -21,18 +21,27 @@ function redirect($url, $redirect_type = 302, $add_querystring = true)
         $url = add_querystring($url);
     }
     
-    // Forçar protocolo correto em localhost
+    // Forçar protocolo correto e manter o caminho relativo ao diretório atual
     if (strpos($url, 'http') !== 0 && isset($_SERVER['HTTP_HOST'])) {
         $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? "https://" : "http://";
         $host = $_SERVER['HTTP_HOST'];
         
-        // Se a URL começa com '/', não adicionar outro
+        // Obter o diretório atual relativo à raiz
+        $current_dir = dirname($_SERVER['PHP_SELF']);
+        if ($current_dir == '/') $current_dir = '';
+        
+        // Se a URL começa com '/', usar caminho absoluto
         if (strpos($url, '/') === 0) {
             $url = $protocol . $host . $url;
-        } else {
-            $url = $protocol . $host . '/' . $url;
+        } 
+        // Se é um caminho relativo, manter relativo ao diretório atual
+        else {
+            $url = $protocol . $host . $current_dir . '/' . $url;
         }
     }
+    
+    // Limpar barras duplas no caminho (exceto após protocolo)
+    $url = preg_replace('#(?<!:)//+#', '/', $url);
     
     // Definir headers para redirecionamento
     header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');

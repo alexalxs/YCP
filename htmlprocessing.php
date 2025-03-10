@@ -337,9 +337,24 @@ function insert_subs_into_forms($html)
 //переписываем все относительные src и href (не начинающиеся с http или с //)
 function rewrite_relative_urls($html,$url)
 {
+    // Remover barras iniciais para garantir que os links sejam relativos
+    if (substr($url, 0, 1) === '/') {
+        $url = substr($url, 1);
+    }
+    
+    // Garantir que a URL termine com uma barra
+    if (substr($url, -1) !== '/') {
+        $url .= '/';
+    }
+    
 	$modified = preg_replace('/\ssrc=[\'\"](?!http|\/\/|data:)([^\'\"]+)[\'\"]/', " src=\"$url\\1\"", $html);
 	$modified = preg_replace('/\shref=[\'\"](?!http|mailto:|tel:|whatsapp:|#|\/\/)([^\'\"]+)[\'\"]/', " href=\"$url\\1\"", $modified);
 	$modified = preg_replace('/background-image:\s*url\((?!http|#|\/\/)([^\)]+)\)/', "background-image: url($url\\1)", $modified);
+	
+	// Converter links absolutos para relativos
+	$modified = preg_replace('/\ssrc=[\'\"]\/([^\'\"]+)[\'\"]/', " src=\"$url\\1\"", $modified);
+	$modified = preg_replace('/\shref=[\'\"]\/([^\'\"]+)[\'\"]/', " href=\"$url\\1\"", $modified);
+	
 	return $modified;
 }
 
