@@ -7,6 +7,7 @@ ini_set('display_startup_errors', 1);
 if (version_compare(phpversion(), '7.2.0', '<')) {
     die("PHP version should be 7.2 or higher! Change your PHP version and return.");
 }
+
 require_once '../settings.php';
 require_once 'password.php';
 check_password();
@@ -32,18 +33,34 @@ if (isset($_GET['startdate'])&& isset($_GET['enddate'])) {
 $filter=isset($_GET['filter'])?$_GET['filter']:'';
 
 $dataDir = __DIR__ . "/../logs";
+echo "<!-- Verificando diretórios específicos -->";
+$subdirs = ['blackclicks', 'whiteclicks', 'leads', 'lpctr'];
+foreach ($subdirs as $subdir) {
+    $path = $dataDir . '/' . $subdir;
+    echo "<!-- Subdiretório $subdir: " . (is_dir($path) ? "Existe" : "NÃO existe") . " -->";
+    if (is_dir($path)) {
+        echo "<!-- Subdiretório $subdir " . (is_readable($path) ? "Pode" : "NÃO pode") . " ser lido -->";
+        echo "<!-- Subdiretório $subdir " . (is_writable($path) ? "Pode" : "NÃO pode") . " ser escrito -->";
+        $dataFiles = glob($path . "/*.json");
+        echo "<!-- Subdiretório $subdir contém " . count($dataFiles) . " arquivos JSON -->";
+    }
+}
+
 switch ($filter) {
     case '':
         $header = ["Subid","IP","Country","ISP","Time","OS","UA","QueryString","Preland","Land"];
         $dataset=get_black_clicks($startdate->getTimestamp(),$enddate->getTimestamp());
+        echo "<!-- Dataset black_clicks: " . count($dataset) . " registros -->";
         break;
     case 'leads':
         $header = ["Subid","Time","Name","Phone","Email","Status","Preland","Land","Fbp","Fbclid"];
         $dataset=get_leads($startdate->getTimestamp(),$enddate->getTimestamp());
+        echo "<!-- Dataset leads: " . count($dataset) . " registros -->";
         break;
     case 'blocked':
         $header = ["IP","Country","ISP","Time","Reason","OS","UA","QueryString"];
         $dataset=get_white_clicks($startdate->getTimestamp(),$enddate->getTimestamp());
+        echo "<!-- Dataset white_clicks: " . count($dataset) . " registros -->";
         break;
 }
 

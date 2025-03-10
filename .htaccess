@@ -2,10 +2,15 @@
 RewriteEngine On
 RewriteBase /
 
-# Regras para permitir acesso direto para bots de busca e com chave específica
-RewriteCond %{QUERY_STRING} (^|&)(key|chave|noip)=1(&|$) [OR]
-RewriteCond %{HTTP_USER_AGENT} (googlebot|facebookexternalhit|facebot) [NC]
-RewriteRule ^oferta/ - [L]
+# Permitir acesso direto aos diretórios importantes
+RewriteRule ^admin/ - [L]
+RewriteRule ^logs/ - [L]
+RewriteRule ^db/ - [L]
+
+# Regras para permitir acesso direto apenas com chave específica
+RewriteCond %{QUERY_STRING} (^|&)(key|chave|noip)=1(&|$)
+# Permitir acesso direto à página de oferta ou raiz apenas com chave
+RewriteRule ^(oferta/|$) - [L]
 
 # Redirecionar todas as outras requisições para index.php
 RewriteCond %{REQUEST_FILENAME} !-f
@@ -33,7 +38,7 @@ AddCharset UTF-8 .html .css .js .xml .json .txt
     </FilesMatch>
 </IfModule>
 
-# Proteção de arquivos sensíveis
+# Proteção de arquivos sensíveis, mas permitir acesso a logs e DB para o sistema
 <FilesMatch "^(settings\.json|\.htaccess|\.git)">
     Order allow,deny
     Deny from all
