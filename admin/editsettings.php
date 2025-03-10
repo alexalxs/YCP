@@ -1306,24 +1306,17 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Comma-separated words that appear in the URL (in the link you clicked), user will be sent to whitepage</label>
+            <label class="login2 pull-left pull-left-pro">Palavras que devem aparecer na URL</label>
         </div>
         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
             <div class="input-group custom-go-button">
-                <input type="text" name="tds.filters.blocked.tokens" class="form-control" placeholder="" value="<?=is_array($tokens_black) ? implode(',',$tokens_black) : $tokens_black?>">
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="form-group-inner">
-    <div class="row">
-        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Comma-separated words that must appear in the URL. If anything is missing - white page will be shown</label>
-        </div>
-        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-            <div class="input-group custom-go-button">
-                <input type="text" name="tds.filters.allowed.inurl" class="form-control" placeholder="" value="<?=is_array($url_should_contain) ? implode(',',$url_should_contain) : $url_should_contain?>">
+                <span class="input-group-btn">
+                    <select name="tds.filters.allowed.inurl.mode" class="form-control" style="border-radius: 3px 0 0 3px;">
+                        <option value="all" <?=$url_mode === 'all' ? 'selected' : ''?>>Todas as palavras</option>
+                        <option value="any" <?=$url_mode === 'any' ? 'selected' : ''?>>Qualquer palavra</option>
+                    </select>
+                </span>
+                <input type="text" name="tds.filters.allowed.inurl" class="form-control" placeholder="key=1,chave=3" value="<?=is_array($url_should_contain) ? implode(',',$url_should_contain) : $url_should_contain?>">
             </div>
         </div>
     </div>
@@ -1344,10 +1337,10 @@ If JS check is enabled, the user will always land on white, and only if the chec
 
 <div class="form-group-inner">
     <div class="row">
-        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
             <label class="login2 pull-left pull-left-pro">Block by ISP (e.g., facebook,google)</label>
         </div>
-        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+        <div class="col-lg-9 col-md-6 col-sm-6 col-xs-12">
             <div class="input-group custom-go-button">
                 <input type="text" name="tds.filters.blocked.isps" class="form-control" placeholder="facebook,google,yandex,amazon,azure,digitalocean" value="<?=is_array($isp_black) ? implode(',',$isp_black) : $isp_black?>">
             </div>

@@ -3,85 +3,482 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tecnologia e Inovação - Blog</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-            color: #333;
-        }
-        header {
-            background-color: #2c3e50;
-            color: white;
-            text-align: center;
-            padding: 2rem 0;
-        }
-        nav {
-            background-color: #34495e;
-            padding: 1rem;
-            text-align: center;
-        }
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin: 0 15px;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .article {
-            margin-bottom: 30px;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border-radius: 5px;
-        }
-        footer {
-            background-color: #2c3e50;
-            color: white;
-            text-align: center;
-            padding: 1rem 0;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-    </style>
+    <title>How to Bring Him Back - Magazine Digital</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lora:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <header>
-        <h1>Tecnologia e Inovação</h1>
-        <p>Seu portal de notícias sobre o mundo tech</p>
-    </header>
-
-    <nav>
-        <a href="#home">Home</a>
-        <a href="#noticias">Notícias</a>
-        <a href="#sobre">Sobre</a>
-        <a href="#contato">Contato</a>
-    </nav>
-
-    <div class="container">
-        <div class="article">
-            <h2>Últimas Novidades em IA</h2>
-            <p>A Inteligência Artificial continua revolucionando diversos setores. Novas descobertas e aplicações surgem diariamente, transformando a maneira como vivemos e trabalhamos.</p>
+    <!-- Preloader de revista -->
+    <div class="magazine-preloader" id="preloader">
+        <div class="magazine-loader">
+            <div class="loader-page"></div>
+            <div class="loader-page"></div>
         </div>
-
-        <div class="article">
-            <h2>Sustentabilidade Digital</h2>
-            <p>Empresas de tecnologia estão cada vez mais comprometidas com práticas sustentáveis. Conheça as principais iniciativas que estão mudando o mercado.</p>
-        </div>
-
-        <div class="article">
-            <h2>O Futuro da Mobilidade</h2>
-            <p>Carros elétricos e autônomos estão redefinindo o conceito de transporte. Descubra as últimas inovações neste setor em constante evolução.</p>
-        </div>
+        <div class="loader-text">Carregando</div>
     </div>
 
-    <footer>
-        <p>&copy; 2024 Tecnologia e Inovação. Todos os direitos reservados.</p>
+    <!-- Cabeçalho da revista -->
+    <header class="magazine-header">
+        <div class="header-top">
+            <div class="container">
+                <div class="header-left">
+                    <div class="edition-info">EDIÇÃO ESPECIAL • RELACIONAMENTOS</div>
+                </div>
+                <div class="header-center">
+                    <h1 class="magazine-title">RECONNECT</h1>
+                </div>
+                <div class="header-right">
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <nav class="magazine-nav">
+            <div class="container">
+                <ul class="nav-list">
+                    <li><a href="#destaque" class="nav-link">Destaque</a></li>
+                    <li><a href="#entrevista" class="nav-link">Entrevista</a></li>
+                    <li><a href="#metodo" class="nav-link">Método</a></li>
+                    <li><a href="#depoimentos" class="nav-link">Depoimentos</a></li>
+                    <li><a href="#adquirir" class="nav-link highlight">Adquirir</a></li>
+                </ul>
+                <button class="mobile-menu-toggle" id="menuToggle">
+                    <span class="toggle-line"></span>
+                    <span class="toggle-line"></span>
+                    <span class="toggle-line"></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Conteúdo principal -->
+    <main class="magazine-content">
+        <!-- Seção de destaque -->
+        <section id="destaque" class="cover-feature">
+            <div class="container">
+                <div class="feature-grid">
+                    <div class="feature-main">
+                        <div class="feature-image-container">
+                            <img src="./how%20to%20bring%20him%20back.png" alt="Capa do livro How to Bring Him Back" class="feature-image">
+                            <div class="feature-badge">BEST-SELLER</div>
+                        </div>
+                    </div>
+                    <div class="feature-content">
+                        <div class="feature-category">LIVRO DO MÊS</div>
+                        <h2 class="feature-title">How to Bring Him Back</h2>
+                        <div class="feature-author">Por Taynara Rodrigues</div>
+                        <div class="feature-excerpt">
+                            <p>Um guia revolucionário que está transformando relacionamentos através de uma abordagem autêntica e emocionalmente inteligente para reconexão.</p>
+                            <p>Descubra como mulheres de todo o Brasil estão redescobrindo o poder da comunicação genuína e da presença feminina para reconstruir laços significativos.</p>
+                        </div>
+                        <div class="feature-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-star"></i>
+                                <span>4.8/5 (352 avaliações)</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-book-open"></i>
+                                <span>248 páginas</span>
+                            </div>
+                        </div>
+                        <a href="#adquirir" class="feature-cta">QUERO LER AGORA</a>
+                    </div>
+                </div>
+            </div>
+            <div class="section-divider">
+                <div class="divider-line"></div>
+                <div class="divider-icon"><i class="fas fa-heart"></i></div>
+                <div class="divider-line"></div>
+            </div>
+        </section>
+
+        <!-- Seção de entrevista -->
+        <section id="entrevista" class="magazine-interview">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Entrevista Exclusiva</h2>
+                    <div class="section-subtitle">Uma conversa com a autora Taynara Rodrigues</div>
+                </div>
+                
+                <div class="interview-layout">
+                    <div class="interview-sidebar">
+                        <div class="author-card">
+                            <div class="author-image-placeholder">
+                                <div class="author-initial">T</div>
+                            </div>
+                            <div class="author-info">
+                                <div class="author-name">Taynara Rodrigues</div>
+                                <div class="author-title">Especialista em Relacionamentos</div>
+                                <div class="author-bio">
+                                    Psicóloga, escritora e mentora com mais de 10 anos de experiência ajudando mulheres a construírem relacionamentos saudáveis e significativos.
+                                </div>
+                                <div class="author-quote">
+                                    "Reconquistar não é sobre técnicas manipulativas, mas sobre autenticidade e conexão genuína."
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="sidebar-facts">
+                            <div class="fact-title">Fatos Rápidos</div>
+                            <ul class="fact-list">
+                                <li>Formada em Psicologia pela USP</li>
+                                <li>Especialista em Terapia de Casal</li>
+                                <li>Mais de 5.000 mulheres orientadas</li>
+                                <li>Palestrante internacional</li>
+                                <li>Colunista em revistas de relacionamento</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="interview-content">
+                        <div class="interview-question">
+                            <div class="question-label">P:</div>
+                            <div class="question-text">O que diferencia seu livro de outros guias de relacionamento no mercado?</div>
+                        </div>
+                        <div class="interview-answer">
+                            <div class="answer-label">R:</div>
+                            <div class="answer-text">
+                                <p>"How to Bring Him Back" não é apenas mais um manual de técnicas superficiais. Ele aborda a reconquista a partir de uma perspectiva de crescimento pessoal e autenticidade. Muitos livros focam apenas em "truques" para atrair alguém de volta, mas isso raramente funciona a longo prazo.</p>
+                                <p>Minha abordagem é baseada em pesquisas psicológicas sólidas sobre apego emocional, comunicação eficaz e inteligência emocional. O livro guia as leitoras por um processo de autoconhecimento que naturalmente as torna mais magnéticas e capazes de construir conexões genuínas.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="interview-question">
+                            <div class="question-label">P:</div>
+                            <div class="question-text">Qual é o maior erro que as mulheres cometem quando tentam reconquistar um relacionamento?</div>
+                        </div>
+                        <div class="interview-answer">
+                            <div class="answer-label">R:</div>
+                            <div class="answer-text">
+                                <p>O maior erro é tentar ser alguém que não são. Muitas mulheres acreditam que precisam mudar completamente ou suprimir suas necessidades para reconquistar um parceiro. Isso cria relacionamentos baseados em falsas premissas que inevitavelmente desmoronam.</p>
+                                <p>Outro erro comum é focar apenas no parceiro, esquecendo-se de seu próprio crescimento. A verdadeira reconquista começa internamente, com uma mulher que se conhece, se valoriza e comunica suas necessidades com clareza e respeito.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="interview-question">
+                            <div class="question-label">P:</div>
+                            <div class="question-text">Existe um "segredo" universal para reconquistar alguém?</div>
+                        </div>
+                        <div class="interview-answer">
+                            <div class="answer-label">R:</div>
+                            <div class="answer-text">
+                                <p>Se existe um "segredo", é a autenticidade combinada com crescimento pessoal. Quando uma mulher trabalha em si mesma não apenas para reconquistar alguém, mas para se tornar sua melhor versão, ela naturalmente se torna mais atraente.</p>
+                                <p>O livro apresenta um método estruturado que chamo de C.L.A.R.A. - Consciência, Libertação, Autenticidade, Reconexão e Ação. Cada etapa desse processo ajuda a leitora a desenvolver habilidades específicas que transformam não apenas seus relacionamentos românticos, mas todas as suas conexões.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="section-divider">
+                <div class="divider-line"></div>
+                <div class="divider-icon"><i class="fas fa-heart"></i></div>
+                <div class="divider-line"></div>
+            </div>
+        </section>
+
+        <!-- Seção do método -->
+        <section id="metodo" class="magazine-method">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">O Método C.L.A.R.A.</h2>
+                    <div class="section-subtitle">Um caminho de 5 passos para reconexão autêntica</div>
+                </div>
+                
+                <div class="method-grid">
+                    <div class="method-step">
+                        <div class="step-header">
+                            <div class="step-letter">C</div>
+                            <h3 class="step-title">Consciência</h3>
+                        </div>
+                        <div class="step-content">
+                            <p>Desenvolva uma compreensão profunda de seus padrões emocionais e como eles afetam seus relacionamentos. Identifique gatilhos e reações automáticas que podem estar sabotando suas conexões.</p>
+                            <div class="step-quote">"O autoconhecimento é o primeiro passo para qualquer transformação duradoura."</div>
+                            <div class="step-exercise">
+                                <div class="exercise-title">Exercício Prático</div>
+                                <p>O Diário de Padrões Emocionais: uma técnica guiada para mapear suas respostas emocionais e identificar padrões recorrentes.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="method-step">
+                        <div class="step-header">
+                            <div class="step-letter">L</div>
+                            <h3 class="step-title">Libertação</h3>
+                        </div>
+                        <div class="step-content">
+                            <p>Liberte-se de crenças limitantes sobre relacionamentos e expectativas irrealistas. Aprenda a soltar o controle e a necessidade de resultados específicos para abrir espaço para novas possibilidades.</p>
+                            <div class="step-quote">"Quando nos libertamos do apego ao resultado, criamos espaço para conexões genuínas."</div>
+                            <div class="step-exercise">
+                                <div class="exercise-title">Exercício Prático</div>
+                                <p>Ritual de Liberação: uma prática poderosa para identificar e soltar crenças que não servem mais ao seu crescimento.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="method-step">
+                        <div class="step-header">
+                            <div class="step-letter">A</div>
+                            <h3 class="step-title">Autenticidade</h3>
+                        </div>
+                        <div class="step-content">
+                            <p>Cultive a coragem de ser verdadeiramente você mesma, expressando suas necessidades e desejos com clareza e respeito. Desenvolva uma presença feminina autêntica que não depende de máscaras ou jogos.</p>
+                            <div class="step-quote">"Sua autenticidade é seu maior poder de atração."</div>
+                            <div class="step-exercise">
+                                <div class="exercise-title">Exercício Prático</div>
+                                <p>Comunicação Vulnerável: técnicas para expressar sentimentos difíceis com honestidade e sem acusações.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="method-step">
+                        <div class="step-header">
+                            <div class="step-letter">R</div>
+                            <h3 class="step-title">Reconexão</h3>
+                        </div>
+                        <div class="step-content">
+                            <p>Aprenda a criar momentos de conexão genuína através de presença plena e escuta ativa. Desenvolva a capacidade de estabelecer pontes emocionais mesmo em situações desafiadoras.</p>
+                            <div class="step-quote">"A verdadeira conexão acontece no espaço entre duas pessoas totalmente presentes."</div>
+                            <div class="step-exercise">
+                                <div class="exercise-title">Exercício Prático</div>
+                                <p>Encontros de Reconexão: um formato estruturado para criar momentos de conexão profunda sem pressão ou expectativas.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="method-step">
+                        <div class="step-header">
+                            <div class="step-letter">A</div>
+                            <h3 class="step-title">Ação</h3>
+                        </div>
+                        <div class="step-content">
+                            <p>Transforme insights em mudanças concretas através de ações consistentes e alinhadas com seus valores. Desenvolva um plano personalizado que respeite seu ritmo e as particularidades do seu relacionamento.</p>
+                            <div class="step-quote">"Pequenas ações consistentes criam transformações profundas."</div>
+                            <div class="step-exercise">
+                                <div class="exercise-title">Exercício Prático</div>
+                                <p>Mapa de Ação Consciente: uma ferramenta para planejar passos concretos alinhados com seus valores e objetivos relacionais.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="section-divider">
+                <div class="divider-line"></div>
+                <div class="divider-icon"><i class="fas fa-heart"></i></div>
+                <div class="divider-line"></div>
+            </div>
+        </section>
+
+        <!-- Seção de depoimentos -->
+        <section id="depoimentos" class="magazine-testimonials">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Histórias de Transformação</h2>
+                    <div class="section-subtitle">Mulheres reais, resultados reais</div>
+                </div>
+                
+                <div class="testimonial-slider" id="testimonialSlider">
+                    <div class="slider-container">
+                        <div class="testimonial-slide">
+                            <div class="testimonial-card">
+                                <div class="testimonial-content">
+                                    <div class="testimonial-quote">
+                                        <p>"Depois de um ano separados, eu estava desesperada e tentando de tudo para reconquistar meu ex. Nada funcionava até que encontrei o método C.L.A.R.A. Percebi que estava focando em 'consertar' o relacionamento sem olhar para mim mesma. O livro me ajudou a redescobrir minha essência e, para minha surpresa, isso não apenas trouxe meu parceiro de volta, mas criou uma conexão muito mais profunda do que tínhamos antes."</p>
+                                    </div>
+                                    <div class="testimonial-author">
+                                        <div class="author-initial">M</div>
+                                        <div class="author-details">
+                                            <div class="author-name">Marina S.</div>
+                                            <div class="author-location">São Paulo, SP</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="testimonial-slide">
+                            <div class="testimonial-card">
+                                <div class="testimonial-content">
+                                    <div class="testimonial-quote">
+                                        <p>"Eu estava em um ciclo de relacionamentos que sempre terminavam da mesma forma. O livro da Taynara me ajudou a identificar padrões que eu repetia inconscientemente. O mais surpreendente foi que, ao trabalhar em mim mesma seguindo o método, não apenas reconquistei meu ex-namorado, mas construímos um relacionamento completamente novo e saudável. A parte de Autenticidade foi revolucionária para mim."</p>
+                                    </div>
+                                    <div class="testimonial-author">
+                                        <div class="author-initial">C</div>
+                                        <div class="author-details">
+                                            <div class="author-name">Carolina F.</div>
+                                            <div class="author-location">Belo Horizonte, MG</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="testimonial-slide">
+                            <div class="testimonial-card">
+                                <div class="testimonial-content">
+                                    <div class="testimonial-quote">
+                                        <p>"Meu casamento de 12 anos estava à beira do fim quando encontrei 'How to Bring Him Back'. Meu marido já estava morando em outro apartamento e falando em divórcio. Os exercícios práticos do livro me deram ferramentas concretas para trabalhar minha comunicação e presença. Seis meses depois, não apenas estamos juntos novamente, mas temos o casamento que sempre sonhei. A abordagem da Taynara é profunda e transformadora."</p>
+                                    </div>
+                                    <div class="testimonial-author">
+                                        <div class="author-initial">L</div>
+                                        <div class="author-details">
+                                            <div class="author-name">Luciana M.</div>
+                                            <div class="author-location">Rio de Janeiro, RJ</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="slider-controls">
+                        <button class="slider-arrow prev" id="prevSlide"><i class="fas fa-chevron-left"></i></button>
+                        <div class="slider-dots" id="sliderDots">
+                            <span class="dot active"></span>
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                        </div>
+                        <button class="slider-arrow next" id="nextSlide"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="section-divider">
+                <div class="divider-line"></div>
+                <div class="divider-icon"><i class="fas fa-heart"></i></div>
+                <div class="divider-line"></div>
+            </div>
+        </section>
+
+        <!-- Seção de aquisição -->
+        <section id="adquirir" class="magazine-purchase">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Adquira Seu Exemplar</h2>
+                    <div class="section-subtitle">Comece sua jornada de transformação hoje</div>
+                </div>
+                
+                <div class="purchase-options">
+                    <div class="purchase-card">
+                        <div class="card-header">
+                            <h3 class="card-title">Versão Digital</h3>
+                            <div class="card-price">R$ 39,90</div>
+                        </div>
+                        <div class="card-content">
+                            <ul class="card-features">
+                                <li><i class="fas fa-check"></i> Acesso imediato</li>
+                                <li><i class="fas fa-check"></i> Formato PDF e ePub</li>
+                                <li><i class="fas fa-check"></i> Leitura em qualquer dispositivo</li>
+                                <li><i class="fas fa-check"></i> Atualizações gratuitas</li>
+                            </ul>
+                            <a href="#" class="card-button">COMPRAR DIGITAL</a>
+                        </div>
+                    </div>
+                    
+                    <div class="purchase-card featured">
+                        <div class="card-badge">MAIS POPULAR</div>
+                        <div class="card-header">
+                            <h3 class="card-title">Pacote Completo</h3>
+                            <div class="card-price">R$ 79,90</div>
+                        </div>
+                        <div class="card-content">
+                            <ul class="card-features">
+                                <li><i class="fas fa-check"></i> Livro físico capa dura</li>
+                                <li><i class="fas fa-check"></i> Versão digital incluída</li>
+                                <li><i class="fas fa-check"></i> Audiobook narrado pela autora</li>
+                                <li><i class="fas fa-check"></i> Workbook de exercícios práticos</li>
+                                <li><i class="fas fa-check"></i> Acesso ao grupo privado de suporte</li>
+                                <li><i class="fas fa-check"></i> Garantia de 30 dias</li>
+                            </ul>
+                            <a href="#" class="card-button featured">QUERO O PACOTE COMPLETO</a>
+                        </div>
+                    </div>
+                    
+                    <div class="purchase-card">
+                        <div class="card-header">
+                            <h3 class="card-title">Versão Física</h3>
+                            <div class="card-price">R$ 59,90</div>
+                        </div>
+                        <div class="card-content">
+                            <ul class="card-features">
+                                <li><i class="fas fa-check"></i> Livro físico capa dura</li>
+                                <li><i class="fas fa-check"></i> Marcador exclusivo</li>
+                                <li><i class="fas fa-check"></i> Envio para todo Brasil</li>
+                                <li><i class="fas fa-check"></i> Garantia de 30 dias</li>
+                            </ul>
+                            <a href="#" class="card-button">COMPRAR FÍSICO</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="purchase-guarantee">
+                    <div class="guarantee-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="guarantee-content">
+                        <h3 class="guarantee-title">Garantia Incondicional de 30 Dias</h3>
+                        <p class="guarantee-text">Se por qualquer motivo você não ficar completamente satisfeita com o livro, basta nos enviar um e-mail dentro de 30 dias após a compra e devolveremos 100% do seu investimento. Sem perguntas, sem burocracia.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Rodapé da revista -->
+    <footer class="magazine-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h2 class="footer-title">RECONNECT</h2>
+                    <div class="footer-tagline">Transformando relacionamentos através da autenticidade</div>
+                </div>
+                
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h3 class="column-title">Navegação</h3>
+                        <ul class="column-links">
+                            <li><a href="#destaque">Destaque</a></li>
+                            <li><a href="#entrevista">Entrevista</a></li>
+                            <li><a href="#metodo">Método</a></li>
+                            <li><a href="#depoimentos">Depoimentos</a></li>
+                            <li><a href="#adquirir">Adquirir</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h3 class="column-title">Contato</h3>
+                        <ul class="column-links">
+                            <li><a href="mailto:contato@reconnect.com.br">contato@reconnect.com.br</a></li>
+                            <li><a href="tel:+551199999999">(11) 9999-9999</a></li>
+                            <li><a href="#">Formulário de Contato</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h3 class="column-title">Redes Sociais</h3>
+                        <div class="social-grid">
+                            <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-pinterest"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="copyright">© 2023 Reconnect Magazine. Todos os direitos reservados.</div>
+                <div class="footer-legal">
+                    <a href="#">Termos de Uso</a>
+                    <a href="#">Política de Privacidade</a>
+                </div>
+            </div>
+        </div>
     </footer>
+
+    <script src="script.js"></script>
 </body>
 </html> 

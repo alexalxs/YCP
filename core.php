@@ -17,6 +17,7 @@ class Cloaker{
 	var $lang_white;
 	var $tokens_black;
 	var $url_should_contain;
+	var $url_mode;
 	var $ua_black;
 	var $ip_black_filename;
 	var $ip_black_cidr;
@@ -26,14 +27,15 @@ class Cloaker{
     var $isp_black;
     var $result=[];
 
-	public function __construct($os_white,$country_white,$lang_white,$ip_black_filename,$ip_black_cidr,$tokens_black,$url_should_contain,$ua_black,$isp_black,$block_without_referer,$referer_stopwords,$block_vpnandtor){
+	public function __construct($os_white,$country_white,$lang_white,$ip_black_filename,$ip_black_cidr,$tokens_black,$url_should_contain,$url_mode,$ua_black,$isp_black,$block_without_referer,$referer_stopwords,$block_vpnandtor){
 		$this->os_white = $os_white;
 		$this->country_white = $country_white;
 		$this->lang_white=$lang_white;
 		$this->ip_black_filename = $ip_black_filename;
         $this->ip_black_cidr = $ip_black_cidr;
 		$this->tokens_black = $tokens_black;
-		$this->url_should_contain= $url_should_contain;
+		$this->url_should_contain = $url_should_contain;
+		$this->url_mode = $url_mode;
 		$this->ua_black = $ua_black;
 		$this->isp_black = $isp_black;
 		$this->block_without_referer = $block_without_referer;
@@ -186,12 +188,27 @@ class Cloaker{
 		}
 
 		if($this->url_should_contain!==[]){
-			foreach($this->url_should_contain AS $should){
-				if ($should==='') continue;
-				if (strpos($_SERVER['REQUEST_URI'],$should)===false){
+			if($this->url_mode === 'all') {
+				foreach($this->url_should_contain AS $should){
+					if ($should==='') continue;
+					if (strpos($_SERVER['REQUEST_URI'],$should)===false){
+						$result=1;
+						$this->result[]='url:'.$should;
+						break;
+					}
+				}
+			} else {
+				$found_any = false;
+				foreach($this->url_should_contain AS $should){
+					if ($should==='') continue;
+					if (strpos($_SERVER['REQUEST_URI'],$should)!==false){
+						$found_any = true;
+						break;
+					}
+				}
+				if (!$found_any) {
 					$result=1;
-					$this->result[]='url:'.$should;
-					break;
+					$this->result[]='url:any';
 				}
 			}
 		}
