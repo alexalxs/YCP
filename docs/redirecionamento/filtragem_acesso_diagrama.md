@@ -23,10 +23,6 @@ sequenceDiagram
         Servidor Web->>Sistema: Requisição com parâmetro especial
         Note over Sistema: Estado: Bypass<br>ativado
         Sistema->>Usuário: Retorna página de oferta
-    else User Agent indica Bot (Google, Facebook)
-        Servidor Web->>Sistema: Requisição com User Agent de bot
-        Note over Sistema: Estado: Bot<br>detectado
-        Sistema->>Usuário: Retorna página de oferta
     else Verificação de acesso normal
         Servidor Web->>Sistema: Requisição padrão
         activate Sistema
@@ -100,15 +96,14 @@ etapas:
 
 1. **Estado Inicial**: Usuário faz uma requisição ao servidor
 2. **Verificação de Bypass**: Sistema verifica se há parâmetros especiais na URL
-3. **Verificação de Bot**: Sistema verifica se o User Agent indica um bot
-   conhecido
-4. **Verificação de Acesso**: Se não houver bypass ou bot, o sistema realiza
+   (key, chave, noip)
+3. **Verificação de Acesso**: Se não houver bypass, o sistema realiza
    verificações de:
    - País do usuário (via GEOIP)
    - IP do usuário (verificação em blacklist)
    - User Agent (verificação de padrões suspeitos)
    - Referrer (origem do tráfego)
-5. **Estado Final**: Baseado nas verificações, o usuário é direcionado para:
+4. **Estado Final**: Baseado nas verificações, o usuário é direcionado para:
    - Página de Oferta (acesso permitido)
    - Página White (acesso negado)
 

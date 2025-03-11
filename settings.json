@@ -57,7 +57,8 @@
             "action": "folder",
             "folder": {
                 "names": [
-                    "oferta"
+                    "oferta1",
+                    "oferta2"
                 ],
                 "customthankyoupage": {
                     "language": "",
@@ -114,7 +115,7 @@
     },
     "tds": {
         "mode": "on",
-        "saveuserflow": false,
+        "saveuserflow": true,
         "filters": {
             "allowed": {
                 "countries": [],
@@ -126,7 +127,7 @@
                     "unknown"
                 ],
                 "inurl": [
-                    "key=1; chave=1"
+                    "key=2"
                 ],
                 "languages": []
             },
@@ -217,7 +218,7 @@
                 "value": "Placement"
             }
         ],
-        "timezone": "Europe/Moscow"
+        "timezone": "America/Belem"
     },
     "postback": {
         "lead": "Lead",

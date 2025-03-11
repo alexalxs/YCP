@@ -1,53 +1,8 @@
-# Ativar o motor de reescrita
-RewriteEngine On
-RewriteBase /
-
-# Permitir acesso direto aos diretórios importantes
-RewriteRule ^admin/ - [L]
-RewriteRule ^logs/ - [L]
-RewriteRule ^db/ - [L]
-
-# Regras para permitir acesso direto apenas com chave específica
-RewriteCond %{QUERY_STRING} (^|&)(key|chave|noip)=1(&|$)
-# Permitir acesso direto à página de oferta ou raiz apenas com chave
-RewriteRule ^(oferta/|$) - [L]
-
-# Redirecionar todas as outras requisições para index.php
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule . /index.php [L]
-
-# Codificação UTF-8
-AddDefaultCharset utf-8
-AddCharset UTF-8 .html .css .js .xml .json .txt
-
-# Cache Control
-<IfModule mod_headers.c>
-    Header set X-Content-Type-Options "nosniff"
-    Header set X-Frame-Options "SAMEORIGIN"
-    Header set X-XSS-Protection "1; mode=block"
-    Header append Vary Accept-Encoding
-    
-    # Cache Control
-    <FilesMatch "\.(html|php)$">
-        Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
-    </FilesMatch>
-    
-    <FilesMatch "\.(css|js|jpg|jpeg|png|gif|ico)$">
-        Header set Cache-Control "public, max-age=31536000"
-    </FilesMatch>
-</IfModule>
-
-# Proteção de arquivos sensíveis, mas permitir acesso a logs e DB para o sistema
-<FilesMatch "^(settings\.json|\.htaccess|\.git)">
-    Order allow,deny
-    Deny from all
-</FilesMatch>
-
-# Configurações de erro do PHP
-php_flag display_errors off
-php_value error_reporting 0
-php_value output_buffering 4096
-
-# Página de erro 404 personalizada
-ErrorDocument 404 /404.php
+ErrorDocument 404 /404/index.php
+<Files "settings.json">
+  Order Allow,Deny
+  Deny from all
+</Files>
+php_flag display_errors 1
+php_flag display_startup_errors 1
+php_value error_reporting 2047
