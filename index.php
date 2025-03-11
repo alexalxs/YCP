@@ -39,16 +39,74 @@ $file_path = __DIR__ . $request_path;
 
 // Se for um arquivo ou diretório existente, servir diretamente
 if (file_exists($file_path) && $request_path != '/') {
+    // Log para depuração
+    error_log("Arquivo ou diretório existente: " . $file_path);
+    
+    // Log específico para oferta1
+    if (strpos($file_path, 'oferta1') !== false) {
+        error_log("Diretório oferta1 detectado: " . $file_path);
+    }
+    
     if (is_dir($file_path)) {
+        // Log para depuração
+        error_log("É um diretório: " . $file_path);
+        
         // Se for um diretório, verificar se existe index.php ou index.html
         if (file_exists($file_path . '/index.php')) {
+            error_log("Incluindo index.php: " . $file_path . '/index.php');
             include($file_path . '/index.php');
             exit;
         } elseif (file_exists($file_path . '/index.html')) {
-            readfile($file_path . '/index.html');
+            error_log("Lendo index.html: " . $file_path . '/index.html');
+            
+            // Ler o conteúdo do arquivo
+            $html = file_get_contents($file_path . '/index.html');
+            
+            // Verificar se é uma pasta de oferta
+            if (strpos($file_path, '/oferta') !== false || strpos($file_path, '/offers') !== false) {
+                error_log("É uma pasta de oferta: " . $file_path);
+                
+                // Adicionar script de conversão se ainda não estiver incluído
+                if (strpos($html, 'conversion_tracker.js') === false && strpos($html, 'email_track.php') === false) {
+                    error_log("Script de conversão não encontrado no HTML");
+                    
+                    // Tentar carregar o script diretamente do arquivo raiz
+                    if (file_exists('conversion_tracker.js')) {
+                        error_log("Carregando script do arquivo raiz");
+                        $script_content = file_get_contents('conversion_tracker.js');
+                    } 
+                    // Ou do diretório scripts
+                    elseif (file_exists('scripts/conversion_tracker.js')) {
+                        error_log("Carregando script do diretório scripts");
+                        $script_content = file_get_contents('scripts/conversion_tracker.js');
+                    }
+                    
+                    if (!empty($script_content)) {
+                        error_log("Script carregado: " . strlen($script_content) . " bytes");
+                        
+                        if (strpos($html, '</body>') !== false) {
+                            error_log("Inserindo script antes de </body>");
+                            $html = str_replace('</body>', '<script>' . $script_content . '</script></body>', $html);
+                        } else {
+                            error_log("Adicionando script ao final do HTML");
+                            $html .= '<script>' . $script_content . '</script>';
+                        }
+                    } else {
+                        error_log("Script não encontrado ou vazio");
+                    }
+                } else {
+                    error_log("Script de conversão já incluído no HTML");
+                }
+            } else {
+                error_log("Não é uma pasta de oferta: " . $file_path);
+            }
+            
+            // Enviar o conteúdo modificado
+            echo $html;
             exit;
         }
     } elseif (is_file($file_path)) {
+        error_log("É um arquivo: " . $file_path);
         // Se for um arquivo, verificar a extensão e definir o tipo MIME apropriado
         $extension = pathinfo($file_path, PATHINFO_EXTENSION);
         switch ($extension) {
@@ -148,7 +206,7 @@ if ($use_js_checks === true) {
 // Verificar se a URL solicitada é uma pasta personalizada
 if (isset($_GET['custom_type']) && isset($_GET['custom_folder'])) {
     // Debug
-    file_put_contents('debug.log', "custom_type: " . $_GET['custom_type'] . ", custom_folder: " . $_GET['custom_folder'] . "\n", FILE_APPEND);
+    error_log("custom_type: " . $_GET['custom_type'] . ", custom_folder: " . $_GET['custom_folder']);
     
     $custom_type = $_GET['custom_type'];
     $custom_folder = $_GET['custom_folder'];
@@ -188,10 +246,6 @@ if (isset($_GET['custom_type']) && isset($_GET['custom_folder'])) {
     }
 }
 
-// Verificar se a URL solicitada é uma pasta personalizada (método alternativo)
-$request_uri = $_SERVER['REQUEST_URI'];
-$request_path = parse_url($request_uri, PHP_URL_PATH);
-
 // Verificar se é uma pasta white personalizada
 if (preg_match('#^/white/([^/]+)/?$#', $request_path, $matches)) {
     $folder = $matches[1];
@@ -199,12 +253,22 @@ if (preg_match('#^/white/([^/]+)/?$#', $request_path, $matches)) {
         $html = load_white_content($folder, $use_js_checks);
         
         // Adicionar script de conversão de lead se ainda não estiver incluído
-        if (file_exists('scripts/conversion_tracker.js') && strpos($html, 'conversion_tracker.js') === false) {
-            $script_content = file_get_contents('scripts/conversion_tracker.js');
-            if (strpos($html, '</body>') !== false) {
-                $html = str_replace('</body>', '<script>' . $script_content . '</script></body>', $html);
-            } else {
-                $html .= '<script>' . $script_content . '</script>';
+        if (strpos($html, 'conversion_tracker.js') === false && strpos($html, 'email_track.php') === false) {
+            // Tentar carregar o script diretamente do arquivo raiz
+            if (file_exists('conversion_tracker.js')) {
+                $script_content = file_get_contents('conversion_tracker.js');
+            } 
+            // Ou do diretório scripts
+            elseif (file_exists('scripts/conversion_tracker.js')) {
+                $script_content = file_get_contents('scripts/conversion_tracker.js');
+            }
+            
+            if (!empty($script_content)) {
+                if (strpos($html, '</body>') !== false) {
+                    $html = str_replace('</body>', '<script>' . $script_content . '</script></body>', $html);
+                } else {
+                    $html .= '<script>' . $script_content . '</script>';
+                }
             }
         }
         
@@ -220,12 +284,22 @@ if (preg_match('#^/offers/([^/]+)/?$#', $request_path, $matches)) {
         $html = load_landing($folder);
         
         // Adicionar script de conversão de lead se ainda não estiver incluído
-        if (file_exists('scripts/conversion_tracker.js') && strpos($html, 'conversion_tracker.js') === false) {
-            $script_content = file_get_contents('scripts/conversion_tracker.js');
-            if (strpos($html, '</body>') !== false) {
-                $html = str_replace('</body>', '<script>' . $script_content . '</script></body>', $html);
-            } else {
-                $html .= '<script>' . $script_content . '</script>';
+        if (strpos($html, 'conversion_tracker.js') === false && strpos($html, 'email_track.php') === false) {
+            // Tentar carregar o script diretamente do arquivo raiz
+            if (file_exists('conversion_tracker.js')) {
+                $script_content = file_get_contents('conversion_tracker.js');
+            } 
+            // Ou do diretório scripts
+            elseif (file_exists('scripts/conversion_tracker.js')) {
+                $script_content = file_get_contents('scripts/conversion_tracker.js');
+            }
+            
+            if (!empty($script_content)) {
+                if (strpos($html, '</body>') !== false) {
+                    $html = str_replace('</body>', '<script>' . $script_content . '</script></body>', $html);
+                } else {
+                    $html .= '<script>' . $script_content . '</script>';
+                }
             }
         }
         

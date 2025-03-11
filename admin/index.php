@@ -190,12 +190,12 @@ $tableOutput.="</tbody></TABLE>";
                                     </a>
                                 </li>
                                 <li>
-                                    <a title="Email Stats" href="/email_stats.php?password=<?=$_GET['password']?>" target="_blank">
+                                    <a title="Email Stats" href="/email_stats.php?password=<?=$_GET['password']?>" target="_blank" style="background-color: #007bff; color: white; font-weight: bold;">
                                         <span class="mini-sub-pro">📊 Email Stats</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a title="File Manager" href="file_manager.php?password=<?=$_GET['password']?>">
+                                    <a title="File Manager" href="file_manager.php?password=<?=$_GET['password']?>" style="background-color: #28a745; color: white; font-weight: bold;">
                                         <span class="mini-sub-pro">📁 Gerenciador de Arquivos</span>
                                     </a>
                                 </li>

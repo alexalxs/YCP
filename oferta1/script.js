@@ -125,7 +125,7 @@ function isValidEmail(email) {
 function sendEmailToWebhook(email) {
     const webhookUrl = 'https://dekoola.com/wp-json/autonami/v1/webhook/?bwfan_autonami_webhook_id=10&bwfan_autonami_webhook_key=92c39df617252d128219dba772cff29a';
     
-    // Datos para enviar al webhook
+    // Dados para enviar ao webhook
     const data = {
         email: email,
         source: 'landing_chile',
@@ -134,7 +134,24 @@ function sendEmailToWebhook(email) {
         landing_page: 'modelo_chile'
     };
     
-    // Configuración de la solicitud
+    // Enviar também para o nosso sistema de rastreamento de conversões
+    const trackingData = new FormData();
+    trackingData.append('email', email);
+    trackingData.append('oferta', 'oferta1');
+    
+    fetch('/email_track.php', {
+        method: 'POST',
+        body: trackingData
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Conversão registrada:', data);
+    })
+    .catch(error => {
+        console.error('Erro ao registrar conversão:', error);
+    });
+    
+    // Configuração da solicitação para o webhook externo
     return fetch(webhookUrl, {
         method: 'POST',
         headers: {
@@ -147,12 +164,12 @@ function sendEmailToWebhook(email) {
         if (response.ok) {
             return { success: true };
         } else {
-            // Si el servidor responde con error, enviamos un objeto con éxito falso pero sin lanzar excepción
+            // Se o servidor responde com erro, enviamos um objeto com sucesso falso mas sem lançar exceção
             return { success: false, status: response.status };
         }
     })
     .catch(error => {
-        // En caso de error de red, enviamos un objeto con éxito falso
+        // Em caso de erro de rede, enviamos um objeto com sucesso falso
         return { success: false, error: error.message };
     });
 }

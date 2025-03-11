@@ -5,7 +5,7 @@
 (function() {
     // Configuração
     const trackingEndpoint = '/email_track.php';
-    const debug = false;
+    const debug = true; // Ativar modo de depuração para diagnóstico
     
     // Função para log (apenas em modo debug)
     function log(message) {
@@ -27,6 +27,12 @@
         const matches = path.match(/\/offers\/([^\/]+)/);
         if (matches && matches.length > 1) {
             return matches[1];
+        }
+        
+        // Verificar se estamos em uma pasta de oferta específica
+        const ofertaMatches = path.match(/\/oferta([0-9]+)/);
+        if (ofertaMatches && ofertaMatches.length > 1) {
+            return 'oferta' + ofertaMatches[1];
         }
         
         // Valor padrão
@@ -58,6 +64,8 @@
     
     // Função para processar o envio de formulário
     function processFormSubmit(event) {
+        log('Formulário enviado');
+        
         // Obter o formulário
         const form = event.target;
         
@@ -73,6 +81,7 @@
                 input.name.toLowerCase().includes('email') || 
                 input.id.toLowerCase().includes('email')) {
                 emailField = input;
+                log('Campo de email encontrado: ' + input.name);
                 break;
             }
         }
@@ -87,6 +96,7 @@
                     const value = input.value.trim();
                     if (value.includes('@') && value.includes('.')) {
                         emailField = input;
+                        log('Campo de texto com email encontrado: ' + input.name);
                         break;
                     }
                 }
@@ -99,8 +109,13 @@
             const oferta = getOfferFromPath();
             
             if (email) {
+                log('Email encontrado: ' + email + ', Oferta: ' + oferta);
                 sendConversion(email, oferta);
+            } else {
+                log('Campo de email está vazio');
             }
+        } else {
+            log('Nenhum campo de email encontrado no formulário');
         }
     }
     
@@ -108,6 +123,9 @@
     function addHiddenOfferField() {
         const forms = document.querySelectorAll('form');
         const oferta = getOfferFromPath();
+        
+        log('Adicionando campo de oferta aos formulários. Oferta: ' + oferta);
+        log('Encontrados ' + forms.length + ' formulários');
         
         forms.forEach(form => {
             // Verificar se já existe um campo de oferta
@@ -121,6 +139,8 @@
                 ofertaField.value = oferta;
                 form.appendChild(ofertaField);
                 log('Campo de oferta adicionado ao formulário');
+            } else {
+                log('Campo de oferta já existe no formulário');
             }
         });
     }
@@ -134,7 +154,29 @@
         
         // Capturar envios de formulários
         document.addEventListener('submit', function(event) {
+            // Não impedir o envio normal do formulário
             processFormSubmit(event);
+        });
+        
+        // Capturar cliques em botões que possam ser de envio
+        document.addEventListener('click', function(event) {
+            const target = event.target;
+            
+            // Verificar se é um botão que não está dentro de um formulário
+            if (target.tagName === 'BUTTON' && !target.closest('form')) {
+                log('Clique em botão fora de formulário: ' + target.textContent);
+                
+                // Verificar se há um campo de email na página
+                const emailInput = document.querySelector('input[type="email"], input[name*="email"], input[id*="email"]');
+                if (emailInput) {
+                    const email = emailInput.value.trim();
+                    if (email) {
+                        const oferta = getOfferFromPath();
+                        log('Email encontrado: ' + email + ', Oferta: ' + oferta);
+                        sendConversion(email, oferta);
+                    }
+                }
+            }
         });
         
         log('Rastreador de conversões inicializado');
