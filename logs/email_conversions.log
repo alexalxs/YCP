@@ -4,3 +4,4 @@
 {"id":"67cfd34414ea3","timestamp":"2025-03-11 06:08:04","email":"alexalxs@gmail.com","oferta":"desconhecida","ip":"172.22.0.1","user_agent":"Mozilla\/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/133.0.0.0 Safari\/537.36","referrer":"","page_url":"http:\/\/localhost:8000\/?key=2","subid":"67cfd1e00bcd1"}
 {"id":"67d07c8c1dbe0","timestamp":"2025-03-11 18:10:20","email":"teste@exemplo.com","oferta":"oferta1","ip":"172.22.0.1","user_agent":"curl\/7.87.0","referrer":"","page_url":"","subid":"sub_67d07c8c1d392"}
 {"id":"67d086d5b9914","timestamp":"2025-03-11 18:54:13","email":"teste@exemplo.com","oferta":"teste","ip":"172.22.0.1","user_agent":"curl\/7.87.0","referrer":"","page_url":"","subid":"sub_67d086d5b98b8"}
+{"id":"67d08a4e2b2ab","timestamp":"2025-03-11 19:09:02","email":"teste@exemplo.com","oferta":"teste","ip":"172.22.0.1","user_agent":"curl\/7.87.0","referrer":"","page_url":"","subid":"sub_67d08a4e2b27a"}

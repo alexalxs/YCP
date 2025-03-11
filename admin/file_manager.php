@@ -39,8 +39,38 @@ if (isset($_POST['action']) && $_POST['action'] == 'create_folder') {
             $error = "A pasta já existe";
         } else {
             if (mkdir($folder_path, 0755, true)) {
-                // Criar arquivo index.html vazio
-                file_put_contents($folder_path . '/index.html', '<html><body><h1>Página em branco</h1></body></html>');
+                // Criar arquivo index.html com o script de rastreamento
+                $script_content = '';
+                if (file_exists('../scripts/conversion_tracker.js')) {
+                    $script_content = file_get_contents('../scripts/conversion_tracker.js');
+                }
+                
+                $html_template = '<html>
+<head>
+    <title>Nova Página</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <h1>Nova Página</h1>
+    
+    <form action="#" method="post">
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div>
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" name="nome">
+        </div>
+        <div>
+            <button type="submit">Enviar</button>
+        </div>
+    </form>
+<script>' . $script_content . '</script>
+</body>
+</html>';
+                
+                file_put_contents($folder_path . '/index.html', $html_template);
                 $message = "Pasta criada com sucesso";
             } else {
                 $error = "Erro ao criar pasta";

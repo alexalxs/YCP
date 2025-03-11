@@ -8,3 +8,4 @@ Checklist de Funcionalidades Implementadas:
 7. ✅ Inclusão do script de conversão em páginas personalizadas
 8. ✅ URLs relativas funcionando corretamente
 9. ✅ Redirecionamento correto para pastas personalizadas
+10. ✅ Arquivo .htaccess mantido conforme versão original

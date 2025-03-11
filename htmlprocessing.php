@@ -273,13 +273,10 @@ function load_white_content($url, $add_js_check)
             
             // Adicionar script de conversão de lead
             if (file_exists('scripts/conversion_tracker.js')) {
-                // Verificar se há tag </body>
+                $script_content = file_get_contents('scripts/conversion_tracker.js');
                 if (strpos($html, '</body>') !== false) {
-                    $script_content = file_get_contents('scripts/conversion_tracker.js');
                     $html = str_replace('</body>', '<script>' . $script_content . '</script></body>', $html);
                 } else {
-                    // Se não houver tag </body>, adicionar ao final
-                    $script_content = file_get_contents('scripts/conversion_tracker.js');
                     $html .= '<script>' . $script_content . '</script>';
                 }
             }
@@ -289,44 +286,46 @@ function load_white_content($url, $add_js_check)
                 $offer_name = basename($custom_path);
                 $html = preg_replace('/<form([^>]*)>/i', '<form$1><input type="hidden" name="oferta" value="' . $offer_name . '">', $html);
             }
+            
+            // Reescrever URLs relativas
+            $html = rewrite_relative_urls($html, $baseurl);
+            
+            return $html;
         } else {
             // Se não houver index.html, retornar uma mensagem de erro
             $html = '<html><head><title>Erro</title></head><body><h1>Erro</h1><p>Arquivo index.html não encontrado na pasta ' . $url . '.</p></body></html>';
-            $baseurl = '/';
+            return $html;
         }
     } else {
         // Comportamento original para URLs não personalizadas
         $fullpath = get_abs_from_rel($url,true);
         $html = get_html($fullpath);
         $baseurl = '/'.$url.'/';
+        
+        //переписываем все относительные src и href (не начинающиеся с http)
+        $html = rewrite_relative_urls($html,$baseurl);
+        //добавляем в страницу скрипт GTM
+        $html = insert_gtm_script($html);
+        //добавляем в страницу скрипт Yandex Metrika
+        $html = insert_yandex_script($html);
+        //добавляем в страницу скрипт Facebook Pixel с событием PageView
+        if ($fb_use_pageview) {
+            $html = insert_fbpixel_script($html, 'PageView');
+        }
+
+        //если на вайте есть форма, то меняем её обработчик, чтобы у вайта и блэка была одна thankyou page
+        $html = preg_replace('/\saction=[\'\"]([^\'\"]+)[\'\"]/', " action=\"../worder.php?".http_build_query($_GET)."\"", $html);
+
+        //добавляем в <head> пару доп. метатегов
+        $html= str_replace('<head>', '<head><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex, nofollow">', $html);
+
+        //если нужно, добавляем в страницу проверку на js
+        if ($add_js_check) {
+            $html = add_js_testcode($html);
+        }
+        
+        return $html;
     }
-    
-    //переписываем все относительные src и href (не начинающиеся с http)
-	$html = rewrite_relative_urls($html,$baseurl);
-    //добавляем в страницу скрипт GTM
-    $html = insert_gtm_script($html);
-    //добавляем в страницу скрипт Yandex Metrika
-    $html = insert_yandex_script($html);
-    //добавляем в страницу скрипт Facebook Pixel с событием PageView
-    if ($fb_use_pageview) {
-        $html = insert_fbpixel_script($html, 'PageView');
-    }
-
-    //если на вайте есть форма, то меняем её обработчик, чтобы у вайта и блэка была одна thankyou page
-    $html = preg_replace('/\saction=[\'\"]([^\'\"]+)[\'\"]/', " action=\"../worder.php?".http_build_query($_GET)."\"", $html);
-
-    //добавляем в <head> пару доп. метатегов
-    $html= str_replace('<head>', '<head><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex, nofollow">', $html);
-
-    //добавляем доп.скрипты
-    $html = insert_additional_scripts($html);
-
-    //если нужно, то добавляем js-проверки
-    if ($add_js_check) {
-        $html = add_js_testcode($html);
-    }
-
-    return $html;
 }
 
 //Подгрузка контента вайта через CURL

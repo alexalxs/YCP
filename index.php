@@ -147,10 +147,13 @@ if ($use_js_checks === true) {
 
 // Verificar se a URL solicitada é uma pasta personalizada
 if (isset($_GET['custom_type']) && isset($_GET['custom_folder'])) {
+    // Debug
+    file_put_contents('debug.log', "custom_type: " . $_GET['custom_type'] . ", custom_folder: " . $_GET['custom_folder'] . "\n", FILE_APPEND);
+    
     $custom_type = $_GET['custom_type'];
     $custom_folder = $_GET['custom_folder'];
     
-    if ($custom_type === 'white' && in_array($custom_folder, $custom_white_folders)) {
+    if ($custom_type === 'white') {
         $html = load_white_content($custom_folder, $use_js_checks);
         
         // Adicionar script de conversão de lead se ainda não estiver incluído
@@ -167,7 +170,7 @@ if (isset($_GET['custom_type']) && isset($_GET['custom_folder'])) {
         exit;
     }
     
-    if ($custom_type === 'offers' && in_array($custom_folder, $custom_offer_folders)) {
+    if ($custom_type === 'offers') {
         $html = load_landing($custom_folder);
         
         // Adicionar script de conversão de lead se ainda não estiver incluído
@@ -188,42 +191,47 @@ if (isset($_GET['custom_type']) && isset($_GET['custom_folder'])) {
 // Verificar se a URL solicitada é uma pasta personalizada (método alternativo)
 $request_uri = $_SERVER['REQUEST_URI'];
 $request_path = parse_url($request_uri, PHP_URL_PATH);
-$path_parts = explode('/', trim($request_path, '/'));
 
 // Verificar se é uma pasta white personalizada
-if (count($path_parts) >= 2 && $path_parts[0] === 'white' && in_array($path_parts[1], $custom_white_folders)) {
-    $html = load_white_content($path_parts[1], $use_js_checks);
-    
-    // Adicionar script de conversão de lead se ainda não estiver incluído
-    if (file_exists('scripts/conversion_tracker.js') && strpos($html, 'conversion_tracker.js') === false) {
-        $script_content = file_get_contents('scripts/conversion_tracker.js');
-        if (strpos($html, '</body>') !== false) {
-            $html = str_replace('</body>', '<script>' . $script_content . '</script></body>', $html);
-        } else {
-            $html .= '<script>' . $script_content . '</script>';
+if (preg_match('#^/white/([^/]+)/?$#', $request_path, $matches)) {
+    $folder = $matches[1];
+    if (file_exists('white/' . $folder) && is_dir('white/' . $folder)) {
+        $html = load_white_content($folder, $use_js_checks);
+        
+        // Adicionar script de conversão de lead se ainda não estiver incluído
+        if (file_exists('scripts/conversion_tracker.js') && strpos($html, 'conversion_tracker.js') === false) {
+            $script_content = file_get_contents('scripts/conversion_tracker.js');
+            if (strpos($html, '</body>') !== false) {
+                $html = str_replace('</body>', '<script>' . $script_content . '</script></body>', $html);
+            } else {
+                $html .= '<script>' . $script_content . '</script>';
+            }
         }
+        
+        echo $html;
+        exit;
     }
-    
-    echo $html;
-    exit;
 }
 
 // Verificar se é uma pasta de oferta personalizada
-if (count($path_parts) >= 2 && $path_parts[0] === 'offers' && in_array($path_parts[1], $custom_offer_folders)) {
-    $html = load_landing($path_parts[1]);
-    
-    // Adicionar script de conversão de lead se ainda não estiver incluído
-    if (file_exists('scripts/conversion_tracker.js') && strpos($html, 'conversion_tracker.js') === false) {
-        $script_content = file_get_contents('scripts/conversion_tracker.js');
-        if (strpos($html, '</body>') !== false) {
-            $html = str_replace('</body>', '<script>' . $script_content . '</script></body>', $html);
-        } else {
-            $html .= '<script>' . $script_content . '</script>';
+if (preg_match('#^/offers/([^/]+)/?$#', $request_path, $matches)) {
+    $folder = $matches[1];
+    if (file_exists('offers/' . $folder) && is_dir('offers/' . $folder)) {
+        $html = load_landing($folder);
+        
+        // Adicionar script de conversão de lead se ainda não estiver incluído
+        if (file_exists('scripts/conversion_tracker.js') && strpos($html, 'conversion_tracker.js') === false) {
+            $script_content = file_get_contents('scripts/conversion_tracker.js');
+            if (strpos($html, '</body>') !== false) {
+                $html = str_replace('</body>', '<script>' . $script_content . '</script></body>', $html);
+            } else {
+                $html .= '<script>' . $script_content . '</script>';
+            }
         }
+        
+        echo $html;
+        exit;
     }
-    
-    echo $html;
-    exit;
 }
 
 // Resto do código original
