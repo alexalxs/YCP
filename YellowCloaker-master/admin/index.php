@@ -191,6 +191,11 @@ $tableOutput.="</tbody></TABLE>";
                                         <span class="mini-sub-pro">Go to bottom</span>
                                     </a>
                                 </li>
+                                <li>
+                                    <a title="Email Stats" href="/email_stats.php?password=<?=$_GET['password']?>" target="_blank">
+                                        <span class="mini-sub-pro">📊 Email Stats</span>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                         <li>

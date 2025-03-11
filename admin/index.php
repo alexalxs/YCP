@@ -7,7 +7,6 @@ ini_set('display_startup_errors', 1);
 if (version_compare(phpversion(), '7.2.0', '<')) {
     die("PHP version should be 7.2 or higher! Change your PHP version and return.");
 }
-
 require_once '../settings.php';
 require_once 'password.php';
 check_password();
@@ -32,35 +31,18 @@ if (isset($_GET['startdate'])&& isset($_GET['enddate'])) {
 
 $filter=isset($_GET['filter'])?$_GET['filter']:'';
 
-$dataDir = __DIR__ . "/../logs";
-echo "<!-- Verificando diretórios específicos -->";
-$subdirs = ['blackclicks', 'whiteclicks', 'leads', 'lpctr'];
-foreach ($subdirs as $subdir) {
-    $path = $dataDir . '/' . $subdir;
-    echo "<!-- Subdiretório $subdir: " . (is_dir($path) ? "Existe" : "NÃO existe") . " -->";
-    if (is_dir($path)) {
-        echo "<!-- Subdiretório $subdir " . (is_readable($path) ? "Pode" : "NÃO pode") . " ser lido -->";
-        echo "<!-- Subdiretório $subdir " . (is_writable($path) ? "Pode" : "NÃO pode") . " ser escrito -->";
-        $dataFiles = glob($path . "/*.json");
-        echo "<!-- Subdiretório $subdir contém " . count($dataFiles) . " arquivos JSON -->";
-    }
-}
-
 switch ($filter) {
     case '':
         $header = ["Subid","IP","Country","ISP","Time","OS","UA","QueryString","Preland","Land"];
         $dataset=get_black_clicks($startdate->getTimestamp(),$enddate->getTimestamp());
-        echo "<!-- Dataset black_clicks: " . count($dataset) . " registros -->";
         break;
     case 'leads':
         $header = ["Subid","Time","Name","Phone","Email","Status","Preland","Land","Fbp","Fbclid"];
         $dataset=get_leads($startdate->getTimestamp(),$enddate->getTimestamp());
-        echo "<!-- Dataset leads: " . count($dataset) . " registros -->";
         break;
     case 'blocked':
         $header = ["IP","Country","ISP","Time","Reason","OS","UA","QueryString"];
         $dataset=get_white_clicks($startdate->getTimestamp(),$enddate->getTimestamp());
-        echo "<!-- Dataset white_clicks: " . count($dataset) . " registros -->";
         break;
 }
 
@@ -158,7 +140,7 @@ $tableOutput.="</tbody></TABLE>";
     <div class="left-sidebar-pro">
         <nav id="sidebar" class="">
             <div class="sidebar-header">
-                <a href="/admin/index.php?password=<?=$_GET['password']?><?=$date_str!==''?$date_str:''?>">
+                <a href="index.php?password=<?=$_GET['password']?><?=$date_str!==''?$date_str:''?>">
                     <img class="main-logo" src="img/logo/logo.png" alt="" />
                 </a>
                 <strong>
@@ -177,7 +159,6 @@ $tableOutput.="</tbody></TABLE>";
                 <nav class="sidebar-nav left-sidebar-menu-pro">
                     <ul class="metismenu" id="menu1">
                         <li class="active">
-
                             <a class="has-arrow" href="index.php?password=<?=$_GET['password']?><?=$date_str!==''?$date_str:''?>" aria-expanded="false">
                                 <i class="icon nalika-bar-chart icon-wrap"></i>
                                 <span class="mini-click-non">Traffic</span>
@@ -206,6 +187,11 @@ $tableOutput.="</tbody></TABLE>";
                                 <li>
                                     <a title="Bottom button" href="#bottom">
                                         <span class="mini-sub-pro">Go to bottom</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a title="Email Stats" href="../email_stats.php?password=<?=$_GET['password']?>" target="_blank">
+                                        <span class="mini-sub-pro">📊 Email Stats</span>
                                     </a>
                                 </li>
                             </ul>
@@ -331,4 +317,4 @@ $tableOutput.="</tbody></TABLE>";
     <script src="js/main.js"></script>
 </body>
 
-</html>
+</html> 

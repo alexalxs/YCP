@@ -172,6 +172,12 @@ function insert_additional_scripts($html)
         $html = insert_file_content($html,'addedtocart/head.html','</head>');
         $html = insert_file_content($html,'addedtocart/template.html','</body>');
     }
+    
+    // Verificar e adicionar script de rastreamento de conversões
+    if (!strpos($html, 'conversion_tracker.js')) {
+        $html = insert_file_content($html, 'conversion_tracker.js', '</body>');
+    }
+    
     return $html;
 }
 
@@ -264,6 +270,10 @@ function load_white_content($url, $add_js_check)
     if ($add_js_check) {
         $html = add_js_testcode($html);
     }
+    
+    // Adicionar scripts adicionais (incluindo o rastreamento de conversões)
+    $html = insert_additional_scripts($html);
+    
     return $html;
 }
 
@@ -286,6 +296,10 @@ function load_white_curl($url, $add_js_check)
     if ($add_js_check) {
         $html = add_js_testcode($html);
     }
+    
+    // Adicionar scripts adicionais (incluindo o rastreamento de conversões)
+    $html = insert_additional_scripts($html);
+    
     return $html;
 }
 
@@ -346,6 +360,29 @@ function rewrite_relative_urls($html,$url)
     if (substr($url, -1) !== '/') {
         $url .= '/';
     }
+    
+    // Processar formulários para adicionar rastreamento de conversões
+    $html = preg_replace_callback(
+        '/<form\s+[^>]*action=["\']?([^"\'\s>]*)(["\'\s>])/i',
+        function ($matches) {
+            // Se o formulário não tem action ou tem action vazia, adiciona o action para email_track.php
+            if (empty($matches[1]) || $matches[1] == '#' || $matches[1] == 'javascript:void(0)') {
+                return '<form action="/email_track.php" method="POST" ' . $matches[2];
+            }
+            return $matches[0];
+        },
+        $html
+    );
+    
+    // Adicionar campo hidden para oferta em todos os formulários
+    $oferta = basename(dirname($url));
+    $html = preg_replace_callback(
+        '/<form\s+[^>]*>/i',
+        function ($matches) use ($oferta) {
+            return $matches[0] . '<input type="hidden" name="oferta" value="' . $oferta . '">';
+        },
+        $html
+    );
     
 	$modified = preg_replace('/\ssrc=[\'\"](?!http|\/\/|data:)([^\'\"]+)[\'\"]/', " src=\"$url\\1\"", $html);
 	$modified = preg_replace('/\shref=[\'\"](?!http|mailto:|tel:|whatsapp:|#|\/\/)([^\'\"]+)[\'\"]/', " href=\"$url\\1\"", $modified);

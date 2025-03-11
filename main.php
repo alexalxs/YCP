@@ -50,6 +50,10 @@ function white($use_js_checks)
             // Processar o HTML para caminhos relativos
             $baseurl = $curfolder[0].'/';
             $html_content = rewrite_relative_urls($html_content, $baseurl);
+            
+            // Adicionar scripts adicionais, incluindo o botão de estatísticas
+            $html_content = insert_additional_scripts($html_content);
+            
             echo $html_content;
         } else {
             // Se o arquivo está vazio, tenta carregar com a função normal
