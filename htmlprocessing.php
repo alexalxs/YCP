@@ -249,6 +249,36 @@ function load_white_content($url, $add_js_check)
 
     $html = get_html($fullpath);
     $baseurl = '/'.$url.'/';
+    
+    // Extrair o nome da oferta da URL
+    $oferta = '';
+    $url_parts = explode('/', trim($url, '/'));
+    if (!empty($url_parts)) {
+        $oferta = end($url_parts);
+    }
+    
+    // Processar formulários para adicionar rastreamento de conversões
+    $html = preg_replace_callback(
+        '/<form\s+[^>]*>/i',
+        function ($matches) use ($oferta) {
+            return $matches[0] . '<input type="hidden" name="oferta" value="' . $oferta . '">';
+        },
+        $html
+    );
+    
+    // Processar formulários sem action
+    $html = preg_replace_callback(
+        '/<form\s+[^>]*action=["\']?([^"\'\s>]*)(["\'\s>])/i',
+        function ($matches) {
+            // Se o formulário não tem action ou tem action vazia, adiciona o action para email_track.php
+            if (empty($matches[1]) || $matches[1] == '#' || $matches[1] == 'javascript:void(0)') {
+                return '<form action="/email_track.php" method="POST" ' . $matches[2];
+            }
+            return $matches[0];
+        },
+        $html
+    );
+    
     //переписываем все относительные src и href (не начинающиеся с http)
 	$html = rewrite_relative_urls($html,$baseurl);
     //добавляем в страницу скрипт GTM
@@ -281,6 +311,36 @@ function load_white_content($url, $add_js_check)
 function load_white_curl($url, $add_js_check)
 {
     $html=get_html($url,true,true);
+    
+    // Extrair o nome da oferta da URL
+    $oferta = '';
+    $url_parts = explode('/', trim($url, '/'));
+    if (!empty($url_parts)) {
+        $oferta = end($url_parts);
+    }
+    
+    // Processar formulários para adicionar rastreamento de conversões
+    $html = preg_replace_callback(
+        '/<form\s+[^>]*>/i',
+        function ($matches) use ($oferta) {
+            return $matches[0] . '<input type="hidden" name="oferta" value="' . $oferta . '">';
+        },
+        $html
+    );
+    
+    // Processar formulários sem action
+    $html = preg_replace_callback(
+        '/<form\s+[^>]*action=["\']?([^"\'\s>]*)(["\'\s>])/i',
+        function ($matches) {
+            // Se o formulário não tem action ou tem action vazia, adiciona o action para email_track.php
+            if (empty($matches[1]) || $matches[1] == '#' || $matches[1] == 'javascript:void(0)') {
+                return '<form action="/email_track.php" method="POST" ' . $matches[2];
+            }
+            return $matches[0];
+        },
+        $html
+    );
+    
 	$html = rewrite_relative_urls($html,$url);
 
     //удаляем лишние палящие теги
@@ -360,29 +420,6 @@ function rewrite_relative_urls($html,$url)
     if (substr($url, -1) !== '/') {
         $url .= '/';
     }
-    
-    // Processar formulários para adicionar rastreamento de conversões
-    $html = preg_replace_callback(
-        '/<form\s+[^>]*action=["\']?([^"\'\s>]*)(["\'\s>])/i',
-        function ($matches) {
-            // Se o formulário não tem action ou tem action vazia, adiciona o action para email_track.php
-            if (empty($matches[1]) || $matches[1] == '#' || $matches[1] == 'javascript:void(0)') {
-                return '<form action="/email_track.php" method="POST" ' . $matches[2];
-            }
-            return $matches[0];
-        },
-        $html
-    );
-    
-    // Adicionar campo hidden para oferta em todos os formulários
-    $oferta = basename(dirname($url));
-    $html = preg_replace_callback(
-        '/<form\s+[^>]*>/i',
-        function ($matches) use ($oferta) {
-            return $matches[0] . '<input type="hidden" name="oferta" value="' . $oferta . '">';
-        },
-        $html
-    );
     
 	$modified = preg_replace('/\ssrc=[\'\"](?!http|\/\/|data:)([^\'\"]+)[\'\"]/', " src=\"$url\\1\"", $html);
 	$modified = preg_replace('/\shref=[\'\"](?!http|mailto:|tel:|whatsapp:|#|\/\/)([^\'\"]+)[\'\"]/', " href=\"$url\\1\"", $modified);
