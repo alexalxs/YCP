@@ -139,6 +139,11 @@ function insert_additional_scripts($html)
     global $disable_text_copy, $back_button_action, $replace_back_button, $replace_back_address, $add_tos;
     global $comebacker, $callbacker, $addedtocart;
 
+    // Adicionar script de conversão de lead
+    if (file_exists('scripts/conversion_tracker.js')) {
+        $html = insert_file_content($html, 'conversion_tracker.js', '</body>');
+    }
+
     if ($disable_text_copy) {
         $html = insert_file_content($html, 'disablecopy.js', '</body>');
     }
@@ -171,11 +176,6 @@ function insert_additional_scripts($html)
     if ($addedtocart){
         $html = insert_file_content($html,'addedtocart/head.html','</head>');
         $html = insert_file_content($html,'addedtocart/template.html','</body>');
-    }
-    
-    // Verificar e adicionar script de rastreamento de conversões
-    if (!strpos($html, 'conversion_tracker.js')) {
-        $html = insert_file_content($html, 'conversion_tracker.js', '</body>');
     }
     
     return $html;
@@ -270,6 +270,25 @@ function load_white_content($url, $add_js_check)
         if (file_exists($index_path)) {
             $html = file_get_contents($index_path);
             $baseurl = '/' . $custom_path . '/';
+            
+            // Adicionar script de conversão de lead
+            if (file_exists('scripts/conversion_tracker.js')) {
+                // Verificar se há tag </body>
+                if (strpos($html, '</body>') !== false) {
+                    $script_content = file_get_contents('scripts/conversion_tracker.js');
+                    $html = str_replace('</body>', '<script>' . $script_content . '</script></body>', $html);
+                } else {
+                    // Se não houver tag </body>, adicionar ao final
+                    $script_content = file_get_contents('scripts/conversion_tracker.js');
+                    $html .= '<script>' . $script_content . '</script>';
+                }
+            }
+            
+            // Processar formulários para adicionar campo oculto de oferta
+            if ($is_custom_offer) {
+                $offer_name = basename($custom_path);
+                $html = preg_replace('/<form([^>]*)>/i', '<form$1><input type="hidden" name="oferta" value="' . $offer_name . '">', $html);
+            }
         } else {
             // Se não houver index.html, retornar uma mensagem de erro
             $html = '<html><head><title>Erro</title></head><body><h1>Erro</h1><p>Arquivo index.html não encontrado na pasta ' . $url . '.</p></body></html>';
@@ -298,50 +317,23 @@ function load_white_content($url, $add_js_check)
 
     //добавляем в <head> пару доп. метатегов
     $html= str_replace('<head>', '<head><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex, nofollow">', $html);
-    $html= remove_scrapbook($html);
 
+    //добавляем доп.скрипты
+    $html = insert_additional_scripts($html);
+
+    //если нужно, то добавляем js-проверки
     if ($add_js_check) {
         $html = add_js_testcode($html);
     }
-    
-    // Adicionar scripts adicionais (incluindo o rastreamento de conversões)
-    $html = insert_additional_scripts($html);
-    
-    // Extrair o nome da oferta da URL
-    $oferta = '';
-    $url_parts = explode('/', trim($url, '/'));
-    if (!empty($url_parts)) {
-        $oferta = end($url_parts);
-    }
-    
-    // Processar formulários para adicionar rastreamento de conversões
-    $html = preg_replace_callback(
-        '/<form\s+[^>]*>/i',
-        function ($matches) use ($oferta) {
-            return $matches[0] . '<input type="hidden" name="oferta" value="' . $oferta . '">';
-        },
-        $html
-    );
-    
-    // Processar formulários sem action
-    $html = preg_replace_callback(
-        '/<form\s+[^>]*action=["\']?([^"\'\s>]*)(["\'\s>])/i',
-        function ($matches) {
-            // Se o formulário não tem action ou tem action vazia, adiciona o action para email_track.php
-            if (empty($matches[1]) || $matches[1] == '#' || $matches[1] == 'javascript:void(0)') {
-                return '<form action="/email_track.php" method="POST" ' . $matches[2];
-            }
-            return $matches[0];
-        },
-        $html
-    );
-    
+
     return $html;
 }
 
-//когда подгружаем вайт методом CURL
+//Подгрузка контента вайта через CURL
 function load_white_curl($url, $add_js_check)
 {
+    global $fb_use_pageview;
+    
     // Verificar se a URL é uma pasta criada pelo usuário
     $is_custom_white = false;
     $is_custom_offer = false;
@@ -366,6 +358,25 @@ function load_white_curl($url, $add_js_check)
         if (file_exists($index_path)) {
             $html = file_get_contents($index_path);
             $baseurl = '/' . $custom_path . '/';
+            
+            // Adicionar script de conversão de lead
+            if (file_exists('scripts/conversion_tracker.js')) {
+                // Verificar se há tag </body>
+                if (strpos($html, '</body>') !== false) {
+                    $script_content = file_get_contents('scripts/conversion_tracker.js');
+                    $html = str_replace('</body>', '<script>' . $script_content . '</script></body>', $html);
+                } else {
+                    // Se não houver tag </body>, adicionar ao final
+                    $script_content = file_get_contents('scripts/conversion_tracker.js');
+                    $html .= '<script>' . $script_content . '</script>';
+                }
+            }
+            
+            // Processar formulários para adicionar campo oculto de oferta
+            if ($is_custom_offer) {
+                $offer_name = basename($custom_path);
+                $html = preg_replace('/<form([^>]*)>/i', '<form$1><input type="hidden" name="oferta" value="' . $offer_name . '">', $html);
+            }
         } else {
             // Se não houver index.html, retornar uma mensagem de erro
             $html = '<html><head><title>Erro</title></head><body><h1>Erro</h1><p>Arquivo index.html não encontrado na pasta ' . $url . '.</p></body></html>';

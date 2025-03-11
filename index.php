@@ -145,61 +145,85 @@ if ($use_js_checks === true) {
     }
 }
 
-// Ler e exibir o conteúdo diretamente
-if (file_exists($file)) {
-    $content = file_get_contents($file);
+// Verificar se a URL solicitada é uma pasta personalizada
+if (isset($_GET['custom_type']) && isset($_GET['custom_folder'])) {
+    $custom_type = $_GET['custom_type'];
+    $custom_folder = $_GET['custom_folder'];
     
-    // Remover quebras de linha desnecessárias e espaços em branco
-    $content = preg_replace('/\s+/', ' ', $content);
-    $content = preg_replace('/>\s+</', '><', $content);
+    if ($custom_type === 'white' && in_array($custom_folder, $custom_white_folders)) {
+        $html = load_white_content($custom_folder, $use_js_checks);
+        
+        // Adicionar script de conversão de lead se ainda não estiver incluído
+        if (file_exists('scripts/conversion_tracker.js') && strpos($html, 'conversion_tracker.js') === false) {
+            $script_content = file_get_contents('scripts/conversion_tracker.js');
+            if (strpos($html, '</body>') !== false) {
+                $html = str_replace('</body>', '<script>' . $script_content . '</script></body>', $html);
+            } else {
+                $html .= '<script>' . $script_content . '</script>';
+            }
+        }
+        
+        echo $html;
+        exit;
+    }
     
-    echo $content;
-} else {
-    header("HTTP/1.0 404 Not Found");
-    echo "Página não encontrada";
+    if ($custom_type === 'offers' && in_array($custom_folder, $custom_offer_folders)) {
+        $html = load_landing($custom_folder);
+        
+        // Adicionar script de conversão de lead se ainda não estiver incluído
+        if (file_exists('scripts/conversion_tracker.js') && strpos($html, 'conversion_tracker.js') === false) {
+            $script_content = file_get_contents('scripts/conversion_tracker.js');
+            if (strpos($html, '</body>') !== false) {
+                $html = str_replace('</body>', '<script>' . $script_content . '</script></body>', $html);
+            } else {
+                $html .= '<script>' . $script_content . '</script>';
+            }
+        }
+        
+        echo $html;
+        exit;
+    }
 }
 
-// Limpar e enviar o buffer
-ob_end_flush();
+// Verificar se a URL solicitada é uma pasta personalizada (método alternativo)
+$request_uri = $_SERVER['REQUEST_URI'];
+$request_path = parse_url($request_uri, PHP_URL_PATH);
+$path_parts = explode('/', trim($request_path, '/'));
 
-// Obter pastas personalizadas
-function get_custom_folders($dir) {
-    $folders = [];
+// Verificar se é uma pasta white personalizada
+if (count($path_parts) >= 2 && $path_parts[0] === 'white' && in_array($path_parts[1], $custom_white_folders)) {
+    $html = load_white_content($path_parts[1], $use_js_checks);
     
-    if (file_exists($dir)) {
-        $items = scandir($dir);
-        
-        foreach ($items as $item) {
-            if ($item != '.' && $item != '..' && is_dir($dir . '/' . $item)) {
-                $folders[] = $item;
-            }
+    // Adicionar script de conversão de lead se ainda não estiver incluído
+    if (file_exists('scripts/conversion_tracker.js') && strpos($html, 'conversion_tracker.js') === false) {
+        $script_content = file_get_contents('scripts/conversion_tracker.js');
+        if (strpos($html, '</body>') !== false) {
+            $html = str_replace('</body>', '<script>' . $script_content . '</script></body>', $html);
+        } else {
+            $html .= '<script>' . $script_content . '</script>';
         }
     }
     
-    return $folders;
+    echo $html;
+    exit;
 }
 
-// Obter pastas white personalizadas
-$custom_white_folders = [];
-if ($conf->get('white.customfolders.enabled', false)) {
-    $white_dir = $conf->get('white.customfolders.basedir', 'white');
-    $custom_white_folders = get_custom_folders($white_dir);
-}
-
-// Obter pastas de ofertas personalizadas
-$custom_offer_folders = [];
-if ($conf->get('black.customfolders.enabled', false)) {
-    $offers_dir = $conf->get('black.customfolders.basedir', 'offers');
-    $custom_offer_folders = get_custom_folders($offers_dir);
-}
-
-// Adicionar pastas personalizadas às opções disponíveis
-if (!empty($custom_white_folders)) {
-    $white_folder_names = array_merge($white_folder_names, $custom_white_folders);
-}
-
-if (!empty($custom_offer_folders)) {
-    $black_land_folder_names = array_merge($black_land_folder_names, $custom_offer_folders);
+// Verificar se é uma pasta de oferta personalizada
+if (count($path_parts) >= 2 && $path_parts[0] === 'offers' && in_array($path_parts[1], $custom_offer_folders)) {
+    $html = load_landing($path_parts[1]);
+    
+    // Adicionar script de conversão de lead se ainda não estiver incluído
+    if (file_exists('scripts/conversion_tracker.js') && strpos($html, 'conversion_tracker.js') === false) {
+        $script_content = file_get_contents('scripts/conversion_tracker.js');
+        if (strpos($html, '</body>') !== false) {
+            $html = str_replace('</body>', '<script>' . $script_content . '</script></body>', $html);
+        } else {
+            $html .= '<script>' . $script_content . '</script>';
+        }
+    }
+    
+    echo $html;
+    exit;
 }
 
 // Resto do código original
