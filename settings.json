@@ -44,6 +44,10 @@
             "timezone": true,
             "tzstart": "-3",
             "tzend": "4"
+        },
+        "customfolders": {
+            "enabled": true,
+            "basedir": "white"
         }
     },
     "black": {
@@ -77,7 +81,11 @@
                 "urls": ""
             }
         },
-        "jsconnect": "replace"
+        "jsconnect": "replace",
+        "customfolders": {
+            "enabled": true,
+            "basedir": "offers"
+        }
     },
     "pixels": {
         "ya": {

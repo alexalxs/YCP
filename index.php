@@ -16,6 +16,12 @@ require_once 'settings.php';
 require_once 'db.php';
 require_once 'main.php';
 require_once 'abtest.php';
+require_once 'htmlprocessing.php';
+require_once 'cookies.php';
+require_once 'redirect.php';
+require_once 'requestfunc.php';
+require_once 'detect.php';
+require_once 'filters.php';
 
 // Carregar configurações
 $settings = json_decode(file_get_contents('settings.json'), true);
@@ -155,4 +161,200 @@ if (file_exists($file)) {
 
 // Limpar e enviar o buffer
 ob_end_flush();
+
+// Obter pastas personalizadas
+function get_custom_folders($dir) {
+    $folders = [];
+    
+    if (file_exists($dir)) {
+        $items = scandir($dir);
+        
+        foreach ($items as $item) {
+            if ($item != '.' && $item != '..' && is_dir($dir . '/' . $item)) {
+                $folders[] = $item;
+            }
+        }
+    }
+    
+    return $folders;
+}
+
+// Obter pastas white personalizadas
+$custom_white_folders = [];
+if ($conf->get('white.customfolders.enabled', false)) {
+    $white_dir = $conf->get('white.customfolders.basedir', 'white');
+    $custom_white_folders = get_custom_folders($white_dir);
+}
+
+// Obter pastas de ofertas personalizadas
+$custom_offer_folders = [];
+if ($conf->get('black.customfolders.enabled', false)) {
+    $offers_dir = $conf->get('black.customfolders.basedir', 'offers');
+    $custom_offer_folders = get_custom_folders($offers_dir);
+}
+
+// Adicionar pastas personalizadas às opções disponíveis
+if (!empty($custom_white_folders)) {
+    $white_folder_names = array_merge($white_folder_names, $custom_white_folders);
+}
+
+if (!empty($custom_offer_folders)) {
+    $black_land_folder_names = array_merge($black_land_folder_names, $custom_offer_folders);
+}
+
+// Resto do código original
+$ip = getip();
+$user_agent = $_SERVER['HTTP_USER_AGENT'];
+$user_language = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+$referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
+$user_os = getOS($user_agent);
+$user_country = getcountry($ip);
+$user_isp = getisp($ip);
+$user_city = getcity($ip);
+$user_region = getregion($ip);
+$user_device = getdevice($user_agent);
+$user_browser = getbrowser($user_agent);
+$user_token = isset($_GET['token']) ? $_GET['token'] : '';
+$user_subid = get_subid();
+$user_flow = get_flow();
+$user_subacc = get_subacc();
+$user_prelanding = get_prelanding();
+$user_landing = get_landing();
+$user_is_bot = is_bot($user_agent);
+$user_is_vpn = is_vpn($ip);
+$user_is_tor = is_tor($ip);
+$user_is_blocked = false;
+$user_block_reason = [];
+
+//Проверяем фильтры
+if (check_os_filter($user_os, $os_white) === false) {
+    $user_is_blocked = true;
+    $user_block_reason[] = 'os';
+}
+
+if (check_country_filter($user_country, $country_white) === false) {
+    $user_is_blocked = true;
+    $user_block_reason[] = 'country';
+}
+
+if (check_url_filter($_SERVER['REQUEST_URI'], $url_should_contain, $url_mode) === false) {
+    $user_is_blocked = true;
+    $user_block_reason[] = 'url';
+}
+
+if (check_tokens_filter($user_token, $tokens_black) === false) {
+    $user_is_blocked = true;
+    $user_block_reason[] = 'token';
+}
+
+if (check_ua_filter($user_agent, $ua_black) === false) {
+    $user_is_blocked = true;
+    $user_block_reason[] = 'ua';
+}
+
+if (check_isp_filter($user_isp, $isp_black) === false) {
+    $user_is_blocked = true;
+    $user_block_reason[] = 'isp';
+}
+
+if (check_lang_filter($user_language, $lang_white) === false) {
+    $user_is_blocked = true;
+    $user_block_reason[] = 'lang';
+}
+
+if (check_referer_filter($referer, $block_without_referer, $referer_stopwords) === false) {
+    $user_is_blocked = true;
+    $user_block_reason[] = 'referer';
+}
+
+if (check_vpntor_filter($user_is_vpn, $user_is_tor, $block_vpnandtor) === false) {
+    $user_is_blocked = true;
+    $user_block_reason[] = 'vpn';
+}
+
+if (check_ip_filter($ip, $ip_black_filename, $ip_black_cidr) === false) {
+    $user_is_blocked = true;
+    $user_block_reason[] = 'ip';
+}
+
+if ($user_is_bot) {
+    $user_is_blocked = true;
+    $user_block_reason[] = 'bot';
+}
+
+//Если пользователь заблокирован, то показываем вайт пейдж
+if ($user_is_blocked) {
+    log_white_click($ip, $user_country, $user_isp, $user_os, $user_agent, $user_block_reason, $_GET);
+    switch ($white_action) {
+        case 'folder':
+            $white_folder = $white_folder_names[array_rand($white_folder_names)];
+            $html = load_white_content($white_folder, $use_js_checks);
+            echo $html;
+            break;
+        case 'curl':
+            $white_url = $white_curl_urls[array_rand($white_curl_urls)];
+            $html = load_white_curl($white_url, $use_js_checks);
+            echo $html;
+            break;
+        case 'redirect':
+            $white_url = $white_redirect_urls[array_rand($white_redirect_urls)];
+            redirect($white_url, $white_redirect_type);
+            break;
+        case 'error':
+            $error_code = $white_error_codes[array_rand($white_error_codes)];
+            http_response_code($error_code);
+            break;
+    }
+    exit;
+}
+
+//Если пользователь прошел фильтры, то показываем блэк пейдж
+log_black_click($user_subid, $ip, $user_country, $user_isp, $user_os, $user_agent, $user_prelanding, $user_landing, $_GET);
+
+//Если у пользователя уже есть кука, то показываем блэк пейдж
+if (isset($_COOKIE['landing'])) {
+    $landing = $_COOKIE['landing'];
+    switch ($black_land_action) {
+        case 'folder':
+            $html = load_landing($landing);
+            echo $html;
+            break;
+        case 'redirect':
+            $black_land_url = $black_land_redirect_urls[array_rand($black_land_redirect_urls)];
+            redirect($black_land_url, $black_land_redirect_type);
+            break;
+    }
+    exit;
+}
+
+//Если у пользователя уже есть кука, то показываем преленд
+if (isset($_COOKIE['prelanding'])) {
+    $prelanding = $_COOKIE['prelanding'];
+    $html = load_prelanding($prelanding, 1);
+    echo $html;
+    exit;
+}
+
+//Если нет куки, то показываем преленд или ленд
+if ($black_preland_action === 'none') {
+    //Показываем ленд
+    $landing = $black_land_folder_names[array_rand($black_land_folder_names)];
+    ywbsetcookie('landing', $landing, '/');
+    switch ($black_land_action) {
+        case 'folder':
+            $html = load_landing($landing);
+            echo $html;
+            break;
+        case 'redirect':
+            $black_land_url = $black_land_redirect_urls[array_rand($black_land_redirect_urls)];
+            redirect($black_land_url, $black_land_redirect_type);
+            break;
+    }
+} else {
+    //Показываем преленд
+    $prelanding = $black_preland_folder_names[array_rand($black_preland_folder_names)];
+    ywbsetcookie('prelanding', $prelanding, '/');
+    $html = load_prelanding($prelanding, 1);
+    echo $html;
+}
 ?>

@@ -245,39 +245,42 @@ function add_images_lazy_load($html){
 function load_white_content($url, $add_js_check)
 {
     global $fb_use_pageview;
-    $fullpath = get_abs_from_rel($url,true);
-
-    $html = get_html($fullpath);
-    $baseurl = '/'.$url.'/';
     
-    // Extrair o nome da oferta da URL
-    $oferta = '';
-    $url_parts = explode('/', trim($url, '/'));
-    if (!empty($url_parts)) {
-        $oferta = end($url_parts);
+    // Verificar se a URL é uma pasta criada pelo usuário
+    $is_custom_white = false;
+    $is_custom_offer = false;
+    $custom_path = '';
+    
+    // Verificar se é uma pasta white personalizada
+    if (file_exists('white/' . $url) && is_dir('white/' . $url)) {
+        $is_custom_white = true;
+        $custom_path = 'white/' . $url;
     }
     
-    // Processar formulários para adicionar rastreamento de conversões
-    $html = preg_replace_callback(
-        '/<form\s+[^>]*>/i',
-        function ($matches) use ($oferta) {
-            return $matches[0] . '<input type="hidden" name="oferta" value="' . $oferta . '">';
-        },
-        $html
-    );
+    // Verificar se é uma pasta de oferta personalizada
+    if (file_exists('offers/' . $url) && is_dir('offers/' . $url)) {
+        $is_custom_offer = true;
+        $custom_path = 'offers/' . $url;
+    }
     
-    // Processar formulários sem action
-    $html = preg_replace_callback(
-        '/<form\s+[^>]*action=["\']?([^"\'\s>]*)(["\'\s>])/i',
-        function ($matches) {
-            // Se o formulário não tem action ou tem action vazia, adiciona o action para email_track.php
-            if (empty($matches[1]) || $matches[1] == '#' || $matches[1] == 'javascript:void(0)') {
-                return '<form action="/email_track.php" method="POST" ' . $matches[2];
-            }
-            return $matches[0];
-        },
-        $html
-    );
+    // Se for uma pasta personalizada, carregar o index.html dela
+    if ($is_custom_white || $is_custom_offer) {
+        $index_path = $custom_path . '/index.html';
+        
+        if (file_exists($index_path)) {
+            $html = file_get_contents($index_path);
+            $baseurl = '/' . $custom_path . '/';
+        } else {
+            // Se não houver index.html, retornar uma mensagem de erro
+            $html = '<html><head><title>Erro</title></head><body><h1>Erro</h1><p>Arquivo index.html não encontrado na pasta ' . $url . '.</p></body></html>';
+            $baseurl = '/';
+        }
+    } else {
+        // Comportamento original para URLs não personalizadas
+        $fullpath = get_abs_from_rel($url,true);
+        $html = get_html($fullpath);
+        $baseurl = '/'.$url.'/';
+    }
     
     //переписываем все относительные src и href (не начинающиеся с http)
 	$html = rewrite_relative_urls($html,$baseurl);
@@ -304,14 +307,6 @@ function load_white_content($url, $add_js_check)
     // Adicionar scripts adicionais (incluindo o rastreamento de conversões)
     $html = insert_additional_scripts($html);
     
-    return $html;
-}
-
-//когда подгружаем вайт методом CURL
-function load_white_curl($url, $add_js_check)
-{
-    $html=get_html($url,true,true);
-    
     // Extrair o nome da oferta da URL
     $oferta = '';
     $url_parts = explode('/', trim($url, '/'));
@@ -341,7 +336,48 @@ function load_white_curl($url, $add_js_check)
         $html
     );
     
-	$html = rewrite_relative_urls($html,$url);
+    return $html;
+}
+
+//когда подгружаем вайт методом CURL
+function load_white_curl($url, $add_js_check)
+{
+    // Verificar se a URL é uma pasta criada pelo usuário
+    $is_custom_white = false;
+    $is_custom_offer = false;
+    $custom_path = '';
+    
+    // Verificar se é uma pasta white personalizada
+    if (file_exists('white/' . $url) && is_dir('white/' . $url)) {
+        $is_custom_white = true;
+        $custom_path = 'white/' . $url;
+    }
+    
+    // Verificar se é uma pasta de oferta personalizada
+    if (file_exists('offers/' . $url) && is_dir('offers/' . $url)) {
+        $is_custom_offer = true;
+        $custom_path = 'offers/' . $url;
+    }
+    
+    // Se for uma pasta personalizada, carregar o index.html dela
+    if ($is_custom_white || $is_custom_offer) {
+        $index_path = $custom_path . '/index.html';
+        
+        if (file_exists($index_path)) {
+            $html = file_get_contents($index_path);
+            $baseurl = '/' . $custom_path . '/';
+        } else {
+            // Se não houver index.html, retornar uma mensagem de erro
+            $html = '<html><head><title>Erro</title></head><body><h1>Erro</h1><p>Arquivo index.html não encontrado na pasta ' . $url . '.</p></body></html>';
+            $baseurl = '/';
+        }
+    } else {
+        // Comportamento original para URLs não personalizadas
+        $html = get_html($url, true, true);
+        $baseurl = $url;
+    }
+    
+    $html = rewrite_relative_urls($html, $baseurl);
 
     //удаляем лишние палящие теги
     $html = preg_replace('/(<meta property=\"og:url\" [^>]+>)/', "", $html);
@@ -359,6 +395,35 @@ function load_white_curl($url, $add_js_check)
     
     // Adicionar scripts adicionais (incluindo o rastreamento de conversões)
     $html = insert_additional_scripts($html);
+    
+    // Extrair o nome da oferta da URL
+    $oferta = '';
+    $url_parts = explode('/', trim($url, '/'));
+    if (!empty($url_parts)) {
+        $oferta = end($url_parts);
+    }
+    
+    // Processar formulários para adicionar rastreamento de conversões
+    $html = preg_replace_callback(
+        '/<form\s+[^>]*>/i',
+        function ($matches) use ($oferta) {
+            return $matches[0] . '<input type="hidden" name="oferta" value="' . $oferta . '">';
+        },
+        $html
+    );
+    
+    // Processar formulários sem action
+    $html = preg_replace_callback(
+        '/<form\s+[^>]*action=["\']?([^"\'\s>]*)(["\'\s>])/i',
+        function ($matches) {
+            // Se o formulário não tem action ou tem action vazia, adiciona o action para email_track.php
+            if (empty($matches[1]) || $matches[1] == '#' || $matches[1] == 'javascript:void(0)') {
+                return '<form action="/email_track.php" method="POST" ' . $matches[2];
+            }
+            return $matches[0];
+        },
+        $html
+    );
     
     return $html;
 }
