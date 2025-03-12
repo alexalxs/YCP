@@ -1,311 +1,383 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Inicializa componentes
-    initPreloader();
-    initMobileMenu();
-    initTestimonialSlider();
-    initScrollAnimations();
-    initSmoothScroll();
+    // Inicializar el formulario de email y el botón final
+    initForm();
+    initFinalButton();
+    
+    // Añadir animaciones de entrada a las secciones
+    addEntryAnimations();
+    
+    // Inicializar el reproductor de audio personalizado
+    initAudioPlayer();
 });
 
-/**
- * Inicializa e gerencia o preloader de revista
- */
-function initPreloader() {
-    const preloader = document.getElementById('preloader');
+// Inicializar el formulario de email
+function initForm() {
+    const emailForm = document.getElementById('email-form');
+    if (emailForm) {
+        emailForm.addEventListener('submit', handleFormSubmit);
+    }
+}
+
+// Inicializar el botón final
+function initFinalButton() {
+    const finalButton = document.getElementById('final-button');
+    if (finalButton) {
+        finalButton.addEventListener('click', function() {
+            // Scrollear hasta el formulario si existe
+            const emailForm = document.getElementById('email-form');
+            if (emailForm) {
+                emailForm.scrollIntoView({ behavior: 'smooth' });
+                document.getElementById('email').focus();
+            } else {
+                // Si no hay formulario, redirigir directamente
+                window.location.href = 'https://dekoola.com/ch/hack/';
+            }
+        });
+    }
+}
+
+// Manejar el envío del formulario
+function handleFormSubmit(event) {
+    event.preventDefault();
     
-    if (!preloader) return;
+    const emailInput = document.getElementById('email');
+    const email = emailInput.value.trim();
+    const formMessage = document.querySelector('.form-message');
     
-    // Oculta o preloader após o carregamento completo
-    window.addEventListener('load', function() {
-        setTimeout(function() {
-            preloader.style.opacity = '0';
+    // Limpiar mensaje anterior
+    if (formMessage) {
+        formMessage.textContent = '';
+        formMessage.className = 'form-message';
+    }
+    
+    // Validar el email
+    if (!email) {
+        showMessage('Por favor, ingresa tu correo electrónico', 'error');
+        if (formMessage) {
+            formMessage.textContent = 'Por favor, ingresa tu correo electrónico';
+            formMessage.className = 'form-message error';
+        }
+        emailInput.focus();
+        return;
+    }
+    
+    if (!isValidEmail(email)) {
+        showMessage('Por favor, ingresa un correo electrónico válido', 'error');
+        if (formMessage) {
+            formMessage.textContent = 'Por favor, ingresa un correo electrónico válido';
+            formMessage.className = 'form-message error';
+        }
+        emailInput.focus();
+        return;
+    }
+    
+    // Mostrar mensaje de carga
+    showMessage('Procesando tu solicitud...', 'info');
+    if (formMessage) {
+        formMessage.textContent = 'Procesando...';
+        formMessage.className = 'form-message info';
+    }
+    
+    // Deshabilitar el botón de envío
+    const submitButton = event.target.querySelector('button[type="submit"]');
+    if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.textContent = 'PROCESANDO...';
+    }
+    
+    // Guardar el email en localStorage para uso futuro si es necesario
+    localStorage.setItem('userEmail', email);
+    
+    // Enviar el email al webhook
+    sendEmailToWebhook(email)
+        .then(result => {
+            if (result.success) {
+                // Mostrar mensaje de éxito y redirigir
+                showMessage('¡Gracias! Redirigiendo...', 'success');
+                if (formMessage) {
+                    formMessage.textContent = '¡Gracias! Redirigiendo...';
+                    formMessage.className = 'form-message success';
+                }
+            } else {
+                // En caso de error, aún redirigimos pero mostramos un mensaje informando
+                console.log('Nota: Hubo un problema con el envío, pero continuaremos con la redirección');
+                showMessage('¡Gracias! Redirigiendo...', 'success');
+                if (formMessage) {
+                    formMessage.textContent = '¡Gracias! Redirigiendo...';
+                    formMessage.className = 'form-message success';
+                }
+            }
             
-            setTimeout(function() {
-                preloader.style.display = 'none';
-                
-                // Anima elementos da página após o preloader
-                animatePageElements();
-            }, 500);
-        }, 2000);
-    });
+            // Redirigir después de un breve retardo, tanto en éxito como en error
+            setTimeout(() => {
+                window.location.href = 'https://dekoola.com/ch/hack/';
+            }, 1500);
+        });
 }
 
-/**
- * Anima elementos principais da página após o carregamento
- */
-function animatePageElements() {
-    const elementsToAnimate = [
-        document.querySelector('.magazine-header'),
-        document.querySelector('.feature-image-container'),
-        document.querySelector('.feature-category'),
-        document.querySelector('.feature-title'),
-        document.querySelector('.feature-author'),
-        document.querySelector('.feature-excerpt'),
-        document.querySelector('.feature-meta'),
-        document.querySelector('.feature-cta')
-    ];
-    
-    // Adiciona estilos para animação
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .animate-in {
-            animation: fadeInUp 0.8s ease forwards;
-            opacity: 0;
-        }
-    `;
-    document.head.appendChild(style);
-    
-    // Aplica animação com atraso sequencial
-    elementsToAnimate.forEach((element, index) => {
-        if (element) {
-            element.classList.add('animate-in');
-            element.style.animationDelay = `${index * 0.15}s`;
-        }
-    });
+// Validar formato de email
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
 }
 
-/**
- * Inicializa o menu móvel
- */
-function initMobileMenu() {
-    const menuToggle = document.getElementById('menuToggle');
-    const nav = document.querySelector('.magazine-nav');
+// Enviar el email al webhook
+function sendEmailToWebhook(email) {
+    const webhookUrl = 'https://dekoola.com/wp-json/autonami/v1/webhook/?bwfan_autonami_webhook_id=10&bwfan_autonami_webhook_key=92c39df617252d128219dba772cff29a';
     
-    if (!menuToggle || !nav) return;
+    // Datos para enviar al webhook
+    const data = {
+        email: email,
+        source: 'landing_chile',
+        timestamp: new Date().toISOString(),
+        country: 'Chile',
+        landing_page: 'modelo_chile'
+    };
     
-    menuToggle.addEventListener('click', function() {
-        nav.classList.toggle('open');
-        
-        // Anima as linhas do botão hamburger
-        const lines = this.querySelectorAll('.toggle-line');
-        
-        if (nav.classList.contains('open')) {
-            lines[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
-            lines[1].style.opacity = '0';
-            lines[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
+    // Configuración de la solicitud
+    return fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (response.ok) {
+            return { success: true };
         } else {
-            lines[0].style.transform = 'none';
-            lines[1].style.opacity = '1';
-            lines[2].style.transform = 'none';
+            // Si el servidor responde con error, enviamos un objeto con éxito falso pero sin lanzar excepción
+            return { success: false, status: response.status };
         }
+    })
+    .catch(error => {
+        // En caso de error de red, enviamos un objeto con éxito falso
+        return { success: false, error: error.message };
     });
+}
+
+// Mostrar mensajes al usuario
+function showMessage(message, type) {
+    // Revisar si ya existe un mensaje
+    let messageEl = document.querySelector('.message-alert');
     
-    // Fecha o menu ao clicar em um link
-    const navLinks = document.querySelectorAll('.nav-link');
+    if (!messageEl) {
+        // Crear elemento de mensaje si no existe
+        messageEl = document.createElement('div');
+        messageEl.className = 'message-alert';
+        document.body.appendChild(messageEl);
+    }
     
-    navLinks.forEach(link => {
-        link.addEventListener('click', function() {
-            if (nav.classList.contains('open')) {
-                menuToggle.click();
+    // Actualizar la clase y el contenido
+    messageEl.className = `message-alert ${type}`;
+    messageEl.textContent = message;
+    messageEl.style.display = 'block';
+    
+    // Ocultar después de un tiempo (excepto para tipo info)
+    if (type !== 'info') {
+        setTimeout(() => {
+            messageEl.style.display = 'none';
+        }, 5000);
+    }
+}
+
+// Añadir animaciones de entrada a las secciones
+function addEntryAnimations() {
+    // Observador de intersección para animar elementos al entrar en la vista
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
             }
         });
-    });
+    }, { threshold: 0.1 });
     
-    // Fecha o menu ao redimensionar a janela para desktop
-    window.addEventListener('resize', function() {
-        if (window.innerWidth > 768 && nav.classList.contains('open')) {
-            nav.classList.remove('open');
-            
-            const lines = menuToggle.querySelectorAll('.toggle-line');
-            lines[0].style.transform = 'none';
-            lines[1].style.opacity = '1';
-            lines[2].style.transform = 'none';
-        }
+    // Seleccionar todos los elementos a animar
+    const sections = document.querySelectorAll('.vogue-section-title, .vogue-lead, .vogue-truth, .vogue-mechanism, .vogue-testimonial, .vogue-product-features, .vogue-final-cta');
+    
+    sections.forEach(section => {
+        section.classList.add('animate-on-scroll');
+        observer.observe(section);
     });
 }
 
-/**
- * Inicializa o slider de depoimentos
- */
-function initTestimonialSlider() {
-    const slider = document.getElementById('testimonialSlider');
+// Inicializar el reproductor de audio personalizado
+function initAudioPlayer() {
+    const audioElement = document.getElementById('sample-audio');
+    if (!audioElement) return;
     
-    if (!slider) return;
+    const playerContainer = audioElement.closest('.custom-audio-player');
+    if (!playerContainer) return;
     
-    const slides = slider.querySelectorAll('.testimonial-slide');
-    const dots = slider.querySelectorAll('.dot');
-    const prevBtn = document.getElementById('prevSlide');
-    const nextBtn = document.getElementById('nextSlide');
+    const playPauseBtn = playerContainer.querySelector('.play-pause-btn');
+    const progressBar = playerContainer.querySelector('.progress');
+    const progressContainer = playerContainer.querySelector('.progress-bar');
+    const currentTimeDisplay = playerContainer.querySelector('.current-time');
+    const durationDisplay = playerContainer.querySelector('.duration');
+    const volumeBtn = playerContainer.querySelector('.volume-btn');
+    const volumeSlider = playerContainer.querySelector('.volume-slider');
+    const volumeProgress = playerContainer.querySelector('.volume-progress');
     
-    if (slides.length === 0) return;
-    
-    let currentSlide = 0;
-    let slideInterval;
-    
-    // Função para mostrar um slide específico
-    function showSlide(index) {
-        // Oculta todos os slides
-        slides.forEach(slide => {
-            slide.style.display = 'none';
-        });
-        
-        // Remove a classe active de todos os dots
-        dots.forEach(dot => {
-            dot.classList.remove('active');
-        });
-        
-        // Mostra o slide atual
-        slides[index].style.display = 'block';
-        
-        // Adiciona a classe active ao dot atual
-        if (dots[index]) {
-            dots[index].classList.add('active');
-        }
-        
-        // Atualiza o índice atual
-        currentSlide = index;
-    }
-    
-    // Função para ir para o próximo slide
-    function nextSlide() {
-        let newIndex = currentSlide + 1;
-        if (newIndex >= slides.length) {
-            newIndex = 0;
-        }
-        showSlide(newIndex);
-    }
-    
-    // Função para ir para o slide anterior
-    function prevSlide() {
-        let newIndex = currentSlide - 1;
-        if (newIndex < 0) {
-            newIndex = slides.length - 1;
-        }
-        showSlide(newIndex);
-    }
-    
-    // Adiciona event listeners aos botões
-    if (prevBtn) {
-        prevBtn.addEventListener('click', function() {
-            prevSlide();
-            resetInterval();
-        });
-    }
-    
-    if (nextBtn) {
-        nextBtn.addEventListener('click', function() {
-            nextSlide();
-            resetInterval();
-        });
-    }
-    
-    // Adiciona event listeners aos dots
-    dots.forEach((dot, index) => {
-        dot.addEventListener('click', function() {
-            showSlide(index);
-            resetInterval();
-        });
+    // Establecer la duración inicial si está disponible
+    audioElement.addEventListener('loadedmetadata', function() {
+        const duration = formatTime(audioElement.duration);
+        durationDisplay.textContent = duration;
     });
     
-    // Inicia o intervalo para trocar os slides automaticamente
-    function startInterval() {
-        slideInterval = setInterval(nextSlide, 5000);
+    // Intentar cargar metadata inmediatamente para aquellos archivos ya en caché
+    if (audioElement.readyState >= 2) {
+        const duration = formatTime(audioElement.duration);
+        durationDisplay.textContent = duration;
     }
     
-    // Reseta o intervalo
-    function resetInterval() {
-        clearInterval(slideInterval);
-        startInterval();
-    }
+    // Manejar clic en botón de reproducción/pausa
+    playPauseBtn.addEventListener('click', function() {
+        if (audioElement.paused) {
+            audioElement.play().then(() => {
+                playerContainer.classList.add('playing');
+            }).catch(error => {
+                console.error('Error al reproducir el audio:', error);
+            });
+        } else {
+            audioElement.pause();
+            playerContainer.classList.remove('playing');
+        }
+    });
     
-    // Mostra o primeiro slide e inicia o intervalo
-    showSlide(0);
-    startInterval();
+    // Actualizar la barra de progreso mientras se reproduce
+    audioElement.addEventListener('timeupdate', function() {
+        const percent = (audioElement.currentTime / audioElement.duration) * 100;
+        progressBar.style.width = percent + '%';
+        currentTimeDisplay.textContent = formatTime(audioElement.currentTime);
+    });
+    
+    // Permitir al usuario hacer clic en la barra de progreso para saltar
+    progressContainer.addEventListener('click', function(e) {
+        const clickPosition = (e.clientX - this.getBoundingClientRect().left) / this.offsetWidth;
+        const skipToTime = clickPosition * audioElement.duration;
+        audioElement.currentTime = skipToTime;
+    });
+    
+    // Manejar botón de volumen
+    let isMuted = false;
+    volumeBtn.addEventListener('click', function() {
+        isMuted = !isMuted;
+        audioElement.muted = isMuted;
+        
+        // Actualizar ícono de volumen con SVG
+        if (isMuted) {
+            volumeBtn.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="#444">
+                    <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+                </svg>
+            `;
+        } else {
+            volumeBtn.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="#444">
+                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                </svg>
+            `;
+        }
+        
+        volumeProgress.style.width = isMuted ? '0%' : '70%';
+    });
+    
+    // Permitir al usuario ajustar el volumen
+    volumeSlider.addEventListener('click', function(e) {
+        const newVolume = (e.clientX - this.getBoundingClientRect().left) / this.offsetWidth;
+        audioElement.volume = Math.max(0, Math.min(1, newVolume));
+        volumeProgress.style.width = (audioElement.volume * 100) + '%';
+        isMuted = audioElement.volume === 0;
+        
+        // Actualizar ícono de volumen con SVG
+        if (isMuted) {
+            volumeBtn.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="#444">
+                    <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+                </svg>
+            `;
+        } else if (audioElement.volume < 0.5) {
+            volumeBtn.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="#444">
+                    <path d="M7 9v6h4l5 5V4l-5 5H7z M14 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02 0-1.77-1.02-3.29-2.5-4.03z"/>
+                </svg>
+            `;
+        } else {
+            volumeBtn.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="#444">
+                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                </svg>
+            `;
+        }
+    });
+    
+    // Reiniciar cuando termine la reproducción
+    audioElement.addEventListener('ended', function() {
+        audioElement.currentTime = 0;
+        playerContainer.classList.remove('playing');
+    });
+    
+    // Función para formatear el tiempo en minutos:segundos
+    function formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return minutes + ':' + (secs < 10 ? '0' : '') + secs;
+    }
 }
 
-/**
- * Inicializa animações baseadas no scroll
- */
-function initScrollAnimations() {
-    const elementsToAnimate = [
-        ...document.querySelectorAll('.section-header'),
-        ...document.querySelectorAll('.method-step'),
-        ...document.querySelectorAll('.author-card'),
-        ...document.querySelectorAll('.sidebar-facts'),
-        ...document.querySelectorAll('.interview-question'),
-        ...document.querySelectorAll('.interview-answer'),
-        ...document.querySelectorAll('.purchase-card'),
-        document.querySelector('.purchase-guarantee')
-    ];
-    
-    // Adiciona estilos para animação
+// Añadir estilos CSS dinámicamente para las animaciones y mensajes
+(function() {
     const style = document.createElement('style');
     style.textContent = `
-        .scroll-animate {
+        .animate-on-scroll {
             opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
         }
         
-        .scroll-animate.visible {
+        .animate-on-scroll.visible {
             opacity: 1;
             transform: translateY(0);
         }
+        
+        .message-alert {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 20px;
+            border-radius: 4px;
+            font-weight: 500;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .message-alert.success {
+            background-color: #e3f8e4;
+            color: #1d6d24;
+            border: 1px solid #a0dba2;
+        }
+        
+        .message-alert.error {
+            background-color: #fce9e9;
+            color: #b02a37;
+            border: 1px solid #f5c2c7;
+        }
+        
+        .message-alert.info {
+            background-color: #e2f0fd;
+            color: #0a58ca;
+            border: 1px solid #9ec5fe;
+        }
+        
+        .message-alert.warning {
+            background-color: #fff3cd;
+            color: #664d03;
+            border: 1px solid #ffecb5;
+        }
     `;
     document.head.appendChild(style);
-    
-    // Aplica classe inicial
-    elementsToAnimate.forEach(element => {
-        if (element) {
-            element.classList.add('scroll-animate');
-        }
-    });
-    
-    // Função para verificar se elemento está visível
-    function checkVisibility() {
-        elementsToAnimate.forEach(element => {
-            if (!element) return;
-            
-            const rect = element.getBoundingClientRect();
-            const windowHeight = window.innerHeight || document.documentElement.clientHeight;
-            
-            if (rect.top <= windowHeight * 0.85) {
-                element.classList.add('visible');
-            }
-        });
-    }
-    
-    // Verifica visibilidade inicial e durante a rolagem
-    checkVisibility();
-    window.addEventListener('scroll', checkVisibility);
-}
-
-/**
- * Implementa rolagem suave para links de ancoragem
- */
-function initSmoothScroll() {
-    const links = document.querySelectorAll('a[href^="#"]');
-    
-    links.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            const targetId = this.getAttribute('href');
-            
-            if (targetId === '#') return;
-            
-            const targetElement = document.querySelector(targetId);
-            
-            if (targetElement) {
-                const headerHeight = document.querySelector('.magazine-header').offsetHeight;
-                const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
-                
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
-} 
+})(); 

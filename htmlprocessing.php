@@ -81,9 +81,24 @@ function load_landing($url)
         $html = file_get_contents($direct_path);
         if (!empty($html)) {
             // Processar o HTML carregado diretamente
-            $baseurl = '/'.$url.'/';
+            $baseurl = $url;
             $html = rewrite_relative_urls($html, $baseurl);
-            // Continuar com o processamento normal
+            
+            // Adicionar script de conversão se necessário
+            if (file_exists('scripts/conversion_tracker.js')) {
+                $script_content = file_get_contents('scripts/conversion_tracker.js');
+                if (strpos($html, '</body>') !== false) {
+                    $html = str_replace('</body>', '<script>' . $script_content . '</script></body>', $html);
+                } else {
+                    $html .= '<script>' . $script_content . '</script>';
+                }
+            }
+            
+            // Processar formulários para adicionar campo oculto de oferta
+            $offer_name = basename($url);
+            $html = preg_replace('/<form([^>]*)>/i', '<form$1><input type="hidden" name="oferta" value="' . $offer_name . '">', $html);
+            
+            return $html;
         } else {
             // Se o arquivo existe mas está vazio, tenta o método tradicional
             $fullpath = get_abs_from_rel($url);
@@ -255,12 +270,22 @@ function load_white_content($url, $add_js_check)
     if (file_exists('white/' . $url) && is_dir('white/' . $url)) {
         $is_custom_white = true;
         $custom_path = 'white/' . $url;
+    } 
+    // Verificar se é uma pasta branca direta
+    elseif (file_exists('branca') && is_dir('branca')) {
+        $is_custom_white = true;
+        $custom_path = 'branca';
     }
     
     // Verificar se é uma pasta de oferta personalizada
     if (file_exists('offers/' . $url) && is_dir('offers/' . $url)) {
         $is_custom_offer = true;
         $custom_path = 'offers/' . $url;
+    }
+    // Verificar se é uma pasta oferta direta
+    elseif (file_exists('oferta1') && is_dir('oferta1')) {
+        $is_custom_offer = true;
+        $custom_path = 'oferta1';
     }
     
     // Se for uma pasta personalizada, carregar o index.html dela
@@ -269,7 +294,9 @@ function load_white_content($url, $add_js_check)
         
         if (file_exists($index_path)) {
             $html = file_get_contents($index_path);
-            $baseurl = '/' . $custom_path . '/';
+            
+            // Definir o caminho base para os recursos
+            $baseurl = $custom_path;
             
             // Adicionar script de conversão de lead
             if (file_exists('scripts/conversion_tracker.js')) {
@@ -293,7 +320,7 @@ function load_white_content($url, $add_js_check)
             return $html;
         } else {
             // Se não houver index.html, retornar uma mensagem de erro
-            $html = '<html><head><title>Erro</title></head><body><h1>Erro</h1><p>Arquivo index.html não encontrado na pasta ' . $url . '.</p></body></html>';
+            $html = '<html><head><title>Erro</title></head><body><h1>Erro</h1><p>Arquivo index.html não encontrado na pasta ' . $custom_path . '.</p></body></html>';
             return $html;
         }
     } else {
@@ -496,15 +523,33 @@ function rewrite_relative_urls($html,$url)
         $url .= '/';
     }
     
-	$modified = preg_replace('/\ssrc=[\'\"](?!http|\/\/|data:)([^\'\"]+)[\'\"]/', " src=\"$url\\1\"", $html);
-	$modified = preg_replace('/\shref=[\'\"](?!http|mailto:|tel:|whatsapp:|#|\/\/)([^\'\"]+)[\'\"]/', " href=\"$url\\1\"", $modified);
-	$modified = preg_replace('/background-image:\s*url\((?!http|#|\/\/)([^\)]+)\)/', "background-image: url($url\\1)", $modified);
-	
-	// Converter links absolutos para relativos
-	$modified = preg_replace('/\ssrc=[\'\"]\/([^\'\"]+)[\'\"]/', " src=\"$url\\1\"", $modified);
-	$modified = preg_replace('/\shref=[\'\"]\/([^\'\"]+)[\'\"]/', " href=\"$url\\1\"", $modified);
-	
-	return $modified;
+    // Evitar duplicação de caminhos
+    if (strpos($html, $url) !== false) {
+        // Se a URL já está presente no HTML, não precisamos reescrever
+        return $html;
+    }
+    
+    // Corrigir links relativos em src, href e background-image
+    $modified = preg_replace('/\ssrc=[\'\"](?!http|https|\/\/|data:)([^\'\"]+)[\'\"]/', " src=\"$url\\1\"", $html);
+    $modified = preg_replace('/\shref=[\'\"](?!http|https|mailto:|tel:|whatsapp:|#|\/\/)([^\'\"]+)[\'\"]/', " href=\"$url\\1\"", $modified);
+    $modified = preg_replace('/background-image:\s*url\([\'"]?(?!http|https|#|\/\/|data:)([^\)]+)[\'"]?\)/', "background-image: url($url\\1)", $modified);
+    
+    // Converter links absolutos para relativos (começando com /)
+    $modified = preg_replace('/\ssrc=[\'\"]\/([^\'\"]+)[\'\"]/', " src=\"$url\\1\"", $modified);
+    $modified = preg_replace('/\shref=[\'\"]\/([^\'\"]+)[\'\"]/', " href=\"$url\\1\"", $modified);
+    $modified = preg_replace('/background-image:\s*url\(\/([^\)]+)\)/', "background-image: url($url\\1)", $modified);
+    
+    // Corrigir links para CSS e JS
+    $modified = preg_replace('/<link[^>]+href=[\'\"](?!http|https|\/\/|data:)([^\'\"]+\.css)[\'\"][^>]*>/', "<link href=\"$url\\1\" rel=\"stylesheet\">", $modified);
+    $modified = preg_replace('/<script[^>]+src=[\'\"](?!http|https|\/\/|data:)([^\'\"]+\.js)[\'\"][^>]*><\/script>/', "<script src=\"$url\\1\"></script>", $modified);
+    
+    // Corrigir links para áudio e vídeo
+    $modified = preg_replace('/\ssrc=[\'\"](?!http|https|\/\/|data:)([^\'\"]+\.(mp3|mp4|wav|ogg))[\'\"]/', " src=\"$url\\1\"", $modified);
+    
+    // Corrigir links para fontes
+    $modified = preg_replace('/url\([\'"]?(?!http|https|\/\/|data:)([^\'"\)]+\.(woff|woff2|ttf|eot))[\'"]?\)/', "url($url\\1)", $modified);
+    
+    return $modified;
 }
 
 function remove_scrapbook($html){

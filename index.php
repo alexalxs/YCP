@@ -42,21 +42,12 @@ if (file_exists($file_path) && $request_path != '/') {
     // Log para depuração
     error_log("Arquivo ou diretório existente: " . $file_path);
     
-    // Log específico para oferta1
-    if (strpos($file_path, 'oferta1') !== false) {
-        error_log("Diretório oferta1 detectado: " . $file_path);
-    }
-    
     if (is_dir($file_path)) {
         // Log para depuração
         error_log("É um diretório: " . $file_path);
         
-        // Se for um diretório, verificar se existe index.php ou index.html
-        if (file_exists($file_path . '/index.php')) {
-            error_log("Incluindo index.php: " . $file_path . '/index.php');
-            include($file_path . '/index.php');
-            exit;
-        } elseif (file_exists($file_path . '/index.html')) {
+        // Se for um diretório, verificar se existe index.html
+        if (file_exists($file_path . '/index.html')) {
             error_log("Lendo index.html: " . $file_path . '/index.html');
             
             // Ler o conteúdo do arquivo
@@ -101,6 +92,13 @@ if (file_exists($file_path) && $request_path != '/') {
                 error_log("Não é uma pasta de oferta: " . $file_path);
             }
             
+            // Reescrever URLs relativas
+            $baseurl = str_replace(__DIR__, '', $file_path);
+            if (substr($baseurl, 0, 1) === '/') {
+                $baseurl = substr($baseurl, 1);
+            }
+            $html = rewrite_relative_urls($html, $baseurl);
+            
             // Enviar o conteúdo modificado
             echo $html;
             exit;
@@ -125,6 +123,27 @@ if (file_exists($file_path) && $request_path != '/') {
                 break;
             case 'gif':
                 header('Content-Type: image/gif');
+                break;
+            case 'mp3':
+                header('Content-Type: audio/mpeg');
+                break;
+            case 'mp4':
+                header('Content-Type: video/mp4');
+                break;
+            case 'webp':
+                header('Content-Type: image/webp');
+                break;
+            case 'svg':
+                header('Content-Type: image/svg+xml');
+                break;
+            case 'woff':
+                header('Content-Type: font/woff');
+                break;
+            case 'woff2':
+                header('Content-Type: font/woff2');
+                break;
+            case 'ttf':
+                header('Content-Type: font/ttf');
                 break;
             // Adicione mais tipos MIME conforme necessário
         }
