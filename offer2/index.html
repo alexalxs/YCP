@@ -3,99 +3,1112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oferta Premium</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Como Trazê-lo De Volta | Taynara Rodrigues</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #ffffff;
+            --secondary-color: #f5f5f5;
+            --accent-color: #e63946;
+            --accent-secondary: #5c2a9d;
+            --text-color: #333333;
+            --light-text: #777777;
+            --border-color: #e0e0e0;
+            --heading-color: #222222;
+            --body-padding: 5vw;
+            --heading-font: 'Playfair Display', serif;
+            --body-font: 'Montserrat', sans-serif;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            font-family: var(--body-font);
+            line-height: 1.7;
+            font-weight: 400;
+            font-size: 16px;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        /* Typography */
+        h1, h2, h3, h4, h5 {
+            font-family: var(--heading-font);
+            line-height: 1.2;
+            color: var(--heading-color);
+        }
+        
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            line-height: 1.1;
+        }
+        
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            position: relative;
+            display: inline-block;
+        }
+        
+        h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        
+        p {
+            margin-bottom: 1.5rem;
+        }
+        
+        .lead {
+            font-size: 1.5rem;
+            line-height: 1.5;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+        
+        .small-text {
+            font-size: 0.9rem;
+            color: var(--light-text);
+        }
+        
+        .highlight {
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+        
+        .highlight-secondary {
+            color: var(--accent-secondary);
+            font-weight: 600;
+        }
+        
+        .italic {
+            font-style: italic;
+        }
+        
+        /* Header */
+        .magazine-header {
+            padding: 2rem var(--body-padding) 0;
+            background-color: var(--primary-color);
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            border-bottom: 3px solid var(--accent-color);
+            padding-bottom: 0.8rem;
+        }
+        
+        .magazine-info {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .magazine-info span {
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .magazine-info span:not(:last-child)::after {
+            content: "•";
+            margin-left: 1rem;
+            color: var(--accent-color);
+        }
+        
+        .magazine-volume {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            border-radius: 3px;
+        }
+        
+        .title-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            padding: 4rem 0;
+            gap: 3rem;
+        }
+        
+        .title-content {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .subtitle {
+            display: inline-block;
+            background-color: var(--accent-secondary);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .title-graphic {
+            position: relative;
+            height: 100%;
+            min-height: 300px;
+        }
+        
+        .graphic-circle {
+            position: absolute;
+            border-radius: 50%;
+        }
+        
+        .circle-1 {
+            width: 280px;
+            height: 280px;
+            background-color: var(--accent-color);
+            opacity: 0.1;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .circle-2 {
+            width: 220px;
+            height: 220px;
+            background-color: var(--accent-secondary);
+            opacity: 0.1;
+            top: 40%;
+            left: 60%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .circle-3 {
+            width: 150px;
+            height: 150px;
+            border: 10px solid var(--accent-color);
+            opacity: 0.2;
+            top: 60%;
+            left: 40%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .author {
+            font-family: var(--body-font);
+            font-size: 1rem;
+            margin-top: 1.5rem;
+            font-weight: 600;
+            color: var(--accent-secondary);
+            border-left: 3px solid var(--accent-secondary);
+            padding-left: 0.8rem;
+        }
+        
+        /* Content Layout */
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 2rem;
+            padding: 0 var(--body-padding) 4rem;
+        }
+        
+        .full-width {
+            grid-column: span 12;
+        }
+        
+        .two-thirds {
+            grid-column: span 8;
+        }
+        
+        .one-third {
+            grid-column: span 4;
+        }
+        
+        .half {
+            grid-column: span 6;
+        }
+        
+        /* Article Sections */
+        .article-section {
+            margin-bottom: 4rem;
+            position: relative;
+        }
+        
+        .section-title {
+            position: relative;
+            margin-bottom: 2rem;
+            padding-bottom: 0.8rem;
+        }
+        
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background-color: var(--accent-color);
+        }
+        
+        .feature-box {
+            background-color: var(--secondary-color);
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            position: relative;
+            border-radius: 6px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .feature-box::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 8px;
+            height: 100%;
+            background-color: var(--accent-color);
+            border-radius: 6px 0 0 6px;
+        }
+        
+        .quote-box {
+            font-family: var(--heading-font);
+            font-size: 1.8rem;
+            font-style: italic;
+            line-height: 1.4;
+            padding: 2.5rem;
+            margin: 2.5rem 0;
+            position: relative;
+            background-color: var(--secondary-color);
+            border-radius: 6px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .quote-box::before {
+            content: "\201C";
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            font-size: 6rem;
+            color: var(--accent-color);
+            opacity: 0.2;
+            line-height: 1;
+            font-family: var(--heading-font);
+        }
+        
+        .sidebar {
+            background-color: var(--secondary-color);
+            padding: 2.5rem;
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+            border-radius: 6px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .sidebar-title {
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-color);
+            font-weight: 600;
+            color: var(--accent-secondary);
+        }
+        
+        .key-point {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px dashed var(--border-color);
+            position: relative;
+            padding-left: 2.5rem;
+        }
+        
+        .key-point:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .key-point-number {
+            position: absolute;
+            left: 0;
+            top: 0.2rem;
+            width: 30px;
+            height: 30px;
+            background-color: var(--accent-secondary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .key-point-title {
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            color: var(--accent-secondary);
+            font-size: 1.1rem;
+        }
+        
+        .drop-cap {
+            float: left;
+            font-family: var(--heading-font);
+            font-size: 5rem;
+            line-height: 0.8;
+            padding-right: 0.8rem;
+            padding-top: 0.2rem;
+            color: var(--accent-color);
+            font-weight: 700;
+        }
+        
+        .columns-2 {
+            column-count: 2;
+            column-gap: 2.5rem;
+        }
+        
+        .column-span-all {
+            column-span: all;
+            margin: 2rem 0;
+        }
+        
+        .graphic-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 3rem 0;
+        }
+        
+        .graphic-divider::before,
+        .graphic-divider::after {
+            content: "";
+            height: 1px;
+            background-color: var(--border-color);
+            flex-grow: 1;
+        }
+        
+        .divider-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            margin: 0 1rem;
+            position: relative;
+        }
+        
+        .divider-icon::before,
+        .divider-icon::after {
+            content: "";
+            position: absolute;
+            background-color: white;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .divider-icon::before {
+            width: 16px;
+            height: 2px;
+        }
+        
+        .divider-icon::after {
+            width: 2px;
+            height: 16px;
+        }
+        
+        /* Call to Action */
+        .cta-wrapper {
+            background: linear-gradient(135deg, var(--accent-color), var(--accent-secondary));
+            color: white;
+            padding: 5rem var(--body-padding);
+            text-align: center;
+            margin-top: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.05;
+        }
+        
+        .cta-background .circle {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid white;
+        }
+        
+        .cta-background .circle:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: -150px;
+            left: -100px;
+        }
+        
+        .cta-background .circle:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            bottom: -100px;
+            right: 100px;
+        }
+        
+        .cta-background .circle:nth-child(3) {
+            width: 400px;
+            height: 400px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .cta-title {
+            color: white;
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .cta-text {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 2.5rem;
+            opacity: 0.9;
+            line-height: 1.6;
+            position: relative;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background-color: white;
+            color: var(--accent-color);
+            padding: 1.2rem 3rem;
+            font-family: var(--body-font);
+            font-weight: 600;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-radius: 50px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--secondary-color);
+            padding: 3rem var(--body-padding);
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--light-text);
+        }
+        
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .two-thirds {
+                grid-column: span 7;
+            }
+            
+            .one-third {
+                grid-column: span 5;
+            }
+            
+            h1 {
+                font-size: 3.5rem;
+            }
+            
+            .quote-box {
+                font-size: 1.6rem;
+            }
+        }
+        
+        @media (max-width: 900px) {
+            :root {
+                --body-padding: 3vw;
+            }
+            
+            h1 {
+                font-size: 3rem;
+            }
+            
+            .title-section {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                padding: 3rem 0;
+            }
+            
+            .title-graphic {
+                min-height: 200px;
+                order: -1;
+            }
+            
+            .two-thirds, .one-third {
+                grid-column: span 12;
+            }
+            
+            .half {
+                grid-column: span 12;
+            }
+            
+            .columns-2 {
+                column-count: 1;
+            }
+            
+            .sidebar {
+                position: static;
+                margin-bottom: 3rem;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            :root {
+                --body-padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+            
+            .lead {
+                font-size: 1.2rem;
+            }
+            
+            .quote-box {
+                font-size: 1.4rem;
+                padding: 2rem;
+            }
+            
+            .feature-box {
+                padding: 2rem;
+            }
+            
+            .cta-title {
+                font-size: 2.2rem;
+            }
+            
+            .magazine-info {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            
+            .magazine-info span:not(:last-child)::after {
+                display: none;
+            }
+        }
+        
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal {
+            background-color: var(--primary-color);
+            width: 90%;
+            max-width: 500px;
+            border-radius: 8px;
+            padding: 2.5rem;
+            position: relative;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            animation: modalFadeIn 0.3s ease-out;
+        }
+        
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: var(--secondary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .modal-close:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+        
+        .modal-title {
+            font-family: var(--heading-font);
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-secondary);
+            text-align: center;
+        }
+        
+        .modal-form {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-family: var(--body-font);
+            font-size: 1rem;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-secondary);
+            box-shadow: 0 0 0 3px rgba(92, 42, 157, 0.1);
+        }
+        
+        .form-submit {
+            background: linear-gradient(135deg, var(--accent-color), var(--accent-secondary));
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-family: var(--body-font);
+            font-weight: 600;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+        
+        .form-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .error-message {
+            color: var(--accent-color);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+        
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 1.5rem;
+            background-color: rgba(92, 42, 157, 0.1);
+            border-radius: 4px;
+            margin-top: 1rem;
+        }
+        
+        .success-title {
+            font-weight: 600;
+            color: var(--accent-secondary);
+            margin-bottom: 0.5rem;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Oferta Premium</h1>
-            <p>Aproveite esta oferta exclusiva por tempo limitado!</p>
-        </header>
-        
-        <div class="offer-timer">
-            <p>Esta oferta expira em: <span class="timer-digits">23</span>:<span class="timer-digits">59</span>:<span class="timer-digits">59</span></p>
-        </div>
-        
-        <div class="product-card">
-            <div class="product-header">
-                <h2>Produto Premium - Edição Limitada</h2>
-                <p>Apenas 50 unidades disponíveis</p>
+    <header class="magazine-header">
+        <div class="container">
+            <div class="header-top">
+                <div class="magazine-info">
+                    <span>Relacionamentos</span>
+                    <span>Neurociência</span>
+                    <span>Amor</span>
+                </div>
+                <div class="magazine-volume">Edição Especial</div>
             </div>
             
-            <div class="product-body">
-                <div class="product-image">
-                    <!-- Usando um placeholder de imagem -->
-                    <img src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22300%22%20height%3D%22300%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20300%20300%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_16ea1c870bd%20text%20%7B%20fill%3A%23AAAAAA%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A20pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_16ea1c870bd%22%3E%3Crect%20width%3D%22300%22%20height%3D%22300%22%20fill%3D%22%23EEEEEE%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22100.5%22%20y%3D%22157.1%22%3EProduto%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" alt="Produto Premium Edição Limitada">
+            <div class="title-section">
+                <div class="title-content">
+                    <div class="subtitle">Guia Exclusivo de Reconquista</div>
+                    <h1>Como Trazê-lo <br>De Volta</h1>
+                    <div class="author">Por Taynara Rodrigues</div>
                 </div>
                 
-                <div class="product-details">
-                    <span class="badge">MAIS VENDIDO</span>
-                    <h3 class="product-title">Produto Premium - Versão 2.0</h3>
+                <div class="title-graphic">
+                    <div class="graphic-circle circle-1"></div>
+                    <div class="graphic-circle circle-2"></div>
+                    <div class="graphic-circle circle-3"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="content-wrapper container">
+        <div class="two-thirds">
+            <div class="article-section">
+                <p class="lead">Nos próximos <span class="highlight">8 minutos</span>, vou revelar um segredo da neurociência que já transformou a vida amorosa de <span class="highlight-secondary">1.452 mulheres</span> com resultados comprovados e verificados.</p>
+                
+                <p><span class="drop-cap">M</span>esmo se vocês tiveram uma briga devastadora, se ele te bloqueou em todas as redes sociais, ou se você já tentou absolutamente tudo sem sucesso. Sei que neste momento você provavelmente está sentindo aquela <span class="highlight">dor aguda de rejeição e abandono</span>, aquela sensação de vazio que só um término doloroso pode causar.</p>
+                
+                <p>Um término de relacionamento pode ser uma das experiências mais dolorosas que enfrentamos. Estudos de neuroimagem mostram que a rejeição romântica ativa as mesmas regiões cerebrais que a dor física, explicando por que você se sente literalmente "ferida" por dentro.</p>
+                
+                <div class="quote-box">
+                    "A chave para reconquistar um homem não está nas táticas manipuladoras, mas na compreensão profunda de como o cérebro masculino processa o desejo e o apego."
+                </div>
+                
+                <h3 class="section-title">Duas Verdades Fundamentais</h3>
+                
+                <div class="columns-2">
+                    <p>Quero compartilhar <span class="highlight-secondary">duas verdades fundamentais</span> com você. A primeira é que você está longe de ser a única passando por isso. Milhares de mulheres em todo o mundo enfrentam exatamente a mesma situação neste exato momento.</p>
                     
-                    <p class="product-description">Nossa versão mais avançada com funcionalidades exclusivas e design refinado. Um produto para quem exige o melhor em qualidade e tecnologia.</p>
+                    <p>A segunda verdade é que o que vou te mostrar hoje vai transformar completamente sua capacidade de reconquistar o homem que você ama. E o mais importante: você <span class="highlight">não vai recorrer</span> ao ineficaz "contato zero", nem a rituais de amarração, poções mágicas, ou qualquer forma de humilhação ou manipulação.</p>
                     
-                    <ul class="product-description">
-                        <li>Tecnologia avançada de última geração</li>
-                        <li>Design exclusivo e premium</li>
-                        <li>Materiais de alta qualidade</li>
-                        <li>Funcionalidades extras exclusivas</li>
-                        <li>Garantia estendida de 2 anos</li>
-                    </ul>
-                    
-                    <div class="price-section">
-                        <p>Oferta por tempo limitado:</p>
-                        <div class="product-price">
-                            R$ 189,90 <span class="original-price">R$ 479,80</span> <span class="discount">-60%</span>
-                        </div>
-                        <p>Economize R$ 289,90 comprando agora!</p>
+                    <div class="column-span-all feature-box">
+                        <h3>O Problema com Métodos Tradicionais</h3>
+                        <p>A maioria das táticas de reconquista populares são, na melhor das hipóteses, ineficazes, e na pior, prejudiciais ao seu bem-estar emocional e à possibilidade de um relacionamento saudável no futuro. Estratégias como o "contato zero" podem até funcionar em certos casos, mas frequentemente falham porque não abordam as causas neurológicas subjacentes da perda de atração.</p>
                     </div>
                     
-                    <a href="../thankyou/" class="buy-button" id="comprar-btn">GARANTIR MINHA OFERTA</a>
+                    <p>O que você vai descobrir é algo muito mais poderoso e <span class="highlight-secondary">cientificamente comprovado</span>: como ativar <span class="highlight">dois neurotransmissores secretos</span> no cérebro masculino que literalmente reprogramam a forma como ele sente atração e amor por você.</p>
+                    
+                    <p>Esta descoberta revolucionária é baseada nas pesquisas dos neurocientistas <span class="highlight-secondary">Dr. Julian Savulescu e Dr. Andrzej Sandberg</span> da Universidade de Oxford, que identificaram exatamente como a dopamina e a ocitocina controlam o desejo e o apego romântico no cérebro humano.</p>
+                </div>
+            </div>
+            
+            <div class="graphic-divider">
+                <div class="divider-icon"></div>
+            </div>
+            
+            <div class="article-section">
+                <h2 class="section-title">A Neurociência da Reconquista</h2>
+                
+                <p>Quando um relacionamento termina, não é apenas o coração que sofre, mas também o cérebro. A quebra de um vínculo amoroso causa uma verdadeira "síndrome de abstinência" neurológica, semelhante ao que ocorre com dependentes químicos. Isso acontece porque durante o relacionamento, seu cérebro se habituou a um fluxo constante de neurotransmissores relacionados ao prazer e à conexão.</p>
+                
+                <p>Mesmo que seu ex-parceiro diga que "não sente mais nada" por você, a verdade é que os circuitos neurológicos que foram ativados durante o relacionamento ainda existem. Eles podem estar temporariamente inativos, mas podem ser reativados com os estímulos certos. É exatamente isso que meu método ensina: como reativar esses circuitos de forma natural e ética.</p>
+                
+                <p>Sou <span class="highlight">Taynara Rodrigues</span>, e sou muito feliz em meu casamento há 12 anos. Minha jornada em busca de um relacionamento saudável e feliz me levou a um profundo interesse pela neurociência e suas implicações nos relacionamentos.</p>
+                
+                <p>Ao longo do tempo, percebi que muitas mulheres enfrentam desafios em suas relações por não conhecerem as técnicas certas para atrair e manter um homem de valor.</p>
+            </div>
+        </div>
+        
+        <div class="one-third">
+            <div class="sidebar">
+                <h4 class="sidebar-title">5 Pilares do Método</h4>
+                
+                <div class="key-point">
+                    <div class="key-point-number">1</div>
+                    <div class="key-point-title">Gatilhos de Dopamina</div>
+                    <p>Aprenda a ativar o sistema de recompensa do cérebro masculino, criando associações positivas com sua presença e interações.</p>
+                </div>
+                
+                <div class="key-point">
+                    <div class="key-point-number">2</div>
+                    <div class="key-point-title">Conexão de Ocitocina</div>
+                    <p>Descubra técnicas específicas para estimular a liberação do hormônio do vínculo emocional, fortalecendo o apego dele por você.</p>
+                </div>
+                
+                <div class="key-point">
+                    <div class="key-point-number">3</div>
+                    <div class="key-point-title">Padrões de Comunicação</div>
+                    <p>Domine os padrões de linguagem que atingem diretamente o centro emocional do cérebro masculino.</p>
+                </div>
+                
+                <div class="key-point">
+                    <div class="key-point-number">4</div>
+                    <div class="key-point-title">Valor Percebido</div>
+                    <p>Aprenda a aumentar seu valor percebido sem jogos ou manipulação, usando princípios de psicologia positiva.</p>
+                </div>
+                
+                <div class="key-point">
+                    <div class="key-point-number">5</div>
+                    <div class="key-point-title">Reescrita Neural</div>
+                    <p>Utilize técnicas para ajudar o cérebro dele a "reescrever" a narrativa do relacionamento, substituindo memórias negativas por positivas.</p>
                 </div>
             </div>
         </div>
         
-        <div class="benefits">
-            <div class="benefit">
-                <div class="benefit-icon">🚚</div>
-                <h3>Entrega Express</h3>
-                <p>Receba em até 5 dias úteis em todo o Brasil.</p>
-            </div>
-            <div class="benefit">
-                <div class="benefit-icon">💰</div>
-                <h3>Pagamento Seguro</h3>
-                <p>Diversas formas de pagamento com segurança garantida.</p>
-            </div>
-            <div class="benefit">
-                <div class="benefit-icon">🔄</div>
-                <h3>Satisfação Garantida</h3>
-                <p>Garantimos a devolução do seu dinheiro em até 30 dias.</p>
+        <div class="full-width">
+            <h2 class="section-title">Resultados Comprovados</h2>
+            
+            <div class="feature-box">
+                <p class="italic">"Depois de 3 meses sem contato, ele me bloqueou em tudo. Achei que tinha acabado para sempre. Após aplicar as técnicas da Taynara, em apenas 2 semanas ele me procurou e hoje estamos mais felizes do que nunca!"</p>
+                <p class="small-text">— Mariana L., 32 anos, São Paulo</p>
             </div>
         </div>
         
-        <div class="testimonials">
-            <h3>O que nossos clientes dizem:</h3>
-            
-            <div class="testimonial">
-                <p class="testimonial-text">"Melhor produto que já comprei! Superou todas as minhas expectativas em qualidade e desempenho."</p>
-                <p class="testimonial-author">- Maria Silva</p>
-            </div>
-            
-            <div class="testimonial">
-                <p class="testimonial-text">"Indispensável no dia a dia! Não consigo mais viver sem este produto, facilitou muito minha rotina."</p>
-                <p class="testimonial-author">- João Oliveira</p>
-            </div>
+        <div class="half">
+            <h3>A Ciência por Trás do Método</h3>
+            <p>O cérebro masculino responde a estímulos de maneira diferente do feminino, especialmente no contexto dos relacionamentos românticos. Estudos de neuroimagem mostram que os homens processam emoções através de circuitos neurais mais compartimentalizados.</p>
+            <p>Isso explica por que muitas vezes um homem parece "desligar" seus sentimentos por você – na verdade, seu cérebro está ativando mecanismos de proteção neurológica. Meu método ensina exatamente como contornar essas barreiras e reacender o desejo e o apego de forma natural.</p>
         </div>
         
-        <div class="navigation">
-            <a href="../white/">Página Inicial</a>
-            <a href="../tos/">Termos de Serviço</a>
-            <a href="../thankyou/">Finalizar Compra</a>
+        <div class="half">
+            <h3>Por Que Métodos Tradicionais Falham</h3>
+            <p>A maioria das técnicas de reconquista tradicionais tem um problema fundamental: ignoram completamente a neurociência. Estratégias como "mostrar que mudou" ou "fazer ciúmes" podem até gerar atenção momentânea, mas falham em criar mudanças duradouras nos padrões de pensamento e sentimento.</p>
+            <p>Em contraste, as técnicas que você vai aprender trabalham com os mecanismos naturais do cérebro dele, criando novas associações neurais positivas com você e seu relacionamento.</p>
         </div>
     </div>
     
-    <script src="script.js"></script>
-</body>
-</html>
+    <div class="cta-wrapper">
+        <div class="cta-background">
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+        </div>
+        <div class="container">
+            <h2 class="cta-title">Descubra o Segredo Neurológico</h2>
+            <p class="cta-text">Continue para descobrir como ativar os gatilhos neurológicos que fazem ele voltar para você, mesmo quando tudo parece perdido.</p>
+            <a href="#" class="cta-button">CONHECER O MÉTODO AGORA</a>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Taynara Rodrigues. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+    
+    <!-- Modal de Captura de Email -->
+    <div class="modal-overlay" id="emailModal">
+        <div class="modal">
+            <div class="modal-close" id="modalClose">✕</div>
+            <h3 class="modal-title">Desbloqueie o Método Agora</h3>
+            
+            <div id="modalForm">
+                <form class="modal-form" id="leadForm">
+                    <div class="form-group">
+                        <label for="lead-name" class="form-label">Seu nome:</label>
+                        <input type="text" id="lead-name" name="name" class="form-input" placeholder="Digite seu nome" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lead-email" class="form-label">Seu melhor email:</label>
+                        <input type="email" id="lead-email" name="email" class="form-input" placeholder="Seu email aqui" required>
+                        <div class="error-message" id="emailError">Por favor, insira um email válido.</div>
+                    </div>
+                    <button type="submit" class="form-submit">ACESSAR CONTEÚDO EXCLUSIVO</button>
+                </form>
+            </div>
+            
+            <div class="success-message" id="successMessage">
+                <div class="success-title">Parabéns, seu cadastro foi realizado com sucesso!</div>
+                <p>Você será redirecionado em instantes para o conteúdo exclusivo...</p>
+            </div>
+        </div>
+    </div>
 
+    <script>
+        // Função para obter parâmetros da URL
+        function getUrlParams() {
+            const params = {};
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            
+            for (const [key, value] of urlParams) {
+                params[key] = value;
+            }
+            
+            return params;
+        }
+        
+        // Função para construir a URL de redirecionamento com os parâmetros originais
+        function buildRedirectUrl(baseUrl) {
+            const params = getUrlParams();
+            const url = new URL(baseUrl);
+            
+            // Adicionar todos os parâmetros da URL atual
+            Object.keys(params).forEach(key => {
+                url.searchParams.append(key, params[key]);
+            });
+            
+            return url.toString();
+        }
+        
+        // Funções para manipular o modal
+        function openModal() {
+            document.getElementById('emailModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // Impedir rolagem enquanto o modal está aberto
+        }
+        
+        function closeModal() {
+            document.getElementById('emailModal').style.display = 'none';
+            document.body.style.overflow = ''; // Restaurar rolagem
+        }
+        
+        // Validação de email
+        function isValidEmail(email) {
+            const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(String(email).toLowerCase());
+        }
+        
+        // Handler de submissão do formulário
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            const nameInput = document.getElementById('lead-name');
+            const emailInput = document.getElementById('lead-email');
+            const name = nameInput.value.trim();
+            const email = emailInput.value.trim();
+            const emailError = document.getElementById('emailError');
+            
+            // Validar email
+            if (!isValidEmail(email)) {
+                emailError.style.display = 'block';
+                return;
+            }
+            
+            emailError.style.display = 'none';
+            
+            try {
+                // Preparar dados para envio
+                const formData = new URLSearchParams();
+                formData.append('action', 'email');
+                formData.append('name', name);
+                formData.append('email', email);
+                
+                // Adicionar parâmetros da URL atual
+                const urlParams = getUrlParams();
+                Object.keys(urlParams).forEach(key => {
+                    formData.append(key, urlParams[key]);
+                });
+                
+                // Obter o subid dos cookies, se disponível
+                const subid = document.cookie.split('; ').find(row => row.startsWith('subid='))?.split('=')[1] || '';
+                if (subid) {
+                    formData.append('subid', subid);
+                }
+                
+                // Registrar o evento de lead localmente
+                console.log("Registrando lead: ", {name, email, subid, ...urlParams});
+                
+                // Enviar para nosso servidor, que fará proxy para o webhook externo
+                const response = await fetch('/send.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: formData.toString()
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('Resposta do servidor:', result);
+                    
+                    // Mostrar mensagem de sucesso personalizada com o nome
+                    document.getElementById('modalForm').style.display = 'none';
+                    
+                    // Personalizar a mensagem de sucesso com o nome do usuário
+                    const successTitle = document.querySelector('.success-title');
+                    if (name) {
+                        successTitle.textContent = `Parabéns, ${name}! Seu cadastro foi realizado com sucesso!`;
+                    }
+                    
+                    document.getElementById('successMessage').style.display = 'block';
+                    
+                    // Redirecionar após breve delay
+                    setTimeout(() => {
+                        window.location.href = buildRedirectUrl('https://dekoola.com/ch/hack/');
+                    }, 2000);
+                } else {
+                    throw new Error('Falha ao enviar os dados para o servidor');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Ocorreu um erro ao processar seu pedido. Por favor, tente novamente.');
+            }
+        }
+        
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Botão CTA principal
+            const ctaButton = document.querySelector('.cta-button');
+            if (ctaButton) {
+                ctaButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    openModal();
+                });
+            }
+            
+            // Fechar modal
+            const modalClose = document.getElementById('modalClose');
+            if (modalClose) {
+                modalClose.addEventListener('click', closeModal);
+            }
+            
+            // Fechar modal ao clicar fora
+            const modal = document.getElementById('emailModal');
+            if (modal) {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        closeModal();
+                    }
+                });
+            }
+            
+            // Submissão do formulário
+            const leadForm = document.getElementById('leadForm');
+            if (leadForm) {
+                leadForm.addEventListener('submit', handleFormSubmit);
+            }
+        });
+    </script>
+</body>
+</html> 

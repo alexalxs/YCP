@@ -11,6 +11,152 @@ require_once 'cookies.php';
 require_once 'redirect.php';
 require_once 'requestfunc.php';
 
+// Habilitar CORS para permitir solicitações do formulário
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
+
+// Log para depuração
+if (defined('DEBUG_LOG') && DEBUG_LOG) {
+    error_log("==== INÍCIO DO PROCESSAMENTO SEND.PHP ====");
+    error_log("Método: " . $_SERVER['REQUEST_METHOD']);
+    error_log("Dados: " . print_r($_POST, true));
+}
+
+// Lidar com solicitações OPTIONS (preflight CORS)
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
+
+// Verifica se é uma ação de captura de email
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'email') {
+    // Verificar e processar o email
+    if (!isset($_POST['email']) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Email inválido']);
+        exit;
+    }
+
+    $email = $_POST['email'];
+    $name = isset($_POST['name']) ? $_POST['name'] : '';
+    $subid = isset($_POST['subid']) ? $_POST['subid'] : (isset($_COOKIE['subid']) ? $_COOKIE['subid'] : '');
+
+    if (empty($subid)) {
+        // Se não tiver subid, gerar um novo
+        $subid = md5(uniqid(rand(), true));
+        ywbsetcookie('subid', $subid, '/');
+    }
+
+    // Log para depuração
+    if (defined('DEBUG_LOG') && DEBUG_LOG) {
+        error_log("Processando email: $email para subid: $subid");
+        error_log("Nome do usuário: $name");
+    }
+
+    // Registrar o lead no banco de dados (incluindo o nome)
+    // Usar o nome padrão se não for fornecido
+    $user_name = !empty($name) ? $name : 'Lead de Email';
+    
+    // Registrar o lead (com um número de telefone fictício para compatibilidade)
+    $phone = '00000000000'; // Telefone fictício para manter compatibilidade
+    add_lead($subid, $user_name, $phone, 'Lead');
+    
+    // Registrar o email no banco de dados
+    add_email($subid, $email);
+    
+    // Enviar para o webhook do Autonami via proxy
+    $webhook_url = 'https://dekoola.com/wp-json/autonami/v1/webhook/?bwfan_autonami_webhook_id=10&bwfan_autonami_webhook_key=92c39df617252d128219dba772cff29a';
+    
+    // Preparar os dados para envio
+    $webhook_data = array(
+        'email' => $email,
+        'name' => $user_name
+    );
+    
+    // Adicionar outros parâmetros da URL original
+    foreach ($_POST as $key => $value) {
+        if ($key != 'action' && $key != 'email' && $key != 'name' && $key != 'subid') {
+            $webhook_data[$key] = $value;
+        }
+    }
+    
+    // Log para depuração
+    if (defined('DEBUG_LOG') && DEBUG_LOG) {
+        error_log("Enviando dados para webhook: " . print_r($webhook_data, true));
+    }
+    
+    // Fazer a requisição para o webhook
+    $ch = curl_init($webhook_url);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($webhook_data));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+    
+    $webhook_response = curl_exec($ch);
+    $webhook_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    
+    // Log da resposta do webhook
+    if (defined('DEBUG_LOG') && DEBUG_LOG) {
+        error_log("Resposta do webhook (status $webhook_status): $webhook_response");
+    }
+
+    // Responder com sucesso
+    http_response_code(200);
+    echo json_encode([
+        'success' => true, 
+        'message' => 'Lead registrado com sucesso',
+        'webhook_status' => $webhook_status
+    ]);
+    exit;
+}
+
+// Processamento de leads normais
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Verificar parâmetros necessários
+    if (!isset($_POST['name']) || !isset($_POST['phone'])) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Parâmetros obrigatórios ausentes']);
+        exit;
+    }
+
+    $name = $_POST['name'];
+    $phone = $_POST['phone'];
+    $subid = isset($_POST['subid']) ? $_POST['subid'] : (isset($_COOKIE['subid']) ? $_COOKIE['subid'] : '');
+
+    if (empty($subid)) {
+        // Se não tiver subid, gerar um novo
+        $subid = md5(uniqid(rand(), true));
+        ywbsetcookie('subid', $subid, '/');
+    }
+
+    // Registrar o lead no banco de dados
+    add_lead($subid, $name, $phone);
+
+    // Se tiver email, registrá-lo também
+    if (isset($_POST['email']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+        add_email($subid, $_POST['email']);
+    }
+
+    // Redirecionamento após o formulário ser processado
+    if (isset($_POST['oferta'])) {
+        $landing = $_POST['oferta'];
+        if (file_exists(__DIR__ . '/' . $landing . '/thankyou.html')) {
+            header('Location: /' . $landing . '/thankyou.html');
+            exit;
+        }
+    }
+
+    // Responder com sucesso se não houver redirecionamento
+    echo json_encode(['success' => true, 'message' => 'Lead registrado com sucesso']);
+    exit;
+}
+
+// Se não for um método suportado
+http_response_code(405);
+echo json_encode(['error' => 'Método não permitido']);
+
 $name = '';
 if (isset($_POST['name']))
     $name=$_POST['name'];

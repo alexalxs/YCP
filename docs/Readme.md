@@ -279,3 +279,72 @@ Os diagramas estão no formato Mermaid, que pode ser visualizado:
 - `statistics.php`: Exibe estatísticas de conversão
 - `order.php`: Processa pedidos da página de oferta
 - `create_lead.php`: Ferramenta para criação direta de leads para testes
+
+# Documentação do Sistema de Captura de Email e Integração com Webhook
+
+Este repositório contém a documentação detalhada do sistema de captura de email,
+registro de leads e integração com webhooks externos implementado no site.
+
+## Visão Geral do Sistema
+
+O sistema implementa um fluxo completo para captura de emails via modal,
+registro de leads no banco de dados local e integração com webhook externo do
+Autonami. O sistema também inclui redirecionamento com preservação de parâmetros
+de URL para rastreamento de campanhas.
+
+## Componentes Principais
+
+### Frontend
+
+- [Modal de Captura de Email](offer2/email-modal.md): Implementação do modal
+  interativo para captura de email
+
+### Backend
+
+- [Processamento de Leads por Email](send/email-lead.md): Sistema de
+  processamento e armazenamento de leads de email
+- [Sistema de Proxy para Webhook](send/webhook-proxy.md): Implementação do proxy
+  para contornar limitações de CORS
+
+### Utilitários
+
+- [Sistema de Redirecionamento](offer2/redirect-system.md): Sistema de
+  redirecionamento com preservação de parâmetros de URL
+
+## Fluxo de Operação Completo
+
+1. Usuário acessa a landing page com parâmetros de rastreamento
+2. Usuário clica no botão CTA "CONHECER O MÉTODO AGORA"
+3. Modal de captura de email é exibido
+4. Usuário insere email e submete o formulário
+5. Frontend valida o email e envia para o backend
+6. Backend registra o email no banco de dados local
+7. Backend envia os dados para o webhook externo do Autonami
+8. Backend retorna status de sucesso para o frontend
+9. Frontend exibe mensagem de confirmação
+10. Após breve delay, usuário é redirecionado para página de destino
+11. Todos os parâmetros de rastreamento são preservados na URL de destino
+
+## Estrutura da Documentação
+
+A documentação está organizada seguindo a mesma estrutura de diretórios do
+código-fonte:
+
+```
+docs/
+├── README.md
+├── offer2/
+│   ├── email-modal.md
+│   └── redirect-system.md
+└── send/
+    ├── email-lead.md
+    └── webhook-proxy.md
+```
+
+Cada arquivo de documentação segue uma estrutura padronizada com as seguintes
+seções:
+
+- To Fix: Funcionalidades que precisam ser corrigidas
+- To Do: Funcionalidades que precisam ser implementadas
+- Test: Funcionalidades em fase de teste
+- Done: Funcionalidades implementadas e funcionando corretamente
