@@ -60,8 +60,24 @@ if (isset($_GET['key']) && $_GET['key'] == '1') {
     
     // Registrar o clique para estatísticas (se estiver usando teste A/B)
     if ($use_abtest) {
-        // Use cloaker->detect se disponível, ou um valor padrão
-        $detect_info = isset($cloaker) ? $cloaker->detect : array();
+        // Use cloaker->detect se disponível, ou crie um array com valores padrão
+        if (isset($cloaker)) {
+            $detect_info = $cloaker->detect;
+        } else {
+            // Criar um array com valores padrão para evitar avisos de índices indefinidos
+            $detect_info = array(
+                'ip' => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '',
+                'country' => '',
+                'os' => '',
+                'isp' => '',
+                'ua' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : ''
+            );
+            
+            // Log para depuração
+            if (defined('DEBUG_LOG') && DEBUG_LOG) {
+                error_log("Usando detect_info padrão (cloaker não definido)");
+            }
+        }
         add_black_click($subid, $detect_info, '', $landing);
     }
     

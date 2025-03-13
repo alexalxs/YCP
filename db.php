@@ -44,15 +44,20 @@ function add_black_click($subid, $data, $preland, $land)
     $dataDir = __DIR__ . "/logs";
     $bclicksStore = new Store("blackclicks", $dataDir);
 
-    $calledIp = $data['ip'];
-    $country = $data['country'];
+    $calledIp = isset($data['ip']) ? $data['ip'] : '';
+    $country = isset($data['country']) ? $data['country'] : '';
     $dt = new DateTime();
     $time = $dt->getTimestamp();
-    $os = $data['os'];
-    $isp = str_replace(',', ' ', $data['isp']);
-    $user_agent = str_replace(',', ' ', $data['ua']);
+    $os = isset($data['os']) ? $data['os'] : '';
+    $isp = isset($data['isp']) ? str_replace(',', ' ', $data['isp']) : '';
+    $user_agent = isset($data['ua']) ? str_replace(',', ' ', $data['ua']) : '';
     $prelanding = empty($preland) ? 'unknown' : $preland;
     $landing = empty($land) ? 'unknown' : $land;
+
+    if (defined('DEBUG_LOG') && DEBUG_LOG) {
+        error_log("add_black_click: subid=$subid, preland=$preland, land=$landing");
+        error_log("add_black_click data: " . print_r($data, true));
+    }
 
     parse_str($_SERVER['QUERY_STRING'], $queryarr);
 
