@@ -75,6 +75,19 @@ function load_landing($url)
     global $replace_landing, $replace_landing_address;
     global $images_lazy_load;
 
+    // Verificar explicitamente se a URL está vazia e definir um valor padrão
+    if (empty($url)) {
+        error_log("URL vazia passada para load_landing()");
+        $url = "offer1"; // Definir um valor padrão se a URL estiver vazia
+    }
+
+    // Verificar se temos conteúdo em cache primeiro
+    $cached_content = get_cached_content($url);
+    if ($cached_content !== false) {
+        // Usar conteúdo em cache
+        return $cached_content;
+    }
+
     // Verificar se existe o arquivo index.html diretamente
     $direct_path = __DIR__ . '/' . $url . '/index.html';
     if (file_exists($direct_path)) {
@@ -100,6 +113,8 @@ function load_landing($url)
                 }
             }
             
+            // Salvar no cache para uso futuro
+            save_cached_content($url, $html);
             return $html;
         }
     }
@@ -107,10 +122,19 @@ function load_landing($url)
     // Método tradicional para casos onde o arquivo não existe diretamente
     $fullpath = get_abs_from_rel($url);
     $fpwqs = get_abs_from_rel($url,true);
+    
+    // Registro de depuração
+    error_log("Tentativa de carregar conteúdo: URL=$url, fullpath=$fullpath, fpwqs=$fpwqs");
+    
     $html = get_html($fpwqs);
     
     if (empty($html)) {
-        return "Error: Unable to load content from $url";
+        error_log("Falha ao carregar conteúdo de $url");
+        // Retornar uma página de erro mais amigável
+        return "<html><head><title>Conteúdo não disponível</title></head><body>
+                <h1>Desculpe, este conteúdo não está disponível no momento</h1>
+                <p>Por favor, tente novamente mais tarde ou retorne para a <a href='/'>página inicial</a>.</p>
+                </body></html>";
     }
     
     $html = remove_scrapbook($html);
@@ -137,6 +161,13 @@ function load_landing($url)
         $html = insert_file_content_with_replace($html, 'replacelanding.js', '</body>', '{REDIRECT}', $replacelandurl);
     }
     
+    // Adicionar lazy loading de imagens se configurado
+    if ($images_lazy_load) {
+        $html = add_images_lazy_load($html);
+    }
+    
+    // Salvar no cache para uso futuro
+    save_cached_content($url, $html);
     return $html;
 }
 
@@ -253,6 +284,19 @@ function load_white_content($url, $add_js_check)
 {
     global $fb_use_pageview;
     
+    // Verificar explicitamente se a URL está vazia
+    if (empty($url)) {
+        error_log("URL vazia passada para load_white_content()");
+        $url = "white"; // Valor padrão
+    }
+    
+    // Verificar cache primeiro
+    $cache_key = "white_" . $url . ($add_js_check ? "_js" : "");
+    $cached_content = get_cached_content($cache_key);
+    if ($cached_content !== false) {
+        return $cached_content;
+    }
+    
     // Verificar se a URL é uma pasta criada pelo usuário
     $is_custom_white = false;
     $is_custom_offer = false;
@@ -299,13 +343,45 @@ function load_white_content($url, $add_js_check)
                 }
             }
             
+            // Se necessário, adicionar verificação JS
+            if ($add_js_check) {
+                $html = add_js_testcode($html);
+            }
+            
+            // Salvar em cache
+            save_cached_content($cache_key, $html);
             return $html;
+        } else {
+            error_log("Arquivo index.html não encontrado em $custom_path");
+            // Retornar página de erro amigável
+            $error_html = "<html><head><title>Conteúdo não disponível</title></head><body>
+                        <h1>Página não encontrada</h1>
+                        <p>O conteúdo solicitado não está disponível. Por favor, verifique o URL ou retorne para a <a href='/'>página inicial</a>.</p>
+                        </body></html>";
+            save_cached_content($cache_key, $error_html);
+            return $error_html;
         }
     } 
     
     // Comportamento original para URLs não personalizadas
     $fullpath = get_abs_from_rel($url,true);
+    
+    // Registro para depuração
+    error_log("Carregando white content de: $url, fullpath=$fullpath");
+    
     $html = get_html($fullpath);
+    
+    // Verificar se conseguimos obter o HTML
+    if (empty($html)) {
+        error_log("Falha ao carregar conteúdo white de $url");
+        $error_html = "<html><head><title>Conteúdo não disponível</title></head><body>
+                    <h1>Conteúdo temporariamente indisponível</h1>
+                    <p>O conteúdo solicitado não pode ser carregado. Por favor, tente novamente mais tarde.</p>
+                    </body></html>";
+        save_cached_content($cache_key, $error_html);
+        return $error_html;
+    }
+    
     $baseurl = '/'.$url.'/';
     
     // Adicionar base href para garantir que os recursos sejam carregados corretamente
@@ -331,6 +407,8 @@ function load_white_content($url, $add_js_check)
         $html = add_js_testcode($html);
     }
     
+    // Salvar em cache
+    save_cached_content($cache_key, $html);
     return $html;
 }
 
@@ -338,6 +416,19 @@ function load_white_content($url, $add_js_check)
 function load_white_curl($url, $add_js_check)
 {
     global $fb_use_pageview;
+    
+    // Verificar URL vazia
+    if (empty($url)) {
+        error_log("URL vazia passada para load_white_curl()");
+        $url = "white"; // Valor padrão
+    }
+    
+    // Verificar cache primeiro
+    $cache_key = "white_curl_" . $url . ($add_js_check ? "_js" : "");
+    $cached_content = get_cached_content($cache_key);
+    if ($cached_content !== false) {
+        return $cached_content;
+    }
     
     // Verificar se a URL é uma pasta criada pelo usuário
     $is_custom_white = false;
@@ -393,15 +484,33 @@ function load_white_curl($url, $add_js_check)
             // Reescrever URLs relativas
             $html = rewrite_relative_urls($html, $baseurl);
             
+            // Adicionar verificação JS se necessário
+            if ($add_js_check) {
+                $html = add_js_testcode($html);
+            }
+            
+            // Salvar em cache
+            save_cached_content($cache_key, $html);
             return $html;
         } else {
             // Se não houver index.html, retornar uma mensagem de erro
-            $html = '<html><head><title>Erro</title></head><body><h1>Erro</h1><p>Arquivo index.html não encontrado na pasta ' . $url . '.</p></body></html>';
-            return $html;
+            error_log("Arquivo index.html não encontrado em $custom_path");
+            $error_html = '<html><head><title>Erro</title></head><body><h1>Erro</h1><p>Arquivo index.html não encontrado na pasta ' . $url . '.</p></body></html>';
+            save_cached_content($cache_key, $error_html);
+            return $error_html;
         }
     } else {
         // Comportamento original para URLs não personalizadas
+        error_log("Carregando URL externa: $url");
         $html = get_html($url, true, true);
+        
+        if (empty($html)) {
+            error_log("Falha ao carregar conteúdo externo de $url");
+            $error_html = '<html><head><title>Erro</title></head><body><h1>Erro</h1><p>Não foi possível carregar o conteúdo de ' . $url . '.</p></body></html>';
+            save_cached_content($cache_key, $error_html);
+            return $error_html;
+        }
+        
         $baseurl = $url;
     }
     
@@ -453,6 +562,8 @@ function load_white_curl($url, $add_js_check)
         $html
     );
     
+    // Salvar em cache
+    save_cached_content($cache_key, $html);
     return $html;
 }
 
@@ -624,5 +735,35 @@ function add_lazy_load($html) {
     });</script>';
     
     return str_replace('</body>', $lazyScript . '</body>', $html);
+}
+
+// Funções de cache para conteúdo
+function get_cached_content($url, $cache_duration = 3600) {
+    $cache_dir = __DIR__ . '/cache';
+    $cache_file = $cache_dir . '/' . md5($url) . '.html';
+    
+    // Criar diretório de cache se não existir
+    if (!is_dir($cache_dir)) {
+        mkdir($cache_dir, 0755, true);
+    }
+    
+    // Verificar se existe cache válido
+    if (file_exists($cache_file) && (time() - filemtime($cache_file) < $cache_duration)) {
+        return file_get_contents($cache_file);
+    }
+    
+    return false;
+}
+
+function save_cached_content($url, $content) {
+    $cache_dir = __DIR__ . '/cache';
+    $cache_file = $cache_dir . '/' . md5($url) . '.html';
+    
+    // Criar diretório de cache se não existir
+    if (!is_dir($cache_dir)) {
+        mkdir($cache_dir, 0755, true);
+    }
+    
+    file_put_contents($cache_file, $content);
 }
 ?>
