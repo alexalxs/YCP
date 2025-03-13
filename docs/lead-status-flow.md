@@ -15,6 +15,12 @@ stateDiagram-v2
     Reject --> [*]: Estado final
     Trash --> [*]: Estado final
     
+    note left of [*]
+        Métodos de criação de Lead:
+        1. Via formulário (offer1/index.html)
+        2. Via create_lead.php (teste direto)
+    end note
+    
     note right of Lead
         Estado inicial quando o lead é criado
         - Armazenado no SleekDB
@@ -50,6 +56,9 @@ stateDiagram-v2
 
 - **Criação**: Quando um usuário preenche o formulário na página de oferta
 - **Processamento**: Realizado pelo arquivo `send.php`
+- **Métodos de Criação**:
+  1. **Via formulário**: Preenchimento do formulário em offer1/index.html
+  2. **Via teste direto**: Execução do script create_lead.php
 - **Dados Armazenados**:
   - subid (identificador único)
   - time (timestamp da criação)
@@ -65,6 +74,9 @@ stateDiagram-v2
 
 - **Atualização**: Via postback com `status=Purchase`
 - **Processamento**: Realizado pelo arquivo `postback.php`
+- **Métodos de Atualização**:
+  1. **Via postback automático**: Enviado pela plataforma de afiliados
+  2. **Via curl manual**: Comando curl para teste de postback
 - **Dados Adicionados**:
   - status = "Purchase"
   - payout (valor da comissão)
@@ -96,6 +108,36 @@ stateDiagram-v2
 
 ## Implementação no Código
 
+### Criação de Lead via Formulário
+
+```php
+// Em send.php - criação do lead via formulário
+$name = $_POST['name'];
+$phone = $_POST['phone'];
+$subid = get_subid();
+add_lead($subid, $name, $phone);
+```
+
+### Criação de Lead via Script de Teste
+
+```php
+// Em create_lead.php - criação do lead para teste
+$subid = uniqid('test_');
+$name = 'Cliente Teste Direto';
+$phone = '11987654321';
+$result = add_lead($subid, $name, $phone, 'Lead');
+```
+
+### Atualização de Status via Postback
+
+```php
+// Em postback.php - atualização de status
+$subid = $_REQUEST['subid'];
+$status = $_REQUEST['status'];
+$payout = $_REQUEST['payout'];
+update_lead($subid, $status, $payout);
+```
+
 Os status são definidos no arquivo `settings.json` e processados pelo
 `postback.php`:
 
@@ -126,3 +168,25 @@ function update_lead($subid, $status, $payout) {
     return true;
 }
 ```
+
+## Método Recomendado para Testes
+
+Para testes completos do fluxo de conversão:
+
+1. **Gerar um Lead**:
+   - Acesse `create_lead.php` para criar um lead com status "Lead"
+   - Anote o subid gerado (ex: test_67d3260cb7978)
+
+2. **Verificar Estatísticas Iniciais**:
+   - Acesse `admin/statistics.php?password=12345`
+   - Confira que o lead está contabilizado como "Hold"
+
+3. **Atualizar o Status**:
+   - Execute o comando curl exibido pelo script create_lead.php:
+   ```bash
+   curl -v "http://localhost:8000/postback.php?subid=test_67d3260cb7978&status=Purchase&payout=99.99"
+   ```
+
+4. **Verificar Estatísticas Atualizadas**:
+   - Acesse novamente `admin/statistics.php?password=12345`
+   - Confira que o lead agora está como "Purchase" e a receita é 99.99

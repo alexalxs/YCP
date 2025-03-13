@@ -165,6 +165,103 @@ bem-sucedido:
 }
 ```
 
+## Implementações para Processamento de Conversões
+
+### 1. Script de Processamento de Pedidos (order.php)
+
+Foi implementado um script `order.php` para processar os pedidos enviados pelo
+formulário:
+
+```php
+<?php
+// Arquivo de processamento de pedidos simples
+header('Content-Type: text/html; charset=utf-8');
+
+// Logs dos dados recebidos para debug
+$log_file = __DIR__ . '/logs/order_log.txt';
+$log_dir = dirname($log_file);
+
+if (!file_exists($log_dir)) {
+    mkdir($log_dir, 0755, true);
+}
+
+// Registra os dados recebidos
+$data = date('Y-m-d H:i:s') . " - ORDER RECEIVED\n";
+$data .= "POST: " . print_r($_POST, true) . "\n";
+$data .= "GET: " . print_r($_GET, true) . "\n";
+$data .= "-------------------------------------\n";
+
+file_put_contents($log_file, $data, FILE_APPEND);
+
+// Retorna uma resposta simples
+echo '<html>
+<head>
+    <title>Pedido Recebido</title>
+</head>
+<body>
+    <h1>Pedido Processado com Sucesso</h1>
+    <p>Obrigado pelo seu pedido!</p>
+</body>
+</html>';
+```
+
+### 2. Script Alternativo para Criação de Leads (create_lead.php)
+
+Para testes e criação direta de leads, foi implementado o script
+`create_lead.php`:
+
+```php
+<?php
+// Arquivo para criar um lead diretamente
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+require_once 'settings.php';
+require_once 'db.php';
+
+// Dados do lead
+$subid = uniqid('test_');
+$name = 'Cliente Teste Direto';
+$phone = '11987654321';
+$email = 'teste@exemplo.com';
+$landing = 'offer1';
+
+// Criar o lead com status inicial
+$result = add_lead($subid, $name, $phone, 'Lead');
+
+echo "Resultado da criação do lead: ";
+var_dump($result);
+echo "<br>";
+echo "SubID gerado: " . $subid;
+echo "<br><br>";
+
+// Exibir informações úteis para criar um postback manualmente
+echo "Para atualizar este lead para Purchase, use:<br>";
+echo "curl -v \"http://localhost:8000/postback.php?subid={$subid}&status=Purchase&payout=99.99\"";
+?>
+```
+
+## Como Testar Conversões
+
+### 1. Método via Formulário
+
+- Preencher o formulário na página `offer1/index.html`
+- Enviar os dados para processamento
+
+### 2. Método via Script Direto
+
+- Acessar `create_lead.php` para gerar um lead diretamente
+- Usar o comando curl exibido para atualizar o status
+
+### 3. Método via Postback Manual
+
+```bash
+curl -v "http://localhost:8000/postback.php?subid=SUBID_AQUI&status=Purchase&payout=99.99"
+```
+
+Onde `SUBID_AQUI` é o identificador de um lead existente
+
 ## Como Visualizar os Diagramas
 
 Os diagramas estão no formato Mermaid, que pode ser visualizado:
@@ -180,3 +277,5 @@ Os diagramas estão no formato Mermaid, que pode ser visualizado:
 - `db.php`: Contém funções para manipulação de leads no banco de dados
 - `settings.json`: Configurações, incluindo definições de postback
 - `statistics.php`: Exibe estatísticas de conversão
+- `order.php`: Processa pedidos da página de oferta
+- `create_lead.php`: Ferramenta para criação direta de leads para testes
