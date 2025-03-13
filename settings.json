@@ -3,7 +3,7 @@
         "action": "folder",
         "folder": {
             "names": [
-                "offer1"
+                "white"
             ]
         },
         "redirect": {
@@ -58,6 +58,7 @@
             "action": "folder",
             "folder": {
                 "names": [
+                    "offer1",
                     "offer2"
                 ],
                 "conversions": {
@@ -137,23 +138,8 @@
                 "tokens": [
                     "key=1"
                 ],
-                "useragents": [
-                    "facebook",
-                    "Facebot",
-                    "curl",
-                    "gce-spider",
-                    "yandex.com/bots",
-                    "OdklBot"
-                ],
-                "isps": [
-                    "facebook",
-                    "google",
-                    "yandex",
-                    "amazon",
-                    "azure",
-                    "digitalocean",
-                    "microsoft"
-                ],
+                "useragents": [],
+                "isps": [],
                 "referer": {
                     "empty": false,
                     "stopwords": []

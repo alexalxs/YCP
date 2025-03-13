@@ -71,27 +71,67 @@ function load_prelanding($url, $land_number)
 //Подгрузка контента блэк ленда из другой папки через CURL
 function load_landing($url)
 {
-	global $black_land_log_conversions_on_button_click,$black_land_use_custom_thankyou_page;
-	global $replace_landing, $replace_landing_address;
+    global $black_land_log_conversions_on_button_click,$black_land_use_custom_thankyou_page;
+    global $replace_landing, $replace_landing_address;
     global $images_lazy_load;
 
-    $fullpath = get_abs_from_rel($url);
-    $fpwqs = get_abs_from_rel($url,true);
-
-    $html=get_html($fpwqs);
-    $html=remove_scrapbook($html);
-    $html=remove_from_html($html,'removeland.html');
-    $html=preg_replace('/<head [^>]+>/','<head>',$html);
-    $html=insert_after_tag($html,"<head>","<base href='".$fullpath."'>");
+    // Verificar se existe o arquivo index.html diretamente
+    $direct_path = __DIR__ . '/' . $url . '/index.html';
+    if (file_exists($direct_path)) {
+        $html = file_get_contents($direct_path);
+        if (!empty($html)) {
+            // Processar o HTML carregado diretamente
+            $baseurl = $url;
+            $html = rewrite_relative_urls($html, $baseurl);
+            
+            // Adicionar script de conversão se necessário
+            if (file_exists('scripts/conversion_tracker.js')) {
+                $script_content = file_get_contents('scripts/conversion_tracker.js');
+                if (strpos($html, '</body>') !== false) {
+                    $html = str_replace('</body>', '<script>' . $script_content . '</script></body>', $html);
+                } else {
+                    $html .= '<script>' . $script_content . '</script>';
+                }
+            }
+            
+            // Processar formulários para adicionar campo oculto de oferta
+            $offer_name = basename($url);
+            $html = preg_replace('/<form([^>]*)>/i', '<form$1><input type="hidden" name="oferta" value="' . $offer_name . '">', $html);
+            
+            return $html;
+        } else {
+            // Se o arquivo existe mas está vazio, tenta o método tradicional
+            $fullpath = get_abs_from_rel($url);
+            $fpwqs = get_abs_from_rel($url,true);
+            $html = get_html($fpwqs);
+        }
+    } else {
+        // Método tradicional
+        $fullpath = get_abs_from_rel($url);
+        $fpwqs = get_abs_from_rel($url,true);
+        $html = get_html($fpwqs);
+    }
+    
+    if (empty($html)) {
+        return "Error: Unable to load content from $url";
+    }
+    
+    $html = remove_scrapbook($html);
+    $html = remove_from_html($html,'removeland.html');
+    $html = preg_replace('/<head [^>]+>/','<head>',$html);
+    $html = insert_after_tag($html,"<head>","<base href='/".$url."/'>");
 
     if($black_land_use_custom_thankyou_page===true){
-		//меняем обработчик формы, чтобы у вайта и блэка была одна thankyou page
+        //меняем обработчик формы, чтобы у вайта и блэка была одна thankyou page
         $send=" action=\"../send.php";
         $query=http_build_query($_GET);
         if ($query!=='') $send.="?".$query;
         $send.="\"";
-		$html = preg_replace('/\saction=[\'\"]([^\'\"]*)[\'\"]/', $send, $html);
-	}
+        $html = preg_replace('/\saction=[\'\"]([^\'\"]*)[\'\"]/', $send, $html);
+    }
+
+    // Inserir subids nas formas
+    $html = insert_subs_into_forms($html);
 
     //если мы будем подменять ленд при переходе на страницу Спасибо, то Спасибо надо открывать в новом окне
     if ($replace_landing) {
@@ -99,34 +139,11 @@ function load_landing($url)
         $replacelandurl = add_subs_to_link($replacelandurl); //добавляем сабы
         $html = insert_file_content_with_replace($html, 'replacelanding.js', '</body>', '{REDIRECT}', $replacelandurl);
     }
-
-    //добавляем в страницу скрипт GTM
-    $html = insert_gtm_script($html);
-    //добавляем в страницу скрипт Yandex Metrika
-    $html = insert_yandex_script($html);
-    //добавляем всё, связанное с пикселем фб
-    $html = full_fbpixel_processing($html,$url);
-    //добавляем всё по тиктоку
-    $html = full_ttpixel_processing($html,$url);
-
-	if ($black_land_log_conversions_on_button_click){
-        $html= insert_file_content($html,'btnclicklog.js','</head>');
-	}
-
-    $html = insert_additional_scripts($html);
-
-    //добавляем во все формы сабы
-    $html = insert_subs_into_forms($html);
-    //добавляем в формы id пикселя фб
-    $html = insert_fbpixel_id($html);
-
-    $html = fix_anchors($html);
-    $html = replace_city_macros($html);
-    //заменяем поле с телефоном на более удобный тип - tel + добавляем autocomplete
-    $html = fix_phone_and_name($html);
-    $html = insert_phone_mask($html);
-
-    $html = add_images_lazy_load($html);
+    
+    // Código adicional para garantir que o conteúdo seja exibido corretamente
+    if ($images_lazy_load) {
+        $html = add_lazy_load($html);
+    }
 
     return $html;
 }
@@ -136,6 +153,11 @@ function insert_additional_scripts($html)
 {
     global $disable_text_copy, $back_button_action, $replace_back_button, $replace_back_address, $add_tos;
     global $comebacker, $callbacker, $addedtocart;
+
+    // Adicionar script de conversão de lead
+    if (file_exists('scripts/conversion_tracker.js')) {
+        $html = insert_file_content($html, 'conversion_tracker.js', '</body>');
+    }
 
     if ($disable_text_copy) {
         $html = insert_file_content($html, 'disablecopy.js', '</body>');
@@ -170,6 +192,7 @@ function insert_additional_scripts($html)
         $html = insert_file_content($html,'addedtocart/head.html','</head>');
         $html = insert_file_content($html,'addedtocart/template.html','</body>');
     }
+    
     return $html;
 }
 
@@ -237,39 +260,161 @@ function add_images_lazy_load($html){
 function load_white_content($url, $add_js_check)
 {
     global $fb_use_pageview;
-    $fullpath = get_abs_from_rel($url,true);
-
-    $html = get_html($fullpath);
-    $baseurl = '/'.$url.'/';
-    //переписываем все относительные src и href (не начинающиеся с http)
-	$html = rewrite_relative_urls($html,$baseurl);
-    //добавляем в страницу скрипт GTM
-    $html = insert_gtm_script($html);
-    //добавляем в страницу скрипт Yandex Metrika
-    $html = insert_yandex_script($html);
-    //добавляем в страницу скрипт Facebook Pixel с событием PageView
-    if ($fb_use_pageview) {
-        $html = insert_fbpixel_script($html, 'PageView');
+    
+    // Verificar se a URL é uma pasta criada pelo usuário
+    $is_custom_white = false;
+    $is_custom_offer = false;
+    $custom_path = '';
+    
+    // Verificar se é uma pasta white personalizada
+    if (file_exists('white/' . $url) && is_dir('white/' . $url)) {
+        $is_custom_white = true;
+        $custom_path = 'white/' . $url;
+    } 
+    // Verificar se é uma pasta branca direta
+    elseif (file_exists('branca') && is_dir('branca')) {
+        $is_custom_white = true;
+        $custom_path = 'branca';
     }
-
-    //если на вайте есть форма, то меняем её обработчик, чтобы у вайта и блэка была одна thankyou page
-    $html = preg_replace('/\saction=[\'\"]([^\'\"]+)[\'\"]/', " action=\"../worder.php?".http_build_query($_GET)."\"", $html);
-
-    //добавляем в <head> пару доп. метатегов
-    $html= str_replace('<head>', '<head><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex, nofollow">', $html);
-    $html= remove_scrapbook($html);
-
-    if ($add_js_check) {
-        $html = add_js_testcode($html);
+    
+    // Verificar se é uma pasta de oferta personalizada
+    if (file_exists('offers/' . $url) && is_dir('offers/' . $url)) {
+        $is_custom_offer = true;
+        $custom_path = 'offers/' . $url;
     }
-    return $html;
+    // Verificar se é uma pasta oferta direta
+    elseif (file_exists('oferta1') && is_dir('oferta1')) {
+        $is_custom_offer = true;
+        $custom_path = 'oferta1';
+    }
+    
+    // Se for uma pasta personalizada, carregar o index.html dela
+    if ($is_custom_white || $is_custom_offer) {
+        $index_path = $custom_path . '/index.html';
+        
+        if (file_exists($index_path)) {
+            $html = file_get_contents($index_path);
+            
+            // Definir o caminho base para os recursos
+            $baseurl = $custom_path;
+            
+            // Adicionar script de conversão de lead
+            if (file_exists('scripts/conversion_tracker.js')) {
+                $script_content = file_get_contents('scripts/conversion_tracker.js');
+                if (strpos($html, '</body>') !== false) {
+                    $html = str_replace('</body>', '<script>' . $script_content . '</script></body>', $html);
+                } else {
+                    $html .= '<script>' . $script_content . '</script>';
+                }
+            }
+            
+            // Processar formulários para adicionar campo oculto de oferta
+            if ($is_custom_offer) {
+                $offer_name = basename($custom_path);
+                $html = preg_replace('/<form([^>]*)>/i', '<form$1><input type="hidden" name="oferta" value="' . $offer_name . '">', $html);
+            }
+            
+            // Reescrever URLs relativas
+            $html = rewrite_relative_urls($html, $baseurl);
+            
+            return $html;
+        } else {
+            // Se não houver index.html, retornar uma mensagem de erro
+            $html = '<html><head><title>Erro</title></head><body><h1>Erro</h1><p>Arquivo index.html não encontrado na pasta ' . $custom_path . '.</p></body></html>';
+            return $html;
+        }
+    } else {
+        // Comportamento original para URLs não personalizadas
+        $fullpath = get_abs_from_rel($url,true);
+        $html = get_html($fullpath);
+        $baseurl = '/'.$url.'/';
+        
+        //переписываем все относительные src и href (не начинающиеся с http)
+        $html = rewrite_relative_urls($html,$baseurl);
+        //добавляем в страницу скрипт GTM
+        $html = insert_gtm_script($html);
+        //добавляем в страницу скрипт Yandex Metrika
+        $html = insert_yandex_script($html);
+        //добавляем в страницу скрипт Facebook Pixel с событием PageView
+        if ($fb_use_pageview) {
+            $html = insert_fbpixel_script($html, 'PageView');
+        }
+
+        //если на вайте есть форма, то меняем её обработчик, чтобы у вайта и блэка была одна thankyou page
+        $html = preg_replace('/\saction=[\'\"]([^\'\"]+)[\'\"]/', " action=\"../worder.php?".http_build_query($_GET)."\"", $html);
+
+        //добавляем в <head> пару доп. метатегов
+        $html= str_replace('<head>', '<head><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex, nofollow">', $html);
+
+        //если нужно, добавляем в страницу проверку на js
+        if ($add_js_check) {
+            $html = add_js_testcode($html);
+        }
+        
+        return $html;
+    }
 }
 
-//когда подгружаем вайт методом CURL
+//Подгрузка контента вайта через CURL
 function load_white_curl($url, $add_js_check)
 {
-    $html=get_html($url,true,true);
-	$html = rewrite_relative_urls($html,$url);
+    global $fb_use_pageview;
+    
+    // Verificar se a URL é uma pasta criada pelo usuário
+    $is_custom_white = false;
+    $is_custom_offer = false;
+    $custom_path = '';
+    
+    // Verificar se é uma pasta white personalizada
+    if (file_exists('white/' . $url) && is_dir('white/' . $url)) {
+        $is_custom_white = true;
+        $custom_path = 'white/' . $url;
+    }
+    
+    // Verificar se é uma pasta de oferta personalizada
+    if (file_exists('offers/' . $url) && is_dir('offers/' . $url)) {
+        $is_custom_offer = true;
+        $custom_path = 'offers/' . $url;
+    }
+    
+    // Se for uma pasta personalizada, carregar o index.html dela
+    if ($is_custom_white || $is_custom_offer) {
+        $index_path = $custom_path . '/index.html';
+        
+        if (file_exists($index_path)) {
+            $html = file_get_contents($index_path);
+            $baseurl = '/' . $custom_path . '/';
+            
+            // Adicionar script de conversão de lead
+            if (file_exists('scripts/conversion_tracker.js')) {
+                // Verificar se há tag </body>
+                if (strpos($html, '</body>') !== false) {
+                    $script_content = file_get_contents('scripts/conversion_tracker.js');
+                    $html = str_replace('</body>', '<script>' . $script_content . '</script></body>', $html);
+                } else {
+                    // Se não houver tag </body>, adicionar ao final
+                    $script_content = file_get_contents('scripts/conversion_tracker.js');
+                    $html .= '<script>' . $script_content . '</script>';
+                }
+            }
+            
+            // Processar formulários para adicionar campo oculto de oferta
+            if ($is_custom_offer) {
+                $offer_name = basename($custom_path);
+                $html = preg_replace('/<form([^>]*)>/i', '<form$1><input type="hidden" name="oferta" value="' . $offer_name . '">', $html);
+            }
+        } else {
+            // Se não houver index.html, retornar uma mensagem de erro
+            $html = '<html><head><title>Erro</title></head><body><h1>Erro</h1><p>Arquivo index.html não encontrado na pasta ' . $url . '.</p></body></html>';
+            $baseurl = '/';
+        }
+    } else {
+        // Comportamento original para URLs não personalizadas
+        $html = get_html($url, true, true);
+        $baseurl = $url;
+    }
+    
+    $html = rewrite_relative_urls($html, $baseurl);
 
     //удаляем лишние палящие теги
     $html = preg_replace('/(<meta property=\"og:url\" [^>]+>)/', "", $html);
@@ -284,6 +429,39 @@ function load_white_curl($url, $add_js_check)
     if ($add_js_check) {
         $html = add_js_testcode($html);
     }
+    
+    // Adicionar scripts adicionais (incluindo o rastreamento de conversões)
+    $html = insert_additional_scripts($html);
+    
+    // Extrair o nome da oferta da URL
+    $oferta = '';
+    $url_parts = explode('/', trim($url, '/'));
+    if (!empty($url_parts)) {
+        $oferta = end($url_parts);
+    }
+    
+    // Processar formulários para adicionar rastreamento de conversões
+    $html = preg_replace_callback(
+        '/<form\s+[^>]*>/i',
+        function ($matches) use ($oferta) {
+            return $matches[0] . '<input type="hidden" name="oferta" value="' . $oferta . '">';
+        },
+        $html
+    );
+    
+    // Processar formulários sem action
+    $html = preg_replace_callback(
+        '/<form\s+[^>]*action=["\']?([^"\'\s>]*)(["\'\s>])/i',
+        function ($matches) {
+            // Se o formulário não tem action ou tem action vazia, adiciona o action para email_track.php
+            if (empty($matches[1]) || $matches[1] == '#' || $matches[1] == 'javascript:void(0)') {
+                return '<form action="/email_track.php" method="POST" ' . $matches[2];
+            }
+            return $matches[0];
+        },
+        $html
+    );
+    
     return $html;
 }
 
@@ -335,10 +513,43 @@ function insert_subs_into_forms($html)
 //переписываем все относительные src и href (не начинающиеся с http или с //)
 function rewrite_relative_urls($html,$url)
 {
-	$modified = preg_replace('/\ssrc=[\'\"](?!http|\/\/|data:)([^\'\"]+)[\'\"]/', " src=\"$url\\1\"", $html);
-	$modified = preg_replace('/\shref=[\'\"](?!http|mailto:|tel:|whatsapp:|#|\/\/)([^\'\"]+)[\'\"]/', " href=\"$url\\1\"", $modified);
-	$modified = preg_replace('/background-image:\s*url\((?!http|#|\/\/)([^\)]+)\)/', "background-image: url($url\\1)", $modified);
-	return $modified;
+    // Remover barras iniciais para garantir que os links sejam relativos
+    if (substr($url, 0, 1) === '/') {
+        $url = substr($url, 1);
+    }
+    
+    // Garantir que a URL termine com uma barra
+    if (substr($url, -1) !== '/') {
+        $url .= '/';
+    }
+    
+    // Evitar duplicação de caminhos
+    if (strpos($html, $url) !== false) {
+        // Se a URL já está presente no HTML, não precisamos reescrever
+        return $html;
+    }
+    
+    // Corrigir links relativos em src, href e background-image
+    $modified = preg_replace('/\ssrc=[\'\"](?!http|https|\/\/|data:)([^\'\"]+)[\'\"]/', " src=\"$url\\1\"", $html);
+    $modified = preg_replace('/\shref=[\'\"](?!http|https|mailto:|tel:|whatsapp:|#|\/\/)([^\'\"]+)[\'\"]/', " href=\"$url\\1\"", $modified);
+    $modified = preg_replace('/background-image:\s*url\([\'"]?(?!http|https|#|\/\/|data:)([^\)]+)[\'"]?\)/', "background-image: url($url\\1)", $modified);
+    
+    // Converter links absolutos para relativos (começando com /)
+    $modified = preg_replace('/\ssrc=[\'\"]\/([^\'\"]+)[\'\"]/', " src=\"$url\\1\"", $modified);
+    $modified = preg_replace('/\shref=[\'\"]\/([^\'\"]+)[\'\"]/', " href=\"$url\\1\"", $modified);
+    $modified = preg_replace('/background-image:\s*url\(\/([^\)]+)\)/', "background-image: url($url\\1)", $modified);
+    
+    // Corrigir links para CSS e JS
+    $modified = preg_replace('/<link[^>]+href=[\'\"](?!http|https|\/\/|data:)([^\'\"]+\.css)[\'\"][^>]*>/', "<link href=\"$url\\1\" rel=\"stylesheet\">", $modified);
+    $modified = preg_replace('/<script[^>]+src=[\'\"](?!http|https|\/\/|data:)([^\'\"]+\.js)[\'\"][^>]*><\/script>/', "<script src=\"$url\\1\"></script>", $modified);
+    
+    // Corrigir links para áudio e vídeo
+    $modified = preg_replace('/\ssrc=[\'\"](?!http|https|\/\/|data:)([^\'\"]+\.(mp3|mp4|wav|ogg))[\'\"]/', " src=\"$url\\1\"", $modified);
+    
+    // Corrigir links para fontes
+    $modified = preg_replace('/url\([\'"]?(?!http|https|\/\/|data:)([^\'"\)]+\.(woff|woff2|ttf|eot))[\'"]?\)/', "url($url\\1)", $modified);
+    
+    return $modified;
 }
 
 function remove_scrapbook($html){
@@ -372,5 +583,69 @@ function remove_from_html($html,$filename){
         }
     }
     return $modified;
+}
+
+// Nova função para adicionar lazy loading de imagens
+function add_lazy_load($html) {
+    // Substitui atributos src por data-src e adiciona classe lazy
+    $html = preg_replace('/<img(.*?)src=[\'"](.*?)[\'"](.*?)>/is', '<img$1src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="$2"$3 class="lazy">', $html);
+    
+    // Adiciona script de lazy loading no final da página
+    $lazyScript = '<script>document.addEventListener("DOMContentLoaded", function() {
+        var lazyImages = [].slice.call(document.querySelectorAll("img.lazy"));
+        
+        if ("IntersectionObserver" in window) {
+            let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        let lazyImage = entry.target;
+                        lazyImage.src = lazyImage.dataset.src;
+                        lazyImage.classList.remove("lazy");
+                        lazyImageObserver.unobserve(lazyImage);
+                    }
+                });
+            });
+            
+            lazyImages.forEach(function(lazyImage) {
+                lazyImageObserver.observe(lazyImage);
+            });
+        } else {
+            // Fallback para navegadores que não suportam IntersectionObserver
+            let active = false;
+            
+            const lazyLoad = function() {
+                if (active === false) {
+                    active = true;
+                    
+                    setTimeout(function() {
+                        lazyImages.forEach(function(lazyImage) {
+                            if ((lazyImage.getBoundingClientRect().top <= window.innerHeight && lazyImage.getBoundingClientRect().bottom >= 0) && getComputedStyle(lazyImage).display !== "none") {
+                                lazyImage.src = lazyImage.dataset.src;
+                                lazyImage.classList.remove("lazy");
+                                
+                                lazyImages = lazyImages.filter(function(image) {
+                                    return image !== lazyImage;
+                                });
+                                
+                                if (lazyImages.length === 0) {
+                                    document.removeEventListener("scroll", lazyLoad);
+                                    window.removeEventListener("resize", lazyLoad);
+                                    window.removeEventListener("orientationchange", lazyLoad);
+                                }
+                            }
+                        });
+                        
+                        active = false;
+                    }, 200);
+                }
+            };
+            
+            document.addEventListener("scroll", lazyLoad);
+            window.addEventListener("resize", lazyLoad);
+            window.addEventListener("orientationchange", lazyLoad);
+        }
+    });</script>';
+    
+    return str_replace('</body>', $lazyScript . '</body>', $html);
 }
 ?>

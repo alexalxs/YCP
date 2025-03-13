@@ -1,48 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página de Agradecimento</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f9f9f9;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-        h1 {
-            color: #2e7d32;
-        }
-        .success-icon {
-            font-size: 80px;
-            color: #4CAF50;
-            margin-bottom: 20px;
-        }
-        .navigation {
-            margin-top: 30px;
-            padding: 10px;
-            background-color: #f0f0f0;
-            border-radius: 5px;
-        }
-        .navigation a {
-            margin: 0 15px;
-            color: #0066cc;
-            text-decoration: none;
-        }
-        .navigation a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
@@ -51,10 +13,30 @@
         <p>Sua solicitação foi recebida com sucesso. Agradecemos pela sua participação.</p>
         <p>Em breve entraremos em contato.</p>
         
+        <div class="order-details">
+            <h2>Detalhes do Pedido</h2>
+            <div class="order-info">
+                <p><strong>Número do Pedido:</strong> <span id="order-number">YC-12345</span></p>
+                <p><strong>Data:</strong> <span id="order-date"></span></p>
+                <p><strong>Status:</strong> <span class="status-processing">Processando</span></p>
+            </div>
+        </div>
+        
+        <div class="next-steps">
+            <h3>Próximos Passos</h3>
+            <ol>
+                <li>Você receberá um e-mail de confirmação em breve.</li>
+                <li>Nossa equipe irá processar seu pedido em até 24 horas.</li>
+                <li>Você receberá atualizações sobre o status do seu pedido.</li>
+            </ol>
+        </div>
+        
         <div class="navigation">
-            <a href="/">Página Inicial</a>
-            <a href="/tos/">Termos de Serviço</a>
+            <a href="../white/">Página Inicial</a>
+            <a href="../tos/">Termos de Serviço</a>
         </div>
     </div>
+    
+    <script src="script.js"></script>
 </body>
 </html> 
