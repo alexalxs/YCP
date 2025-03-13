@@ -31,6 +31,7 @@ if (isset($_GET['startdate'])&& isset($_GET['enddate'])) {
 
 $filter=isset($_GET['filter'])?$_GET['filter']:'';
 
+$dataDir = __DIR__ . "/../logs";
 switch ($filter) {
     case '':
         $header = ["Subid","IP","Country","ISP","Time","OS","UA","QueryString","Preland","Land"];
@@ -140,7 +141,7 @@ $tableOutput.="</tbody></TABLE>";
     <div class="left-sidebar-pro">
         <nav id="sidebar" class="">
             <div class="sidebar-header">
-                <a href="index.php?password=<?=$_GET['password']?><?=$date_str!==''?$date_str:''?>">
+                <a href="/admin/index.php?password=<?=$_GET['password']?><?=$date_str!==''?$date_str:''?>">
                     <img class="main-logo" src="img/logo/logo.png" alt="" />
                 </a>
                 <strong>
@@ -159,6 +160,7 @@ $tableOutput.="</tbody></TABLE>";
                 <nav class="sidebar-nav left-sidebar-menu-pro">
                     <ul class="metismenu" id="menu1">
                         <li class="active">
+
                             <a class="has-arrow" href="index.php?password=<?=$_GET['password']?><?=$date_str!==''?$date_str:''?>" aria-expanded="false">
                                 <i class="icon nalika-bar-chart icon-wrap"></i>
                                 <span class="mini-click-non">Traffic</span>
@@ -190,13 +192,8 @@ $tableOutput.="</tbody></TABLE>";
                                     </a>
                                 </li>
                                 <li>
-                                    <a title="Email Stats" href="/email_stats.php?password=<?=$_GET['password']?>" target="_blank" style="background-color: #007bff; color: white; font-weight: bold;">
+                                    <a title="Email Stats" href="/email_stats.php?password=<?=$_GET['password']?>" target="_blank">
                                         <span class="mini-sub-pro">📊 Email Stats</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a title="File Manager" href="file_manager.php?password=<?=$_GET['password']?>" style="background-color: #28a745; color: white; font-weight: bold;">
-                                        <span class="mini-sub-pro">📁 Gerenciador de Arquivos</span>
                                     </a>
                                 </li>
                             </ul>
@@ -322,4 +319,4 @@ $tableOutput.="</tbody></TABLE>";
     <script src="js/main.js"></script>
 </body>
 
-</html> 
+</html>

@@ -42,11 +42,6 @@ function getip(){
 }
 
 function getcountry($ip=null){
-    // Permitir sobreposição via variável de servidor para testes
-    if (isset($_SERVER['GEOIP_COUNTRY_CODE'])) {
-        return $_SERVER['GEOIP_COUNTRY_CODE'];
-    }
-    
 	if (is_null($ip))
 		$ip=getip();
 	$reader = new Reader(__DIR__.'/GeoLite2-Country.mmdb');

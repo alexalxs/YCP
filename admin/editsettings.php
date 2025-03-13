@@ -1,9 +1,9 @@
 <?php
-//Debug information
+//Включение отладочной информации
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 ini_set('display_startup_errors', 1);
-//End of debug information
+//Конец включения отладочной информации
 require_once __DIR__.'/../settings.php';
 require_once 'password.php';
 check_password();
@@ -68,12 +68,14 @@ if (isset($_GET['startdate'])&& isset($_GET['enddate'])) {
                 <nav class="sidebar-nav left-sidebar-menu-pro">
                   <ul class="metismenu" id="menu1">
                         <li class="active">
+
                             <a class="has-arrow" href="index.php?password=<?=$_GET['password']?><?=$date_str!==''?$date_str:''?>" aria-expanded="false"><i class="icon nalika-bar-chart icon-wrap"></i> <span class="mini-click-non">Traffic</span></a>
                             <ul class="submenu-angle" aria-expanded="false">
-                                <li><a title="Stats" href="statistics.php?password=<?=$_GET['password']?><?=$date_str!==''?$date_str:''?>"><span class="mini-sub-pro">Statistics</span></a></li>
-                                <li><a title="Allowed" href="index.php?password=<?=$_GET['password']?><?=$date_str!==''?$date_str:''?>"><span class="mini-sub-pro">Allowed</span></a></li>
-                                <li><a title="Leads" href="index.php?filter=leads&password=<?=$_GET['password']?><?=$date_str!==''?$date_str:''?>"><span class="mini-sub-pro">Leads</span></a></li>
-                                <li><a title="Blocked" href="index.php?filter=blocked&password=<?=$_GET['password']?><?=$date_str!==''?$date_str:''?>"><span class="mini-sub-pro">Blocked</span></a></li>
+                                <li><a title="Стата" href="statistics.php?password=<?=$_GET['password']?><?=$date_str!==''?$date_str:''?>"><span class="mini-sub-pro">Statistics</span></a></li>
+                                <li><a title="Разрешённый" href="index.php?password=<?=$_GET['password']?><?=$date_str!==''?$date_str:''?>"><span class="mini-sub-pro">Allowed</span></a></li>
+                                <li><a title="Лиды" href="index.php?filter=leads&password=<?=$_GET['password']?><?=$date_str!==''?$date_str:''?>"><span class="mini-sub-pro">Leads</span></a></li>
+                                <li><a title="Заблокированный" href="index.php?filter=blocked&password=<?=$_GET['password']?><?=$date_str!==''?$date_str:''?>"><span class="mini-sub-pro">Blocked</span></a></li>
+
                             </ul>
                         </li>
                         <li>
@@ -114,25 +116,28 @@ if (isset($_GET['startdate'])&& isset($_GET['enddate'])) {
                                         <div class="header-right-info">
                                             <ul class="nav navbar-nav mai-top-nav header-right-menu">
                                                 <li class="nav-item dropdown">
-                                                <li class="nav-item">
-                                                    <a class="nav-link" href="" onClick="location.reload()">Refresh</a>
-                                                </li>
+                             <li class="nav-item">
+                            <a class="nav-link" href="" onClick="location.reload()">Refresh</a>
+                            </li>
                                                 </i>
                                             </ul>
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
     <a name="top"></a>
 
     <form action="savesettings.php?password=<?=$log_password?>" method="post">
         <div class="basic-form-area mg-tb-15">
             <div class="container-fluid">
+
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="sparkline12-list">
@@ -142,11 +147,11 @@ if (isset($_GET['startdate'])&& isset($_GET['enddate'])) {
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                             <div class="all-form-element-inner">
                                                 <hr>
-<h4>#1 White Page Setup</h4>
+<h4>#1 Настройка вайта</h4>
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Select method: </label>
+            <label class="login2 pull-left pull-left-pro">Выберите метод: </label>
         </div>
         <div class="col-lg-9 col-md-6 col-sm-6 col-xs-12">
             <div class="bt-df-checkbox pull-left">
@@ -154,7 +159,7 @@ if (isset($_GET['startdate'])&& isset($_GET['enddate'])) {
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$white_action==='folder'?'checked':''?> value="folder" name="white.action" onclick="(document.getElementById('b_2').style.display='block'); (document.getElementById('b_3').style.display='none'); (document.getElementById('b_4').style.display='none'); (document.getElementById('b_5').style.display='none')"> Local white page from folder </label>
+                                    <input type="radio" <?=$white_action==='folder'?'checked':''?> value="folder" name="white.action" onclick="(document.getElementById('b_2').style.display='block'); (document.getElementById('b_3').style.display='none'); (document.getElementById('b_4').style.display='none'); (document.getElementById('b_5').style.display='none')"> Локальный вайт-пейдж из папки </label>
                         </div>
                     </div>
                 </div>
@@ -162,7 +167,7 @@ if (isset($_GET['startdate'])&& isset($_GET['enddate'])) {
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$white_action==='redirect'?'checked':''?> value="redirect" name="white.action" onclick="(document.getElementById('b_2').style.display='none'); (document.getElementById('b_3').style.display='block'); (document.getElementById('b_4').style.display='none'); (document.getElementById('b_5').style.display='none')"> Redirect </label>
+                                    <input type="radio" <?=$white_action==='redirect'?'checked':''?> value="redirect" name="white.action" onclick="(document.getElementById('b_2').style.display='none'); (document.getElementById('b_3').style.display='block'); (document.getElementById('b_4').style.display='none'); (document.getElementById('b_5').style.display='none')"> Редирект </label>
                         </div>
                     </div>
                 </div>
@@ -170,7 +175,7 @@ if (isset($_GET['startdate'])&& isset($_GET['enddate'])) {
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$white_action==='curl'?'checked':''?> value="curl" name="white.action" onclick="(document.getElementById('b_2').style.display='none'); (document.getElementById('b_3').style.display='none'); (document.getElementById('b_4').style.display='block'); (document.getElementById('b_5').style.display='none')"> Load external site via curl </label>
+                                    <input type="radio" <?=$white_action==='curl'?'checked':''?> value="curl" name="white.action" onclick="(document.getElementById('b_2').style.display='none'); (document.getElementById('b_3').style.display='none'); (document.getElementById('b_4').style.display='block'); (document.getElementById('b_5').style.display='none')">  Подгрузка внешнего сайта через curl </label>
                         </div>
                     </div>
                 </div>
@@ -178,7 +183,7 @@ if (isset($_GET['startdate'])&& isset($_GET['enddate'])) {
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$white_action==='error'?'checked':''?> value="error" name="white.action" onclick="(document.getElementById('b_2').style.display='none'); (document.getElementById('b_3').style.display='none'); (document.getElementById('b_4').style.display='none'); (document.getElementById('b_5').style.display='block')"> Return HTTP code <small>(e.g., error 404 or just 200)</small> </label>
+                                    <input type="radio" <?=$white_action==='error'?'checked':''?> value="error" name="white.action" onclick="(document.getElementById('b_2').style.display='none'); (document.getElementById('b_3').style.display='none'); (document.getElementById('b_4').style.display='none'); (document.getElementById('b_5').style.display='block')">  Возврат HTTP-кода <small>(например, ошибки 404 или просто 200)</small> </label>
                         </div>
                     </div>
                 </div>
@@ -190,11 +195,11 @@ if (isset($_GET['startdate'])&& isset($_GET['enddate'])) {
     <div class="form-group-inner">
         <div class="row">
             <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-                <label class="login2 pull-left pull-left-pro">White page folder: </label>
+                <label class="login2 pull-left pull-left-pro">Папка, где лежит вайт: </label>
             </div>
             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                 <div class="input-group custom-go-button">
-                    <input type="text" class="form-control" placeholder="white" name="white.folder.names" value="<?=is_array($white_folder_names) ? implode(',',$white_folder_names) : $white_folder_names?>">
+                    <input type="text" class="form-control" placeholder="white" name="white.folder.names" value="<?=implode(',',$white_folder_names)?>">
                 </div>
             </div>
         </div>
@@ -204,11 +209,11 @@ if (isset($_GET['startdate'])&& isset($_GET['enddate'])) {
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Redirect URL: </label>
+            <label class="login2 pull-left pull-left-pro">Адрес для редиректа: </label>
         </div>
         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
             <div class="input-group custom-go-button">
-                <input type="text" class="form-control" placeholder="https://ya.ru" name="white.redirect.urls" value="<?=is_array($white_redirect_urls) ? implode(',',$white_redirect_urls) : $white_redirect_urls?>">
+                <input type="text" class="form-control" placeholder="https://ya.ru" name="white.redirect.urls" value="<?=implode(',',$white_redirect_urls)?>">
             </div>
         </div>
     </div>
@@ -217,10 +222,11 @@ if (isset($_GET['startdate'])&& isset($_GET['enddate'])) {
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Select redirect code: </label>
+            <label class="login2 pull-left pull-left-pro">Выберите код редиректа: </label>
         </div>
         <div class="col-lg-9 col-md-6 col-sm-6 col-xs-12">
             <div class="bt-df-checkbox pull-left">
+
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
@@ -241,7 +247,7 @@ if (isset($_GET['startdate'])&& isset($_GET['enddate'])) {
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$white_redirect_type==='303'?'checked':''?> value="303" name="white.redirect.type"> 303 </label>
+                                    <input type="radio" <?=$white_redirect_type==='303'?'checked':''?> value="303" name="white.redirect.type">  303 </label>
                         </div>
                     </div>
                 </div>
@@ -263,11 +269,11 @@ if (isset($_GET['startdate'])&& isset($_GET['enddate'])) {
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">URL to load via curl: </label>
+            <label class="login2 pull-left pull-left-pro">Адрес для подгрузки через curl: </label>
         </div>
         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
             <div class="input-group custom-go-button">
-                <input type="text" class="form-control" placeholder="https://ya.ru" name="white.curl.urls" value="<?=is_array($white_curl_urls) ? implode(',',$white_curl_urls) : $white_curl_urls?>">
+                <input type="text" class="form-control" placeholder="https://ya.ru" name="white.curl.urls" value="<?=implode(',',$white_curl_urls)?>">
             </div>
         </div>
     </div>
@@ -278,11 +284,11 @@ if (isset($_GET['startdate'])&& isset($_GET['enddate'])) {
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">HTTP code to return instead of white page: </label>
+            <label class="login2 pull-left pull-left-pro">HTTP-код для возврата вместо вайта: </label>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
             <div class="input-group custom-go-button">
-                <input type="text" class="form-control" placeholder="404" name="white.error.codes" value="<?=is_array($white_error_codes) ? implode(',',$white_error_codes) : $white_error_codes?>">
+                <input type="text" class="form-control" placeholder="404" name="white.error.codes" value="<?=implode(',',$white_error_codes)?>">
             </div>
         </div>
     </div>
@@ -292,7 +298,7 @@ if (isset($_GET['startdate'])&& isset($_GET['enddate'])) {
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Show individual white page for each domain? </label>
+            <label class="login2 pull-left pull-left-pro">Показывать индивидуальный вайт под каждый домен? </label>
         </div>
         <div class="col-lg-9 col-md-6 col-sm-6 col-xs-12">
             <div class="bt-df-checkbox pull-left">
@@ -301,7 +307,7 @@ if (isset($_GET['startdate'])&& isset($_GET['enddate'])) {
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$white_use_domain_specific===false?'checked':''?> value="false" name="white.domainfilter.use" onclick="(document.getElementById('b_6').style.display='none')"> No </label>
+                                    <input type="radio" <?=$white_use_domain_specific===false?'checked':''?> value="false" name="white.domainfilter.use" onclick="(document.getElementById('b_6').style.display='none')"> Нет </label>
                         </div>
                     </div>
                 </div>
@@ -309,7 +315,7 @@ if (isset($_GET['startdate'])&& isset($_GET['enddate'])) {
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$white_use_domain_specific===true?'checked':''?> value="true" name="white.domainfilter.use" onclick="(document.getElementById('b_6').style.display='block')"> Yes, show </label>
+                                    <input type="radio" <?=$white_use_domain_specific===true?'checked':''?> value="true" name="white.domainfilter.use" onclick="(document.getElementById('b_6').style.display='block')"> Да, показывать </label>
                         </div>
                     </div>
                 </div>
@@ -324,7 +330,7 @@ if (isset($_GET['startdate'])&& isset($_GET['enddate'])) {
 <div class="form-group-inner white">
     <div class="row">
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-            <label class="login2 pull-left pull-left-pro">Domain => Method:Direction</label>
+            <label class="login2 pull-left pull-left-pro">Домен => Метод:Направление</label>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
              <div class="input-group">
@@ -340,44 +346,44 @@ if (isset($_GET['startdate'])&& isset($_GET['enddate'])) {
             </div>
         </div>
         <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-            <a href="javascript:void(0)" class="remove-domain-item btn btn-sm btn-primary">Remove</a>
+            <a href="javascript:void(0)" class="remove-domain-item btn btn-sm btn-primary">Удалить</a>
         </div>
     </div>
 </div>
 <?php } ?>
 </div>
-<a id="add-domain-item" class="btn btn-sm btn-primary" href="javascript:;">Add</a>
+<a id="add-domain-item" class="btn btn-sm btn-primary" href="javascript:;">Добавить</a>
 </div>
 
 <div class="form-group-inner">
 <div class="row">
-<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-<label class="login2 pull-left pull-left-pro">Use JS check? 
-    <small>
-If JS check is enabled, the user will always land on white, and only if the checks pass, then they will see black.
-    </small> 
-</div>
-<div class="col-lg-9 col-md-6 col-sm-6 col-xs-12">
-<div class="bt-df-checkbox pull-left">
-
-    <div class="row">
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <div class="i-checks pull-left">
-                <label>
-                        <input type="radio" <?=$use_js_checks===false?'checked="checked"':''?> value="false" name="white.jschecks.enabled" onclick="(document.getElementById('jscheckssettings').style.display = 'none')"> No, do not use </label>
+    <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+        <label class="login2 pull-left pull-left-pro">Использовать JS проверку? 
+            <small>
+Если проверка по JS включена, то пользователь всегда попадает вначале на вайт, и только если проверки пройдены, тогда ему показывается блэк.
+            </small> 
+        </label>
+    </div>
+    <div class="col-lg-9 col-md-6 col-sm-6 col-xs-12">
+        <div class="bt-df-checkbox pull-left">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="i-checks pull-left">
+                        <label>
+                                <input type="radio" <?=$use_js_checks===false?'checked="checked"':''?> value="false" name="white.jschecks.enabled" onclick="(document.getElementById('jscheckssettings').style.display = 'none')"> Нет, не использовать </label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="i-checks pull-left">
+                        <label>
+                                <input type="radio" value="true" <?=$use_js_checks===true?'checked="checked"':''?> name="white.jschecks.enabled" onclick="(document.getElementById('jscheckssettings').style.display = 'block')">  Использовать </label>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <div class="i-checks pull-left">
-                <label>
-                        <input type="radio" value="true" <?=$use_js_checks===true?'checked="checked"':''?> name="white.jschecks.enabled" onclick="(document.getElementById('jscheckssettings').style.display = 'block')"> Yes, use </label>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
 </div>
 </div>
 
@@ -385,7 +391,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Test time in milliseconds: </label>
+            <label class="login2 pull-left pull-left-pro">Время теста в миллисекундах: </label>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
             <div class="input-group custom-go-button">
@@ -397,7 +403,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">What to check? </label>
+            <label class="login2 pull-left pull-left-pro">Что проверять? </label>
         </div>
         <div class="col-lg-9 col-md-6 col-sm-6 col-xs-12">
             <div class="bt-df-checkbox pull-left">
@@ -406,7 +412,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="checkbox" name="white.jschecks.events[]" value="mousemove" <?=in_array('mousemove',$js_checks)?'checked':''?>> Mouse movement </label>
+                                    <input type="checkbox" name="white.jschecks.events[]" value="mousemove" <?=in_array('mousemove',$js_checks)?'checked':''?>> Движения мыши </label>
                         </div>
                     </div>
                 </div>
@@ -414,7 +420,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="checkbox" name="white.jschecks.events[]" value="keydown" <?=in_array('keydown',$js_checks)?'checked':''?>> Key presses </label>
+                                    <input type="checkbox" name="white.jschecks.events[]" value="keydown" <?=in_array('keydown',$js_checks)?'checked':''?>> Нажатия клавиш </label>
                         </div>
                     </div>
                 </div>
@@ -422,7 +428,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="checkbox" name="white.jschecks.events[]" value="scroll" <?=in_array('scroll',$js_checks)?'checked':''?>> Scrolling </label>
+                                    <input type="checkbox" name="white.jschecks.events[]" value="scroll" <?=in_array('scroll',$js_checks)?'checked':''?>> Скроллинг </label>
                         </div>
                     </div>
                 </div>
@@ -430,7 +436,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="checkbox" name="white.jschecks.events[]" value="devicemotion" <?=in_array('devicemotion',$js_checks)?'checked':''?>> Device motion (only for Android) </label>
+                                    <input type="checkbox" name="white.jschecks.events[]" value="devicemotion" <?=in_array('devicemotion',$js_checks)?'checked':''?>> Датчик движения (только для Android)</label>
                         </div>
                     </div>
                 </div>
@@ -438,16 +444,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="checkbox" name="white.jschecks.events[]" value="deviceorientation" <?=in_array('deviceorientation',$js_checks)?'checked':''?>> Device orientation in space (only for Android) </label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <div class="i-checks pull-left">
-                            <label>
-                                    <input type="checkbox" name="white.jschecks.events[]" value="audiocontext" <?=in_array('audiocontext',$js_checks)?'checked':''?>> Audio context in browser </label>
+                                    <input type="checkbox" name="white.jschecks.events[]" value="deviceorientation" <?=in_array('deviceorientation',$js_checks)?'checked':''?>> Датчик ориентации в пространстве (только для Android)</label>
                         </div>
                     </div>
                 </div>
@@ -456,7 +453,16 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input id="tzcheck" type="checkbox" name="white.jschecks.events[]" value="timezone" <?=in_array('timezone',$js_checks)?'checked':''?> onchange="(document.getElementById('jscheckstz').style.display = this.checked?'block':'none')"> Time zone </label>
+                                    <input type="checkbox" name="white.jschecks.events[]" value="audiocontext" <?=in_array('audiocontext',$js_checks)?'checked':''?>> Наличие аудиодвижка в браузере</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="i-checks pull-left">
+                            <label>
+                                    <input id="tzcheck" type="checkbox" name="white.jschecks.events[]" value="timezone" <?=in_array('timezone',$js_checks)?'checked':''?> onchange="(document.getElementById('jscheckstz').style.display = this.checked?'block':'none')"> Часовой пояс </label>
                         </div>
                     </div>
                 </div>
@@ -467,7 +473,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div id="jscheckstz" class="form-group-inner" style="display:<?=in_array('timezone',$js_checks)?'block':'none'?>;">
     <div class="row">
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Minimum acceptable time zone</label>
+            <label class="login2 pull-left pull-left-pro">Минимально допустимый часовой пояс</label>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
             <div class="input-group custom-go-button">
@@ -477,7 +483,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
     </div>
     <div class="row">
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Maximum acceptable time zone</label>
+            <label class="login2 pull-left pull-left-pro">Максимально допустимый часовой пояс</label>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
             <div class="input-group custom-go-button">
@@ -489,7 +495,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Mask JS check code? </label>
+            <label class="login2 pull-left pull-left-pro">Маскировать код JS-проверки? </label>
         </div>
         <div class="col-lg-9 col-md-6 col-sm-6 col-xs-12">
             <div class="bt-df-checkbox pull-left">
@@ -498,7 +504,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" value="true" <?=$js_obfuscate===true?'checked="checked"':''?> name="white.jschecks.obfuscate"> Mask </label>
+                                    <input type="radio" value="true" <?=$js_obfuscate===true?'checked="checked"':''?> name="white.jschecks.obfuscate">  Маскировать </label>
                         </div>
                     </div>
                 </div>
@@ -506,7 +512,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" value="false" <?=$js_obfuscate===false?'checked="checked"':''?> name="white.jschecks.obfuscate"> No, do not mask </label>
+                                    <input type="radio" value="false" <?=$js_obfuscate===false?'checked="checked"':''?> name="white.jschecks.obfuscate"> Нет, не маскировать </label>
                         </div>
                     </div>
                 </div>
@@ -518,11 +524,11 @@ If JS check is enabled, the user will always land on white, and only if the chec
 </div>
 <br>
 <hr>
-<h4>#2 Black Page Setup</h4>
+<h4>#2 Настройка блэка</h4>
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Select method to load black pages: </label>
+            <label class="login2 pull-left pull-left-pro">Выберите метод загрузки прокладок: </label>
         </div>
         <div class="col-lg-9 col-md-6 col-sm-6 col-xs-12">
             <div class="bt-df-checkbox pull-left">
@@ -530,7 +536,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$black_preland_action==='none'?'checked':''?> value="none" name="black.prelanding.action" onclick="(document.getElementById('b_8').style.display='none')"> Do not use prelanding </label>
+                                    <input type="radio" <?=$black_preland_action==='none'?'checked':''?> value="none" name="black.prelanding.action" onclick="(document.getElementById('b_8').style.display='none')"> Не использовать прелендинг </label>
                         </div>
                     </div>
                 </div>
@@ -538,7 +544,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$black_preland_action==='folder'?'checked':''?> value="folder" name="black.prelanding.action" onclick="(document.getElementById('b_8').style.display='block')"> Local prelanding from folder </label>
+                                    <input type="radio" <?=$black_preland_action==='folder'?'checked':''?> value="folder" name="black.prelanding.action" onclick="(document.getElementById('b_8').style.display='block')"> Локальный прелендинг из папки </label>
                         </div>
                     </div>
                 </div>
@@ -552,11 +558,11 @@ If JS check is enabled, the user will always land on white, and only if the chec
     <div class="form-group-inner">
         <div class="row">
             <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-                <label class="login2 pull-left pull-left-pro">Folders where prelandings are located </label>
+                <label class="login2 pull-left pull-left-pro">Папки, где лежат прелендинги </label>
             </div>
             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                 <div class="input-group custom-go-button">
-                    <input type="text" class="form-control" placeholder="p1,p2" name="black.prelanding.folders" value="<?=is_array($black_preland_folder_names) ? implode(',',$black_preland_folder_names) : $black_preland_folder_names?>">
+                    <input type="text" class="form-control" placeholder="p1,p2" name="black.prelanding.folders" value="<?=implode(',',$black_preland_folder_names)?>">
                 </div>
             </div>
         </div>
@@ -567,7 +573,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Select method to load landing pages: </label>
+            <label class="login2 pull-left pull-left-pro">Выберите метод загрузки лендингов: </label>
         </div>
         <div class="col-lg-9 col-md-6 col-sm-6 col-xs-12">
             <div class="bt-df-checkbox pull-left">
@@ -576,7 +582,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$black_land_action==='folder'?'checked':''?> value="folder" name="black.landing.action" onclick="(document.getElementById('b_landings_redirect').style.display='none'); (document.getElementById('b_landings_folder').style.display='block')"> Local landing from folder </label>
+                                    <input type="radio" <?=$black_land_action==='folder'?'checked':''?> value="folder" name="black.landing.action" onclick="(document.getElementById('b_landings_redirect').style.display='none'); (document.getElementById('b_landings_folder').style.display='block')"> Локальный лендинг из папки </label>
                         </div>
                     </div>
                 </div>
@@ -584,7 +590,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$black_land_action==='redirect'?'checked':''?> value="redirect" name="black.landing.action" onclick="(document.getElementById('b_landings_redirect').style.display='block'); (document.getElementById('b_landings_folder').style.display='none')"> Redirect </label>
+                                    <input type="radio" <?=$black_land_action==='redirect'?'checked':''?> value="redirect" name="black.landing.action" onclick="(document.getElementById('b_landings_redirect').style.display='block'); (document.getElementById('b_landings_folder').style.display='none')"> Редирект </label>
                         </div>
                     </div>
                 </div>
@@ -596,11 +602,11 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Folders where landing pages are located </label>
+            <label class="login2 pull-left pull-left-pro">Папки, где лежат лендинги </label>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
             <div class="input-group custom-go-button">
-                <input type="text" class="form-control" placeholder="l1,l2" name="black.landing.folder.names" value="<?=is_array($black_land_folder_names) ? implode(',',$black_land_folder_names) : $black_land_folder_names?>">
+                <input type="text" class="form-control" placeholder="l1,l2" name="black.landing.folder.names" value="<?=implode(',',$black_land_folder_names)?>">
             </div>
         </div>
     </div>
@@ -609,7 +615,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Use thank you page: </label>
+            <label class="login2 pull-left pull-left-pro">Использовать страницу Спасибо: </label>
         </div>
         <div class="col-lg-9 col-md-6 col-sm-6 col-xs-12">
             <div class="bt-df-checkbox pull-left">
@@ -618,7 +624,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$black_land_use_custom_thankyou_page===true?'checked':''?> value="true" name="black.landing.folder.customthankyoupage.use" onclick="(document.getElementById('ctpage').style.display = 'block'); (document.getElementById('pppage').style.display = 'none')"> Custom, on the klo side </label>
+                                    <input type="radio" <?=$black_land_use_custom_thankyou_page===true?'checked':''?> value="true" name="black.landing.folder.customthankyoupage.use" onclick="(document.getElementById('ctpage').style.display = 'block'); (document.getElementById('pppage').style.display = 'none')"> Кастомную, на стороне кло </label>
                         </div>
                     </div>
                 </div>
@@ -626,7 +632,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$black_land_use_custom_thankyou_page===false?'checked':''?> value="false" name="black.landing.folder.customthankyoupage.use" onclick="(document.getElementById('ctpage').style.display = 'none'); (document.getElementById('pppage').style.display = 'block')"> Regular, on the PP side </label>
+                                    <input type="radio" <?=$black_land_use_custom_thankyou_page===false?'checked':''?> value="false" name="black.landing.folder.customthankyoupage.use" onclick="(document.getElementById('ctpage').style.display = 'none'); (document.getElementById('pppage').style.display = 'block')"> Обычную, на стороне ПП </label>
                         </div>
                     </div>
                 </div>
@@ -638,7 +644,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div id="ctpage" class="form-group-inner" style="display:<?=$black_land_use_custom_thankyou_page===true?'block':'none'?>">
     <div class="row">
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Language to show thank you page on Klo: </label>
+            <label class="login2 pull-left pull-left-pro">Язык, на котором показывать страницу Спасибо Кло: </label>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
             <div class="input-group custom-go-button">
@@ -648,7 +654,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
     </div>
     <div class="row">
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <label class="login2 pull-left pull-left-pro"> Path from root of landing to script to send form data:</label>
+            <label class="login2 pull-left pull-left-pro"> Путь от корня лендинга до скрипта отправки данных с формы:</label>
         </div>
         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
             <div class="input-group custom-go-button">
@@ -658,7 +664,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
     </div>
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Use upsell on thank you page: </label>
+            <label class="login2 pull-left pull-left-pro">Использовать допродажи на странице Спасибо: </label>
         </div>
         <div class="col-lg-9 col-md-6 col-sm-6 col-xs-12">
             <div class="bt-df-checkbox pull-left">
@@ -667,7 +673,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$thankyou_upsell===true?'checked':''?> value="true" name="black.landing.folder.customthankyoupage.upsell.use" onclick="document.getElementById('thankupsell').style.display = 'block'"> Yes</label>
+                                    <input type="radio" <?=$thankyou_upsell===true?'checked':''?> value="true" name="black.landing.folder.customthankyoupage.upsell.use" onclick="document.getElementById('thankupsell').style.display = 'block'"> Да</label>
                         </div>
                     </div>
                 </div>
@@ -675,7 +681,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$thankyou_upsell===false?'checked':''?> value="false" name="black.landing.folder.customthankyoupage.upsell.use" onclick="document.getElementById('thankupsell').style.display = 'none'">No</label>
+                                    <input type="radio" <?=$thankyou_upsell===false?'checked':''?> value="false" name="black.landing.folder.customthankyoupage.upsell.use" onclick="document.getElementById('thankupsell').style.display = 'none'">Нет</label>
                         </div>
                     </div>
                 </div>
@@ -686,7 +692,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div id="thankupsell" class="form-group-inner" style="display:<?=$thankyou_upsell===true?'block':'none'?>">
     <div class="row">
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Upsell header:</label>
+            <label class="login2 pull-left pull-left-pro">Заголовок апсейла:</label>
         </div>
         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
             <div class="input-group custom-go-button">
@@ -696,7 +702,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
     </div>
     <div class="row">
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Upsell text:</label>
+            <label class="login2 pull-left pull-left-pro">Текст апсейла:</label>
         </div>
         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
             <div class="input-group custom-go-button">
@@ -706,7 +712,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
     </div>
     <div class="row">
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Full URL of landing upsell:</label>
+            <label class="login2 pull-left pull-left-pro">Полный адрес ленда апсейла:</label>
         </div>
         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
             <div class="input-group custom-go-button">
@@ -716,7 +722,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
     </div>
     <div class="row">
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Folder name for thank you page images <small>folder must be created in thankyou/upsell</small></label>
+            <label class="login2 pull-left pull-left-pro">Имя папки с картинками для витрины <small>папка должна быть создана в thankyou/upsell</small></label>
         </div>
         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
             <div class="input-group custom-go-button">
@@ -728,7 +734,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div id="pppage" class="form-group-inner" style="display:<?=$black_land_use_custom_thankyou_page===false?'block':'none'?>">
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Add to button click handler to count conversions on landing page? </label>
+            <label class="login2 pull-left pull-left-pro">Добавить в обработчик кнопки Заказать на ленде подсчёт конверсий кло? </label>
         </div>
         <div class="col-lg-9 col-md-6 col-sm-6 col-xs-12">
             <div class="bt-df-checkbox pull-left">
@@ -737,7 +743,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$black_land_log_conversions_on_button_click===false?'checked':''?> value="false" name="black.landing.folder.conversions.logonbuttonclick"> No <small>(conversion will be counted on CUSTOM thank you page)</small> </label>
+                                    <input type="radio" <?=$black_land_log_conversions_on_button_click===false?'checked':''?> value="false" name="black.landing.folder.conversions.logonbuttonclick"> Нет <small>(конверсия будет считаться на КАСТОМНОЙ стр.Спасибо)</small> </label>
                         </div>
                     </div>
                 </div>
@@ -745,7 +751,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$black_land_log_conversions_on_button_click===true?'checked':''?> value="true" name="black.landing.folder.conversions.logonbuttonclick"> Yes </label>
+                                    <input type="radio" <?=$black_land_log_conversions_on_button_click===true?'checked':''?> value="true" name="black.landing.folder.conversions.logonbuttonclick"> Да </label>
                         </div>
                     </div>
                 </div>
@@ -754,7 +760,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
     </div>
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Where to track conversion in Facebook? </label>
+            <label class="login2 pull-left pull-left-pro">Откуда отстукивать в Facebook конверсию? </label>
         </div>
         <div class="col-lg-9 col-md-6 col-sm-6 col-xs-12">
             <div class="bt-df-checkbox pull-left">
@@ -763,7 +769,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$fb_add_button_pixel===false?'checked':''?> value="false" name="pixels.fb.conversion.fireonbutton"> From thank you page <small>(if you don't use custom thank you, enter pixel code!)</small></label>
+                                    <input type="radio" <?=$fb_add_button_pixel===false?'checked':''?> value="false" name="pixels.fb.conversion.fireonbutton"> Со страницы спасибо <small>(если не используете кастомную Спасибо, впишите код пикселя!)</small></label>
                         </div>
                     </div>
                 </div>
@@ -771,7 +777,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$fb_add_button_pixel===true?'checked':''?> value="true" name="pixels.fb.conversion.fireonbutton"> From button on landing </label>
+                                    <input type="radio" <?=$fb_add_button_pixel===true?'checked':''?> value="true" name="pixels.fb.conversion.fireonbutton"> С кнопки на ленде </label>
                         </div>
                     </div>
                 </div>
@@ -781,7 +787,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Where to track conversion in TikTok? </label>
+            <label class="login2 pull-left pull-left-pro">Откуда отстукивать в TikTok конверсию? </label>
         </div>
         <div class="col-lg-9 col-md-6 col-sm-6 col-xs-12">
             <div class="bt-df-checkbox pull-left">
@@ -790,7 +796,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$tt_add_button_pixel===false?'checked':''?> value="false" name="pixels.tt.conversion.fireonbutton"> From thank you page <small>(if you don't use custom thank you, enter pixel code!)</small></label>
+                                    <input type="radio" <?=$tt_add_button_pixel===false?'checked':''?> value="false" name="pixels.tt.conversion.fireonbutton"> Со страницы спасибо <small>(если не используете кастомную Спасибо, впишите код пикселя!)</small></label>
                         </div>
                     </div>
                 </div>
@@ -798,7 +804,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$tt_add_button_pixel===true?'checked':''?> value="true" name="pixels.tt.conversion.fireonbutton"> From button on landing </label>
+                                    <input type="radio" <?=$tt_add_button_pixel===true?'checked':''?> value="true" name="pixels.tt.conversion.fireonbutton"> С кнопки на ленде </label>
                         </div>
                     </div>
                 </div>
@@ -811,11 +817,11 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Redirect URLs: <small>(can be multiple, separated by commas)</small> </label>
+            <label class="login2 pull-left pull-left-pro">Адреса для редиректа: <small>(Можно НЕСКОЛЬКО через запятую)</small> </label>
         </div>
         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
             <div class="input-group custom-go-button">
-                <input type="text" class="form-control" placeholder="https://ya.ru,https://google.com" name="black.landing.redirect.urls" value="<?=is_array($black_land_redirect_urls) ? implode(',',$black_land_redirect_urls) : $black_land_redirect_urls?>">
+                <input type="text" class="form-control" placeholder="https://ya.ru,https://google.com" name="black.landing.redirect.urls" value="<?=implode(',',$black_land_redirect_urls)?>">
             </div>
         </div>
     </div>
@@ -824,7 +830,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Select redirect code: </label>
+            <label class="login2 pull-left pull-left-pro">Выберите код редиректа: </label>
         </div>
         <div class="col-lg-9 col-md-6 col-sm-6 col-xs-12">
             <div class="bt-df-checkbox pull-left">
@@ -870,7 +876,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Action when connecting to klo via Javascript (for builders) <small>If black is selected as redirect, then redirect will always be from the builder. If black is local, then only: replacement, iframe are possible</small> </label>
+            <label class="login2 pull-left pull-left-pro">Действие при подключении кло через Javascript (для конструкторов) <small>Если в качестве блэка выбран редирект, то и с конструктора ВСЕГДА будет редирект. Если же блэк локальный, то возможны только: подмена, iframe</small> </label>
         </div>
         <div class="col-lg-9 col-md-6 col-sm-6 col-xs-12">
             <div class="bt-df-checkbox pull-left">
@@ -879,7 +885,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$black_jsconnect_action==='redirect'?'checked':''?> value="redirect" name="black.jsconnect"> Redirect </label>
+                                    <input type="radio" <?=$black_jsconnect_action==='redirect'?'checked':''?> value="redirect" name="black.jsconnect"> Редирект </label>
                         </div>
                     </div>
                 </div>
@@ -887,7 +893,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$black_jsconnect_action==='replace'?'checked':''?> value="replace" name="black.jsconnect"> Replacement </label>
+                                    <input type="radio" <?=$black_jsconnect_action==='replace'?'checked':''?> value="replace" name="black.jsconnect"> Подмена </label>
                         </div>
                     </div>
                 </div>
@@ -905,11 +911,11 @@ If JS check is enabled, the user will always land on white, and only if the chec
 </div>
 <br>
 <hr>
-<h4>#3 Metrics and Pixels</h4>
+<h4>#3 Настройка метрик и пикселей</h4>
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Google Tag Manager ID: </label>
+            <label class="login2 pull-left pull-left-pro">Идентификатор Google Tag Manager: </label>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
             <div class="input-group custom-go-button">
@@ -921,7 +927,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Yandex.Metrika ID: </label>
+            <label class="login2 pull-left pull-left-pro">Идентификатор Яндекс.Метрики: </label>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
             <div class="input-group custom-go-button">
@@ -931,11 +937,11 @@ If JS check is enabled, the user will always land on white, and only if the chec
     </div>
 </div>
 
-<h5>#3.1 Facebook Pixel</h5>
+<h5>#3.1 Настройка пикселя Facebook</h5>
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Name of parameter containing Facebook Pixel ID: </label>
+            <label class="login2 pull-left pull-left-pro">Имя параметра в котором лежит ID пикселя Facebook: </label>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
             <div class="input-group custom-go-button">
@@ -948,7 +954,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Add PageView event to white pages? </label>
+            <label class="login2 pull-left pull-left-pro">Добавлять ли на проклы-ленды событие PageView? </label>
         </div>
         <div class="col-lg-9 col-md-6 col-sm-6 col-xs-12">
             <div class="bt-df-checkbox pull-left">
@@ -957,7 +963,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$fb_use_pageview===false?'checked':''?> value="false" name="pixels.fb.pageview"> No </label>
+                                    <input type="radio" <?=$fb_use_pageview===false?'checked':''?> value="false" name="pixels.fb.pageview"> Нет </label>
                         </div>
                     </div>
                 </div>
@@ -965,7 +971,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$fb_use_pageview===true?'checked':''?> value="true" name="pixels.fb.pageview"> Yes, add </label>
+                                    <input type="radio" <?=$fb_use_pageview===true?'checked':''?> value="true" name="pixels.fb.pageview"> Да, добавлять </label>
                         </div>
                     </div>
                 </div>
@@ -977,7 +983,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Add ViewContent event after viewing page within the specified time? </label>
+            <label class="login2 pull-left pull-left-pro">Добавлять событие ViewContent после просмотра страницы в течении указанного ниже времени? </label>
         </div>
         <div class="col-lg-9 col-md-6 col-sm-6 col-xs-12">
             <div class="bt-df-checkbox pull-left">
@@ -986,7 +992,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$fb_use_viewcontent===false?'checked':''?> value="false" name="pixels.fb.viewcontent.use" onclick="(document.getElementById('b_8-2').style.display='none')"> No </label>
+                                    <input type="radio" <?=$fb_use_viewcontent===false?'checked':''?> value="false" name="pixels.fb.viewcontent.use" onclick="(document.getElementById('b_8-2').style.display='none')"> Нет </label>
                         </div>
                     </div>
                 </div>
@@ -994,7 +1000,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$fb_use_viewcontent===true?'checked':''?> value="true" name="pixels.fb.viewcontent.use" onclick="(document.getElementById('b_8-2').style.display='block')"> Yes, add </label>
+                                    <input type="radio" <?=$fb_use_viewcontent===true?'checked':''?> value="true" name="pixels.fb.viewcontent.use" onclick="(document.getElementById('b_8-2').style.display='block')"> Да, добавлять </label>
                         </div>
                     </div>
                 </div>
@@ -1007,7 +1013,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Time in seconds after which ViewContent is sent:<br><small>if 0, event will not be triggered</small> </label>
+            <label class="login2 pull-left pull-left-pro">Время в сек после которго отправляется ViewContent:<br><small>если 0, то событие не будет вызвано</small> </label>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
             <div class="input-group custom-go-button">
@@ -1020,7 +1026,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Percentage of page scrolling before ViewContent event:<br><small>if 0, event will not be triggered</small> </label>
+            <label class="login2 pull-left pull-left-pro">Процент проскролливания страницы, до вызова события ViewContent:<br><small>если 0, то событие не будет вызвано</small> </label>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
             <div class="input-group custom-go-button">
@@ -1033,7 +1039,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">What event will we use for conversion in Facebook? <small>e.g., Lead or Purchase</small></label>
+            <label class="login2 pull-left pull-left-pro">Какое событие будем использовать для конверсии в Facebook? <small>Например: Lead или Purchase</small></label>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
             <div class="input-group custom-go-button">
@@ -1042,11 +1048,11 @@ If JS check is enabled, the user will always land on white, and only if the chec
         </div>
     </div>
 </div>
-<h5>#3.2 TikTok Pixel</h5>
+<h5>#3.2 Настройка пикселя TikTok</h5>
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Name of parameter containing TikTok Pixel ID: </label>
+            <label class="login2 pull-left pull-left-pro">Имя параметра в котором лежит ID пикселя TikTok: </label>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
             <div class="input-group custom-go-button">
@@ -1059,7 +1065,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Add PageView event to white pages? </label>
+            <label class="login2 pull-left pull-left-pro">Добавлять ли на проклы-ленды событие PageView? </label>
         </div>
         <div class="col-lg-9 col-md-6 col-sm-6 col-xs-12">
             <div class="bt-df-checkbox pull-left">
@@ -1068,7 +1074,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$tt_use_pageview===false?'checked':''?> value="false" name="pixels.tt.pageview"> No </label>
+                                    <input type="radio" <?=$tt_use_pageview===false?'checked':''?> value="false" name="pixels.tt.pageview"> Нет </label>
                         </div>
                     </div>
                 </div>
@@ -1076,7 +1082,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$tt_use_pageview===true?'checked':''?> value="true" name="pixels.tt.pageview"> Yes, add </label>
+                                    <input type="radio" <?=$tt_use_pageview===true?'checked':''?> value="true" name="pixels.tt.pageview"> Да, добавлять </label>
                         </div>
                     </div>
                 </div>
@@ -1088,7 +1094,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Add ViewContent event after viewing page within the specified time? </label>
+            <label class="login2 pull-left pull-left-pro">Добавлять событие ViewContent после просмотра страницы в течении указанного ниже времени? </label>
         </div>
         <div class="col-lg-9 col-md-6 col-sm-6 col-xs-12">
             <div class="bt-df-checkbox pull-left">
@@ -1097,7 +1103,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$tt_use_viewcontent===false?'checked':''?> value="false" name="pixels.tt.viewcontent.use" onclick="(document.getElementById('tt_8-2').style.display='none')"> No </label>
+                                    <input type="radio" <?=$tt_use_viewcontent===false?'checked':''?> value="false" name="pixels.tt.viewcontent.use" onclick="(document.getElementById('tt_8-2').style.display='none')"> Нет </label>
                         </div>
                     </div>
                 </div>
@@ -1105,7 +1111,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$tt_use_viewcontent===true?'checked':''?> value="true" name="pixels.tt.viewcontent.use" onclick="(document.getElementById('tt_8-2').style.display='block')"> Yes, add </label>
+                                    <input type="radio" <?=$tt_use_viewcontent===true?'checked':''?> value="true" name="pixels.tt.viewcontent.use" onclick="(document.getElementById('tt_8-2').style.display='block')"> Да, добавлять </label>
                         </div>
                     </div>
                 </div>
@@ -1118,7 +1124,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Time in seconds after which ViewContent is sent:<br><small>if 0, event will not be triggered</small> </label>
+            <label class="login2 pull-left pull-left-pro">Время в сек после которго отправляется ViewContent:<br><small>если 0, то событие не будет вызвано</small> </label>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
             <div class="input-group custom-go-button">
@@ -1131,7 +1137,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Percentage of page scrolling before ViewContent event:<br><small>if 0, event will not be triggered</small> </label>
+            <label class="login2 pull-left pull-left-pro">Процент проскролливания страницы, до вызова события ViewContent:<br><small>если 0, то событие не будет вызвано</small> </label>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
             <div class="input-group custom-go-button">
@@ -1144,7 +1150,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">What event will we use for conversion in TikTok? <small>e.g., CompletePayment or AddPaymentInfo</small></label>
+            <label class="login2 pull-left pull-left-pro">Какое событие будем использовать для конверсии в TikTok? <small>Например: CompletePayment или AddPaymentInfo</small></label>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
             <div class="input-group custom-go-button">
@@ -1155,11 +1161,11 @@ If JS check is enabled, the user will always land on white, and only if the chec
 </div>
 <br>
 <hr>
-<h4>#4 TDS</h4>
+<h4>#4 Настройка TDS</h4>
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">TDS mode:</label>
+            <label class="login2 pull-left pull-left-pro">Режим работы TDS:</label>
         </div>
         <div class="col-lg-9 col-md-6 col-sm-6 col-xs-12">
             <div class="bt-df-checkbox pull-left">
@@ -1168,7 +1174,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$tds_mode==='on'?'checked':''?> value="on" name="tds.mode"> Regular </label>
+                                    <input type="radio" <?=$tds_mode==='on'?'checked':''?> value="on" name="tds.mode"> Обычный </label>
                         </div>
                     </div>
                 </div>
@@ -1176,7 +1182,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$tds_mode==='full'?'checked':''?> value="full" name="tds.mode"> Send all to white </label>
+                                    <input type="radio" <?=$tds_mode==='full'?'checked':''?> value="full" name="tds.mode"> Посылать всех на вайт</label>
                         </div>
                     </div>
                 </div>
@@ -1184,7 +1190,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$tds_mode==='off'?'checked':''?> value="off" name="tds.mode"> Send all to black (TDS disabled) </label>
+                                    <input type="radio" <?=$tds_mode==='off'?'checked':''?> value="off" name="tds.mode"> Посылать всех на блэк (TDS отключена)</label>
                         </div>
                     </div>
                 </div>
@@ -1196,7 +1202,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Send the same user to the same white pages?</label>
+            <label class="login2 pull-left pull-left-pro">Посылать одного и того же юзера на одни и те же проклы-ленды?</label>
         </div>
         <div class="col-lg-9 col-md-6 col-sm-6 col-xs-12">
             <div class="bt-df-checkbox pull-left">
@@ -1205,7 +1211,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$save_user_flow===false?'checked':''?> value="false" name="tds.saveuserflow"> No </label>
+                                    <input type="radio" <?=$save_user_flow===false?'checked':''?> value="false" name="tds.saveuserflow"> Нет </label>
                         </div>
                     </div>
                 </div>
@@ -1213,7 +1219,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$save_user_flow===true?'checked':''?> value="true" name="tds.saveuserflow"> Yes, send </label>
+                                    <input type="radio" <?=$save_user_flow===true?'checked':''?> value="true" name="tds.saveuserflow"> Да, посылать </label>
                         </div>
                     </div>
                 </div>
@@ -1224,15 +1230,15 @@ If JS check is enabled, the user will always land on white, and only if the chec
 
 <br>
 <hr>
-<h4>#5 Filters</h4>
+<h4>#5 Настройка фильтров</h4>
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">List of allowed OS:</label>
+            <label class="login2 pull-left pull-left-pro">Список разрешённых ОС:</label>
         </div>
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
             <div class="input-group custom-go-button">
-                <input type="text" name="tds.filters.allowed.os" class="form-control" placeholder="Android,iOS,Windows,OS X" value="<?=is_array($os_white) ? implode(',',$os_white) : $os_white?>">
+                <input type="text" name="tds.filters.allowed.os" class="form-control" placeholder="Android,iOS,Windows,OS X" value="<?=implode(',',$os_white)?>">
             </div>
         </div>
     </div>
@@ -1241,11 +1247,11 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">List of allowed countries: <small>(WW or empty for all)</small></label>
+            <label class="login2 pull-left pull-left-pro">Список разрешённых стран: <small>(WW или пустое значение для всего мира)</small></label>
         </div>
         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
             <div class="input-group custom-go-button">
-                <input type="text" name="tds.filters.allowed.countries" class="form-control" placeholder="RU,UA" value="<?=is_array($country_white) ? implode(',',$country_white) : $country_white?>">
+                <input type="text" name="tds.filters.allowed.countries" class="form-control" placeholder="RU,UA" value="<?=implode(',',$country_white)?>">
             </div>
         </div>
     </div>
@@ -1254,11 +1260,11 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">List of allowed languages: <small>(any or empty for all)</small></label>
+            <label class="login2 pull-left pull-left-pro">Список разрешённых языков: <small>(any или пустое значение для всех языков)</small></label>
         </div>
         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
             <div class="input-group custom-go-button">
-                <input type="text" name="tds.filters.allowed.languages" class="form-control" placeholder="en,ru,de" value="<?=is_array($lang_white) ? implode(',',$lang_white) : $lang_white?>">
+                <input type="text" name="tds.filters.allowed.languages" class="form-control" placeholder="en,ru,de" value="<?=implode(',',$lang_white)?>">
             </div>
         </div>
     </div>
@@ -1267,7 +1273,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-            <label class="login2 pull-left pull-left-pro">Name of additional blacklist IP file <small>file must be in bases folder</small></label>
+            <label class="login2 pull-left pull-left-pro">Имя файла дополнительной базы с запрещёнными IP-адресами <small>файл должен лежать в папке bases</small></label>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
             <div class="input-group custom-go-button">
@@ -1277,7 +1283,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
     </div>
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Additional blacklist IP in CIDR format?</label>
+            <label class="login2 pull-left pull-left-pro">Дополнительная база запрещённых IP в формате CIDR?</label>
         </div>
         <div class="col-lg-9 col-md-6 col-sm-6 col-xs-12">
             <div class="bt-df-checkbox pull-left">
@@ -1286,7 +1292,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$ip_black_cidr===false?'checked':''?> value="false" name="tds.filters.blocked.ips.cidrformat"> No </label>
+                                    <input type="radio" <?=$ip_black_cidr===false?'checked':''?> value="false" name="tds.filters.blocked.ips.cidrformat"> Нет </label>
                         </div>
                     </div>
                 </div>
@@ -1294,7 +1300,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$ip_black_cidr===true?'checked':''?> value="true" name="tds.filters.blocked.ips.cidrformat"> Yes </label>
+                                    <input type="radio" <?=$ip_black_cidr===true?'checked':''?> value="true" name="tds.filters.blocked.ips.cidrformat"> Да </label>
                         </div>
                     </div>
                 </div>
@@ -1306,17 +1312,11 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Palavras que devem aparecer na URL</label>
+            <label class="login2 pull-left pull-left-pro">Слова через запятую, при наличии которых в адресе перехода (в ссылке, по которой перешли), юзер будет отправлен на whitepage</label>
         </div>
         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
             <div class="input-group custom-go-button">
-                <span class="input-group-btn">
-                    <select name="tds.filters.allowed.inurl.mode" class="form-control" style="border-radius: 3px 0 0 3px;">
-                        <option value="all" <?=$url_mode === 'all' ? 'selected' : ''?>>Todas as palavras</option>
-                        <option value="any" <?=$url_mode === 'any' ? 'selected' : ''?>>Qualquer palavra</option>
-                    </select>
-                </span>
-                <input type="text" name="tds.filters.allowed.inurl" class="form-control" placeholder="key=1,chave=3" value="<?=is_array($url_should_contain) ? implode(',',$url_should_contain) : $url_should_contain?>">
+                <input type="text" name="tds.filters.blocked.tokens" class="form-control" placeholder="" value="<?=implode(',',$tokens_black)?>">
             </div>
         </div>
     </div>
@@ -1325,11 +1325,11 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Comma-separated words that appear in UserAgent, user will be sent to whitepage</label>
+            <label class="login2 pull-left pull-left-pro">Слова через запятую, которые обязательно должны быть в адресе. Если хотя бы чего-то нет - показывается вайт</label>
         </div>
         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
             <div class="input-group custom-go-button">
-                <input type="text" class="form-control" placeholder="facebook,Facebot,curl,gce-spider,yandex.com/bots,OdklBot" name="tds.filters.blocked.useragents" value="<?=is_array($ua_black) ? implode(',',$ua_black) : $ua_black?>">
+                <input type="text" name="tds.filters.allowed.inurl" class="form-control" placeholder="" value="<?=implode(',',$url_should_contain)?>">
             </div>
         </div>
     </div>
@@ -1337,12 +1337,25 @@ If JS check is enabled, the user will always land on white, and only if the chec
 
 <div class="form-group-inner">
     <div class="row">
-        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Block by ISP (e.g., facebook,google)</label>
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+            <label class="login2 pull-left pull-left-pro">Слова через запятую, при наличии которых в UserAgent, юзер будет отправлен на whitepage</label>
         </div>
-        <div class="col-lg-9 col-md-6 col-sm-6 col-xs-12">
+        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
             <div class="input-group custom-go-button">
-                <input type="text" name="tds.filters.blocked.isps" class="form-control" placeholder="facebook,google,yandex,amazon,azure,digitalocean" value="<?=is_array($isp_black) ? implode(',',$isp_black) : $isp_black?>">
+                <input type="text" class="form-control" placeholder="facebook,Facebot,curl,gce-spider,yandex.com/bots" name="tds.filters.blocked.useragents" value="<?=implode(',',$ua_black)?>">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="form-group-inner">
+    <div class="row">
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+            <label class="login2 pull-left pull-left-pro">Блокировка по провадеру (ISP), например: facebook,google</label>
+        </div>
+        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+            <div class="input-group custom-go-button">
+                <input type="text" name="tds.filters.blocked.isps" class="form-control" placeholder="facebook,google,yandex,amazon,azure,digitalocean" value="<?=implode(',',$isp_black)?>">
             </div>
         </div>
     </div>
@@ -1351,7 +1364,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Send all requests without referer to whitepage?</label>
+            <label class="login2 pull-left pull-left-pro">Посылать все запросы без referer на whitepage?</label>
         </div>
         <div class="col-lg-9 col-md-6 col-sm-6 col-xs-12">
             <div class="bt-df-checkbox pull-left">
@@ -1360,7 +1373,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$block_without_referer===false?'checked':''?> value="false" name="tds.filters.blocked.referer.empty"> No </label>
+                                    <input type="radio" <?=$block_without_referer===false?'checked':''?> value="false" name="tds.filters.blocked.referer.empty"> Нет </label>
                         </div>
                     </div>
                 </div>
@@ -1368,7 +1381,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$block_without_referer===true?'checked':''?> value="true" name="tds.filters.blocked.referer.empty"> Yes </label>
+                                    <input type="radio" <?=$block_without_referer===true?'checked':''?> value="true" name="tds.filters.blocked.referer.empty"> Да </label>
                         </div>
                     </div>
                 </div>
@@ -1380,11 +1393,11 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Comma-separated words that appear in referer, user will be sent to whitepage</label>
+            <label class="login2 pull-left pull-left-pro">Слова через запятую, при наличии которых в реферере, юзер будет отправлен на whitepage</label>
         </div>
         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
             <div class="input-group custom-go-button">
-                <input type="text" name="tds.filters.blocked.referer.stopwords" class="form-control" placeholder="adheart" value="<?=is_array($referer_stopwords) ? implode(',',$referer_stopwords) : $referer_stopwords?>">
+                <input type="text" name="tds.filters.blocked.referer.stopwords" class="form-control" placeholder="adheart" value="<?=implode(',',$referer_stopwords)?>">
             </div>
         </div>
     </div>
@@ -1393,7 +1406,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-            <label class="login2 pull-left pull-left-pro">Send all users using VPN and Tor to white?</label>
+            <label class="login2 pull-left pull-left-pro">Посылать всех, использующих VPN и Tor на вайт?</label>
         </div>
         <div class="col-lg-9 col-md-6 col-sm-6 col-xs-12">
             <div class="bt-df-checkbox pull-left">
@@ -1402,7 +1415,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$block_vpnandtor===false?'checked':''?> value="false" name="tds.filters.blocked.vpntor"> No </label>
+                                    <input type="radio" <?=$block_vpnandtor===false?'checked':''?> value="false" name="tds.filters.blocked.vpntor"> Нет </label>
                         </div>
                     </div>
                 </div>
@@ -1410,7 +1423,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="i-checks pull-left">
                             <label>
-                                    <input type="radio" <?=$block_vpnandtor===true?'checked':''?> value="true" name="tds.filters.blocked.vpntor"> Yes </label>
+                                    <input type="radio" <?=$block_vpnandtor===true?'checked':''?> value="true" name="tds.filters.blocked.vpntor"> Да </label>
                         </div>
                     </div>
                 </div>
@@ -1420,11 +1433,11 @@ If JS check is enabled, the user will always land on white, and only if the chec
 </div>
 <br>
 <hr>
-<h4>#6 Additional Scripts</h4>
+<h4>#6 Настройка дополнительных скриптов</h4>
 <div class="form-group-inner">
 <div class="row">
 <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-<label class="login2 pull-left pull-left-pro">What to do with the Back button?</label>
+<label class="login2 pull-left pull-left-pro">Что делать с кнопкой Назад?</label>
 </div>
 <div class="col-lg-9 col-md-6 col-sm-6 col-xs-12">
 <div class="bt-df-checkbox pull-left">
@@ -1433,7 +1446,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="i-checks pull-left">
                 <label>
-                        <input type="radio" <?=$back_button_action==='off'?'checked':''?> value="off" name="scripts.back.action" onclick="(document.getElementById('b_9').style.display='none')"> Leave default </label>
+                        <input type="radio" <?=$back_button_action==='off'?'checked':''?> value="off" name="scripts.back.action" onclick="(document.getElementById('b_9').style.display='none')"> Оставить по умолчанию </label>
             </div>
         </div>
     </div>
@@ -1441,7 +1454,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="i-checks pull-left">
                 <label>
-                        <input type="radio" <?=$back_button_action==='disable'?'checked':''?> value="disable" name="scripts.back.action" onclick="(document.getElementById('b_9').style.display='none')"> Disable (button no longer works)</label>
+                        <input type="radio" <?=$back_button_action==='disable'?'checked':''?> value="disable" name="scripts.back.action" onclick="(document.getElementById('b_9').style.display='none')"> Отключить (перестает нажиматься)</label>
             </div>
         </div>
     </div>
@@ -1449,7 +1462,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="i-checks pull-left">
                 <label>
-                        <input type="radio" <?=$back_button_action==='replace'?'checked':''?> value="replace" name="scripts.back.action" onclick="(document.getElementById('b_9').style.display='block')"> Attach redirect to URL</label>
+                        <input type="radio" <?=$back_button_action==='replace'?'checked':''?> value="replace" name="scripts.back.action" onclick="(document.getElementById('b_9').style.display='block')"> Повесить на нее редирект на URL</label>
             </div>
         </div>
     </div>
@@ -1461,7 +1474,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
 <div class="row">
 <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-<label class="login2 pull-left pull-left-pro">Where to redirect when Back button is clicked?</label>
+<label class="login2 pull-left pull-left-pro">Куда направлять при нажатии Назад?</label>
 </div>
 <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
 <div class="input-group custom-go-button">
@@ -1474,7 +1487,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
 <div class="row">
 <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-<label class="login2 pull-left pull-left-pro">Prevent user from selecting and saving text with Ctrl+S, removing context menu?</label>
+<label class="login2 pull-left pull-left-pro">Запретить выделять и сохранять текст по Ctrl+S, убирать контекстное меню?</label>
 </div>
 <div class="col-lg-9 col-md-6 col-sm-6 col-xs-12">
 <div class="bt-df-checkbox pull-left">
@@ -1483,7 +1496,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="i-checks pull-left">
                 <label>
-                        <input type="radio" <?=$disable_text_copy===false?'checked':''?> value="false" name="scripts.disabletextcopy"> No </label>
+                        <input type="radio" <?=$disable_text_copy===false?'checked':''?> value="false" name="scripts.disabletextcopy"> Нет </label>
             </div>
         </div>
     </div>
@@ -1491,7 +1504,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="i-checks pull-left">
                 <label>
-                        <input type="radio" <?=$disable_text_copy===true?'checked':''?> value="true" name="scripts.disabletextcopy"> Yes, prevent </label>
+                        <input type="radio" <?=$disable_text_copy===true?'checked':''?> value="true" name="scripts.disabletextcopy"> Да, запретить </label>
             </div>
         </div>
     </div>
@@ -1503,7 +1516,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
 <div class="row">
 <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-<label class="login2 pull-left pull-left-pro">Open links on landing page in new window with URL below?</label>
+<label class="login2 pull-left pull-left-pro">Открывать ссылки на ленд в новом окне с подменой в старом окне проклы на URL указанный ниже?</label>
 </div>
 <div class="col-lg-9 col-md-6 col-sm-6 col-xs-12">
 <div class="bt-df-checkbox pull-left">
@@ -1512,7 +1525,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="i-checks pull-left">
                 <label>
-                        <input type="radio" <?=$replace_prelanding===false?'checked':''?> value="false" name="scripts.prelandingreplace.use" onclick="(document.getElementById('b_10').style.display='none')"> No </label>
+                        <input type="radio" <?=$replace_prelanding===false?'checked':''?> value="false" name="scripts.prelandingreplace.use" onclick="(document.getElementById('b_10').style.display='none')"> Нет </label>
             </div>
         </div>
     </div>
@@ -1520,7 +1533,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="i-checks pull-left">
                 <label>
-                        <input type="radio" <?=$replace_prelanding===true?'checked':''?> value="true" name="scripts.prelandingreplace.use" onclick="(document.getElementById('b_10').style.display='block')"> Yes, open  </label>
+                        <input type="radio" <?=$replace_prelanding===true?'checked':''?> value="true" name="scripts.prelandingreplace.use" onclick="(document.getElementById('b_10').style.display='block')"> Да, открывать  </label>
             </div>
         </div>
     </div>
@@ -1532,7 +1545,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
 <div class="row">
 <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-<label class="login2 pull-left pull-left-pro">URL that will open in old window:</label>
+<label class="login2 pull-left pull-left-pro">URL который откроется в старом окне:</label>
 </div>
 <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
 <div class="input-group custom-go-button">
@@ -1547,7 +1560,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
 <div class="row">
 <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-<label class="login2 pull-left pull-left-pro">Open thank you page of landing in new window with URL below?</label>
+<label class="login2 pull-left pull-left-pro">Открывать страницу Спасибо ленда в новом окне с подменой в старом окне ленда на URL указанный ниже?</label>
 </div>
 <div class="col-lg-9 col-md-6 col-sm-6 col-xs-12">
 <div class="bt-df-checkbox pull-left">
@@ -1556,7 +1569,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="i-checks pull-left">
                 <label>
-                        <input type="radio" <?=$replace_landing===false?'checked':''?> value="false" name="scripts.landingreplace.use" onclick="(document.getElementById('b_1010').style.display='none')"> No </label>
+                        <input type="radio" <?=$replace_landing===false?'checked':''?> value="false" name="scripts.landingreplace.use" onclick="(document.getElementById('b_1010').style.display='none')"> Нет </label>
             </div>
         </div>
     </div>
@@ -1564,7 +1577,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="i-checks pull-left">
                 <label>
-                        <input type="radio" <?=$replace_landing===true?'checked':''?> value="true" name="scripts.landingreplace.use" onclick="(document.getElementById('b_1010').style.display='block')"> Yes, open  </label>
+                        <input type="radio" <?=$replace_landing===true?'checked':''?> value="true" name="scripts.landingreplace.use" onclick="(document.getElementById('b_1010').style.display='block')"> Да, открывать  </label>
             </div>
         </div>
     </div>
@@ -1576,7 +1589,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
 <div class="row">
 <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-<label class="login2 pull-left pull-left-pro">URL that will open in old window:</label>
+<label class="login2 pull-left pull-left-pro">URL который откроется в старом окне:</label>
 </div>
 <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
 <div class="input-group custom-go-button">
@@ -1590,7 +1603,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
 <div class="row">
 <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-<label class="login2 pull-left pull-left-pro">Add mask to phone input on LANDING?</label>
+<label class="login2 pull-left pull-left-pro">К полю ввода телефона НА ЛЕНДИНГЕ будет добавлена маска указанная ниже</label>
 </div>
 <div class="col-lg-9 col-md-6 col-sm-6 col-xs-12">
 <div class="bt-df-checkbox pull-left">
@@ -1599,7 +1612,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="i-checks pull-left">
                 <label>
-                        <input type="radio" <?=$black_land_use_phone_mask===false?'checked':''?> value="false" name="scripts.phonemask.use" onclick="(document.getElementById('b_11').style.display='none')"> No </label>
+                        <input type="radio" <?=$black_land_use_phone_mask===false?'checked':''?> value="false" name="scripts.phonemask.use" onclick="(document.getElementById('b_11').style.display='none')"> Нет </label>
             </div>
         </div>
     </div>
@@ -1607,7 +1620,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="i-checks pull-left">
                 <label>
-                        <input type="radio" <?=$black_land_use_phone_mask===true?'checked':''?> value="true" name="scripts.phonemask.use" onclick="(document.getElementById('b_11').style.display='block')"> Yes, add mask </label>
+                        <input type="radio" <?=$black_land_use_phone_mask===true?'checked':''?> value="true" name="scripts.phonemask.use" onclick="(document.getElementById('b_11').style.display='block')"> Да, добавить маску </label>
             </div>
         </div>
     </div>
@@ -1620,7 +1633,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
 <div class="row">
 <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-<label class="login2 pull-left pull-left-pro">Enter mask:</label>
+<label class="login2 pull-left pull-left-pro">Укажите маску:</label>
 </div>
 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
 <div class="input-group custom-go-button">
@@ -1633,7 +1646,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
 <div class="row">
 <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-<label class="login2 pull-left pull-left-pro">Enable Comebacker script?</label>
+<label class="login2 pull-left pull-left-pro">Включить скрипт Comebacker?</label>
 </div>
 <div class="col-lg-9 col-md-6 col-sm-6 col-xs-12">
 <div class="bt-df-checkbox pull-left">
@@ -1642,7 +1655,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="i-checks pull-left">
             <label>
-                    <input type="radio" <?=$comebacker===false?'checked':''?> value="false" name="scripts.comebacker"> No </label>
+                    <input type="radio" <?=$comebacker===false?'checked':''?> value="false" name="scripts.comebacker"> Нет </label>
         </div>
     </div>
 </div>
@@ -1650,7 +1663,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="i-checks pull-left">
             <label>
-                    <input type="radio" <?=$comebacker===true?'checked':''?> value="true" name="scripts.comebacker"> Yes</label>
+                    <input type="radio" <?=$comebacker===true?'checked':''?> value="true" name="scripts.comebacker"> Да</label>
         </div>
     </div>
 </div>
@@ -1661,7 +1674,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
 <div class="row">
 <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-<label class="login2 pull-left pull-left-pro">Enable Callbacker script?</label>
+<label class="login2 pull-left pull-left-pro">Включить скрипт Callbacker?</label>
 </div>
 <div class="col-lg-9 col-md-6 col-sm-6 col-xs-12">
 <div class="bt-df-checkbox pull-left">
@@ -1670,7 +1683,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="i-checks pull-left">
             <label>
-                    <input type="radio" <?=$callbacker===false?'checked':''?> value="false" name="scripts.callbacker"> No </label>
+                    <input type="radio" <?=$callbacker===false?'checked':''?> value="false" name="scripts.callbacker"> Нет </label>
         </div>
     </div>
 </div>
@@ -1678,7 +1691,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="i-checks pull-left">
             <label>
-                    <input type="radio" <?=$callbacker===true?'checked':''?> value="true" name="scripts.callbacker"> Yes</label>
+                    <input type="radio" <?=$callbacker===true?'checked':''?> value="true" name="scripts.callbacker"> Да</label>
         </div>
     </div>
 </div>
@@ -1689,7 +1702,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
 <div class="row">
 <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-<label class="login2 pull-left pull-left-pro">Enable script to show pop-up messages about someone purchasing a product?</label>
+<label class="login2 pull-left pull-left-pro">Включить скрипт, показывающий всплывающие сообщения о том, что кто-то приобрёл товар?</label>
 </div>
 <div class="col-lg-9 col-md-6 col-sm-6 col-xs-12">
 <div class="bt-df-checkbox pull-left">
@@ -1698,7 +1711,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="i-checks pull-left">
             <label>
-                    <input type="radio" <?=$addedtocart===false?'checked':''?> value="false" name="scripts.addedtocart"> No </label>
+                    <input type="radio" <?=$addedtocart===false?'checked':''?> value="false" name="scripts.addedtocart"> Нет </label>
         </div>
     </div>
 </div>
@@ -1706,7 +1719,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="i-checks pull-left">
             <label>
-                    <input type="radio" <?=$addedtocart===true?'checked':''?> value="true" name="scripts.addedtocart"> Yes</label>
+                    <input type="radio" <?=$addedtocart===true?'checked':''?> value="true" name="scripts.addedtocart"> Да</label>
         </div>
     </div>
 </div>
@@ -1717,7 +1730,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
 <div class="form-group-inner">
 <div class="row">
 <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-<label class="login2 pull-left pull-left-pro">Use lazy loading (lazy loading) for landing pages/landing pages?</label>
+<label class="login2 pull-left pull-left-pro">Использовать отложенную загрузку (lazy loading) для картинок на прелендах/лендах?</label>
 </div>
 <div class="col-lg-9 col-md-6 col-sm-6 col-xs-12">
 <div class="bt-df-checkbox pull-left">
@@ -1726,7 +1739,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="i-checks pull-left">
             <label>
-                    <input type="radio" <?=$images_lazy_load===false?'checked':''?> value="false" name="scripts.imageslazyload"> No </label>
+                    <input type="radio" <?=$images_lazy_load===false?'checked':''?> value="false" name="scripts.imageslazyload"> Нет </label>
         </div>
     </div>
 </div>
@@ -1734,7 +1747,7 @@ If JS check is enabled, the user will always land on white, and only if the chec
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="i-checks pull-left">
             <label>
-                    <input type="radio" <?=$images_lazy_load===true?'checked':''?> value="true" name="scripts.imageslazyload"> Yes</label>
+                    <input type="radio" <?=$images_lazy_load===true?'checked':''?> value="true" name="scripts.imageslazyload"> Да</label>
         </div>
     </div>
 </div>
@@ -1744,20 +1757,20 @@ If JS check is enabled, the user will always land on white, and only if the chec
 </div>
 <br>
 <hr>
-<h4>#7 Sub-meters</h4>
-<p>Klo takes the submeters from the URL string and:<br>
-1. If you have a local landing, klo writes the values of the tags into each form on the landing in fields with names to the right<br>
-2. If you have a landing in PP, klo appends the values of the tags to the link in PP with names to the right<br>
-This way we pass the submeter values to PP so that the correct information appears in the PP article <br>
-Plus, this is necessary to pass subid for postback<br>
-There are 3 "built-in" tags: <br>
-- subid - unique identifier of the user, created when the user lands on black, stored in cookies<br>
-- prelanding - name of the prelanding folder<br>
-- landing - name of the landing folder<br><br />
-Example: <br>
-your URL string was http://xxx.com?cn=MyCampaign<br>
-you wrote in settings: cn => utm_campaign <br />
-a <pre>&lt;input type="hidden" name="utm_campaign" value="MyCampaign"/&gt;</pre> will be added to the form on the landing
+<h4>#7 Настройка суб-меток</h4>
+<p>Кло берёт из адресной строки те субметки, что слева и:<br>
+1. Если у вас локальный ленд, то кло записывает значения меток в каждую форму на ленде в поля с именами, которые справа<br>
+2. Если у вас ленд в ПП, то кло дописывает значения меток к ссылке ПП с именами, которые справа<br>
+Таким образом мы передаём значения субметок в ПП, чтобы в стате ПП отображалась нужная нам инфа <br>
+Ну и плюс это нужно для того, чтобы передавать subid для постбэка<br>
+Есть 3 "зашитые" метки: <br>
+- subid - уникальный идентификатор пользователя, создаётся при заходе пользователя на блэк, хранится в куки<br>
+- prelanding - название папки преленда<br>
+- landing - название папки ленда<br><br />
+Пример: <br>
+у вас в адресной строке было http://xxx.com?cn=MyCampaign<br>
+вы написали в настройке: cn => utm_campaign <br />
+в форме на ленде добавится <pre>&lt;input type="hidden" name="utm_campaign" value="MyCampaign"/&gt;</pre>
 </p>
 <div id="subs_container">
 <?php  for ($i=0;$i<count($sub_ids);$i++){?>
@@ -1777,21 +1790,21 @@ a <pre>&lt;input type="hidden" name="utm_campaign" value="MyCampaign"/&gt;</pre>
     </div>
 </div>
 <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-    <a href="javascript:void(0)" class="remove-sub-item btn btn-sm btn-primary">Remove</a>
+    <a href="javascript:void(0)" class="remove-sub-item btn btn-sm btn-primary">Удалить</a>
 </div>
 </div>
 </div>
 <?php }?>
 </div>
-<a id="add-sub-item" class="btn btn-sm btn-primary" href="javascript:;">Add</a>
+<a id="add-sub-item" class="btn btn-sm btn-primary" href="javascript:;">Добавить</a>
 
 <br>
 <hr>
-<h4>#8 Statistics</h4>
+<h4>#8 Настройка статистики</h4>
 <div class="form-group-inner">
 <div class="row">
 <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-<label class="login2 pull-left pull-left-pro">Password for admin panel: <br><small>add as: /admin?password=xxxxx</small></label>
+<label class="login2 pull-left pull-left-pro">Пароль от админ-панели: <br><small>добавлять как: /admin?password=xxxxx</small></label>
 </div>
 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
 <div class="input-group custom-go-button">
@@ -1803,7 +1816,7 @@ a <pre>&lt;input type="hidden" name="utm_campaign" value="MyCampaign"/&gt;</pre>
 <div class="form-group-inner">
 <div class="row">
 <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-<label class="login2 pull-left pull-left-pro">Time zone for displaying stats</label>
+<label class="login2 pull-left pull-left-pro">Часовой пояс для отображения статы</label>
 </div>
 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
 <div class="input-group custom-go-button">
@@ -1816,11 +1829,11 @@ a <pre>&lt;input type="hidden" name="utm_campaign" value="MyCampaign"/&gt;</pre>
 <div class="form-group-inner">
 <div class="row">
 <div class="col-lg-5 col-md-12 col-sm-12 col-xs-12">
-<label class="login2 pull-left pull-left-pro">Settings for displaying tables by submeters in stats:</label>
+<label class="login2 pull-left pull-left-pro">Настройка отображения таблиц по субметкам в стате:</label>
 <br/>
 <br/>
-<p>Left side is the name of the tag that klo will take from the URL.</p>
-<p>Right side is the name of the table in English where all values of the selected tag and their stats will be shown: clicks, conversions</p>
+<p>Слева название метки, которую кло возьмёт из адреса перехода.</p>
+<p>Справа название НА АНГЛИЙСКОМ таблицы, в которой будут показаны все значения выбранной метки и их стата: клики, конверсии</p>
 </div>
 </div>
 
@@ -1842,21 +1855,21 @@ a <pre>&lt;input type="hidden" name="utm_campaign" value="MyCampaign"/&gt;</pre>
     </div>
 </div>
 <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-    <a href="javascript:void(0)" class="remove-stats-sub-item btn btn-sm btn-primary">Remove</a>
+    <a href="javascript:void(0)" class="remove-stats-sub-item btn btn-sm btn-primary">Удалить</a>
 </div>
 </div>
 </div>
 <?php }?>
 </div>
-<a id="add-stats-sub-item" class="btn btn-sm btn-primary" href="javascript:;">Add</a>
+<a id="add-stats-sub-item" class="btn btn-sm btn-primary" href="javascript:;">Добавить</a>
 </div>
 <br>
 <hr>
-<h4>#9 Postbacks</h4>
+<h4>#9 Настройка постбэков</h4>
 <div class="form-group-inner">
 <div class="row">
 <div class="col-lg-5 col-md-12 col-sm-12 col-xs-12">
-<label class="login2 pull-left pull-left-pro">Here you need to write the statuses of leads as they are sent to you by the PP postback:</label>
+<label class="login2 pull-left pull-left-pro">Здесь необходимо прописать статусы лидов, в том виде, как их вам отправляет в постбэке ПП:</label>
 </div>
 </div>
 </div>
@@ -1914,7 +1927,7 @@ a <pre>&lt;input type="hidden" name="utm_campaign" value="MyCampaign"/&gt;</pre>
 <div class="form-group-inner">
 <div class="row">
 <div class="col-lg-5 col-md-12 col-sm-12 col-xs-12">
-<label class="login2 pull-left pull-left-pro">S2S postback settings:</label>
+<label class="login2 pull-left pull-left-pro">Настойка S2S-постбеков:</label>
 <br/>
 </div>
 </div>
@@ -1924,9 +1937,9 @@ a <pre>&lt;input type="hidden" name="utm_campaign" value="MyCampaign"/&gt;</pre>
 <div class="form-group-inner s2s">
 <div class="row">
 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-    <label class="login2 pull-left pull-left-pro">URL:</label>
+    <label class="login2 pull-left pull-left-pro">Адрес:</label>
     <br/><br/>
-<p>Inside the postback URL, you can use the following macros:
+<p>Внутри адреса постбэка можно использовать следующие макросы:
 {subid}, {prelanding}, {landing}, {px}, {domain}, {status}</p>
 </div>
 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
@@ -1935,12 +1948,12 @@ a <pre>&lt;input type="hidden" name="utm_campaign" value="MyCampaign"/&gt;</pre>
     </div>
 </div>
 <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-    <a href="javascript:void(0)" class="remove-s2s-item btn btn-sm btn-primary">Remove</a>
+    <a href="javascript:void(0)" class="remove-s2s-item btn btn-sm btn-primary">Удалить</a>
 </div>
 </div>
 <div class="row">
 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-    <label class="login2 pull-left pull-left-pro">Method of sending postback:</label>
+    <label class="login2 pull-left pull-left-pro">Метод отправки постбэка:</label>
 </div>
 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
      <div class="input-group">
@@ -1953,7 +1966,7 @@ a <pre>&lt;input type="hidden" name="utm_campaign" value="MyCampaign"/&gt;</pre>
 </div>
 <div class="row">
 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-    <label class="login2 pull-left pull-left-pro">Events for which postback will be sent:</label>
+    <label class="login2 pull-left pull-left-pro">События, при которых будет отправлен постбэк:</label>
 </div>
 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
     <br/>
@@ -1977,7 +1990,7 @@ a <pre>&lt;input type="hidden" name="utm_campaign" value="MyCampaign"/&gt;</pre>
 </div>
 <?php }?>
 </div>
-<a id="add-s2s-item" class="btn btn-sm btn-primary" href="javascript:;">Add</a>
+<a id="add-s2s-item" class="btn btn-sm btn-primary" href="javascript:;">Добавить</a>
 </div>
 
 <hr>
@@ -1987,7 +2000,7 @@ a <pre>&lt;input type="hidden" name="utm_campaign" value="MyCampaign"/&gt;</pre>
 <div class="col-lg-3"></div>
 <div class="col-lg-9">
 <div class="login-horizental cancel-wp pull-left">
-    <button class="btn btn-sm btn-primary" type="submit"><strong>Save settings</strong></button>
+    <button class="btn btn-sm btn-primary" type="submit"><strong>Сохранить настройки</strong></button>
 </div>
 </div>
 </div>

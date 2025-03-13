@@ -71,8 +71,7 @@ $save_user_flow = $conf['tds.saveuserflow'];
 
 $os_white = $conf['tds.filters.allowed.os'];
 $country_white = $conf['tds.filters.allowed.countries'];
-$url_should_contain = $conf['tds.filters.allowed.inurl'];
-$url_mode = $conf->get('tds.filters.allowed.inurl.mode', 'all');
+$url_should_contain =$conf['tds.filters.allowed.inurl'];
 $lang_white = $conf['tds.filters.allowed.languages'];
 
 $ip_black_filename = $conf->get('tds.filters.blocked.ips.filename','');

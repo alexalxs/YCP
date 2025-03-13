@@ -3,13 +3,14 @@
         "action": "folder",
         "folder": {
             "names": [
-                "branca"
+                "white"
             ]
         },
         "redirect": {
             "type": "303",
             "urls": [
-                "/branca/"
+                "https://ya.ru",
+                "https://google.com"
             ]
         },
         "curl": {
@@ -44,10 +45,6 @@
             "timezone": true,
             "tzstart": "-3",
             "tzend": "4"
-        },
-        "customfolders": {
-            "enabled": true,
-            "basedir": "white"
         }
     },
     "black": {
@@ -61,31 +58,32 @@
             "action": "folder",
             "folder": {
                 "names": [
-                    "oferta1",
-                    "oferta2"
+                    "land"
                 ],
-                "customthankyoupage": {
-                    "language": "",
-                    "upsell": {
-                        "header": "",
-                        "text": "",
-                        "url": "",
-                        "imgdir": ""
-                    }
-                },
                 "conversions": {
-                    "script": ""
+                    "script": "order.php",
+                    "logonbuttonclick": false
+                },
+                "customthankyoupage": {
+                    "use": true,
+                    "language": "RU",
+                    "upsell": {
+                        "use": false,
+                        "imgdir": "img",
+                        "header": "This is a header!",
+                        "text": "This is a text!",
+                        "url": "http://ya.ru"
+                    }
                 }
             },
             "redirect": {
-                "urls": ""
+                "urls": [
+                    "https://yandex.ru"
+                ],
+                "type": "303"
             }
         },
-        "jsconnect": "replace",
-        "customfolders": {
-            "enabled": true,
-            "basedir": "offers"
-        }
+        "jsconnect": "replace"
     },
     "pixels": {
         "ya": {
@@ -123,20 +121,20 @@
     },
     "tds": {
         "mode": "on",
-        "saveuserflow": true,
+        "saveuserflow": false,
         "filters": {
             "allowed": {
-                "countries": [],
+                "countries": [
+                    "UA",
+                    "BY"
+                ],
                 "os": [
                     "Android",
                     "iOS",
                     "Windows",
-                    "OS X",
-                    "unknown"
+                    "OS X"
                 ],
-                "inurl": [
-                    "key=2"
-                ],
+                "inurl": [],
                 "languages": []
             },
             "blocked": {
@@ -148,6 +146,7 @@
                 "useragents": [
                     "facebook",
                     "Facebot",
+                    "curl",
                     "gce-spider",
                     "yandex.com/bots",
                     "OdklBot"
@@ -226,7 +225,7 @@
                 "value": "Placement"
             }
         ],
-        "timezone": "America/Belem"
+        "timezone": "Europe/Moscow"
     },
     "postback": {
         "lead": "Lead",
