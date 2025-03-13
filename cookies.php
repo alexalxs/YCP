@@ -1,7 +1,39 @@
 <?php
 function ywbsetcookie($name,$value,$path='/'){
 	$expires = time()+60*60*24*5; //время, на которое ставятся куки, по умолчанию - 5 дней
-	header("Set-Cookie: {$name}={$value}; Expires={$expires}; Path={$path}; SameSite=None; Secure",false);
+	
+	// Log para depuração
+	if (defined('DEBUG_LOG') && DEBUG_LOG) {
+		error_log("Definindo cookie: $name=$value, Path=$path, Expires=$expires");
+		error_log("Headers já enviados antes do setcookie: " . (headers_sent() ? 'SIM' : 'NÃO'));
+	}
+	
+	// Usar setcookie nativo do PHP para garantir compatibilidade
+	if (!headers_sent()) {
+		setcookie($name, $value, $expires, $path, '', true, false);
+		
+		// Também enviar o header manualmente como backup
+		header("Set-Cookie: {$name}={$value}; Expires={$expires}; Path={$path}; SameSite=None; Secure", false);
+	} else {
+		// Se os headers já foram enviados, armazenar o cookie na sessão para uso futuro
+		if (session_status() !== PHP_SESSION_ACTIVE) {
+			session_start(['read_and_close' => false]);
+		}
+		$_SESSION[$name] = $value;
+		session_write_close();
+		
+		if (defined('DEBUG_LOG') && DEBUG_LOG) {
+			error_log("Headers já enviados, cookie armazenado na sessão: $name=$value");
+		}
+	}
+	
+	// Definir também na superglobal $_COOKIE para uso imediato
+	$_COOKIE[$name] = $value;
+	
+	// Log para depuração
+	if (defined('DEBUG_LOG') && DEBUG_LOG) {
+		error_log("Headers já enviados após o setcookie: " . (headers_sent() ? 'SIM' : 'NÃO'));
+	}
 }
 
 function get_cookie($name){

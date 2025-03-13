@@ -110,4 +110,9 @@ $purchase_status_name = $conf['postback.purchase'];
 $reject_status_name = $conf['postback.reject'];
 $trash_status_name = $conf['postback.trash'];
 
+// Adiciona constante de debug para logging
+if (!defined('DEBUG_LOG')) {
+    define('DEBUG_LOG', true);
+}
+
 ?>

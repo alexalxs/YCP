@@ -59,15 +59,10 @@
             "folder": {
                 "names": [
                     "offer1",
-                    "offer2",
-                    "offer2",
-                    "offer2",
-                    "offer2",
-                    "offer2",
-                    ""
+                    "offer2"
                 ],
                 "conversions": {
-                    "script": "order.php",
+                    "script": "send.php",
                     "logonbuttonclick": false
                 },
                 "customthankyoupage": {

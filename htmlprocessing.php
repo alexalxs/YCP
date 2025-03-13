@@ -71,103 +71,117 @@ function load_prelanding($url, $land_number)
 //Подгрузка контента блэк ленда из другой папки через CURL
 function load_landing($url)
 {
-    global $black_land_log_conversions_on_button_click,$black_land_use_custom_thankyou_page;
-    global $replace_landing, $replace_landing_address;
-    global $images_lazy_load;
+    global $replace_landing, $replace_landing_address, $black_land_log_conversions_on_button_click, $replace_back_address,$back_button_action,$disable_text_copy,$black_land_use_phone_mask,$black_land_phone_mask,$comebacker,$callbacker,$addedtocart, $images_lazy_load;
 
-    // Verificar explicitamente se a URL está vazia e definir um valor padrão
-    if (empty($url)) {
-        error_log("URL vazia passada para load_landing()");
-        $url = "offer1"; // Definir um valor padrão se a URL estiver vazia
+    // Obtém o caminho completo da landing page
+    $fullpath = get_abs_from_rel($url);
+    $fpwqs = get_abs_from_rel($url, true);
+
+    // Carrega o conteúdo HTML da página
+    $html = get_html($fpwqs);
+    
+    // Remove elementos desnecessários e faz ajustes básicos
+    $html = remove_scrapbook($html);
+    $html = remove_from_html($html, 'removeland.html');
+    $html = preg_replace('/<head [^>]+>/', '<head>', $html);
+    
+    // Verifica se estamos na raiz do site (URL padrão) ou em um URL específico
+    $is_root_url = ($_SERVER['REQUEST_URI'] == '/' || parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) == '/');
+    
+    // Se não estamos na raiz, adiciona a base href normal
+    if (!$is_root_url) {
+        $html = insert_after_tag($html, "<head>", "<base href='" . $fullpath . "'>");
+    } else {
+        // Se estamos na raiz, ajustar todos os links para serem relativos
+        // Não adiciona base href, mas ajusta os links diretamente
+        $html = preg_replace('/(href|src|action)="\/([^"]+)"/i', '$1="./$2"', $html);
+        $html = preg_replace('/(href|src|action)="\/"/i', '$1="./"', $html);
+        
+        // Ajusta formulários para apontar para send.php na raiz
+        $html = preg_replace('/action="([^"]*\/)?send\.php(\?[^"]*)?"/i', 'action="send.php$2"', $html);
     }
-
-    // Verificar se temos conteúdo em cache primeiro
-    $cached_content = get_cached_content($url);
-    if ($cached_content !== false) {
-        // Usar conteúdo em cache
-        return $cached_content;
+    
+    // Adiciona scripts de análise e pixel
+    $html = insert_gtm_script($html);
+    $html = insert_yandex_script($html);
+    $html = insert_fbpixel_pageview($html);
+    $html = insert_fbpixel_viewcontent($html, $url);
+    $html = insert_ttpixel_pageview($html);
+    $html = insert_ttpixel_viewcontent($html, $url);
+    
+    // Verifica se a página contém um formulário de oferta
+    $has_offer_form = strpos($html, 'name="oferta"') !== false || 
+                      strpos($html, 'name="product"') !== false || 
+                      strpos($html, 'name="price"') !== false ||
+                      strpos($html, 'action="send.php"') !== false ||
+                      strpos($html, 'action="../send.php"') !== false;
+    
+    // Preservar parâmetro key=1 e outros parâmetros da URL para formulários
+    $query_params = [];
+    if (isset($_GET['key'])) {
+        $query_params['key'] = $_GET['key'];
     }
-
-    // Verificar se existe o arquivo index.html diretamente
-    $direct_path = __DIR__ . '/' . $url . '/index.html';
-    if (file_exists($direct_path)) {
-        $html = file_get_contents($direct_path);
-        if (!empty($html)) {
-            // Processar o HTML carregado diretamente
-            $baseurl = $url;
-            
-            // Adicionar base href antes de reescrever as URLs relativas
-            $html = preg_replace('/<head[^>]*>/', '<head><base href="/' . $baseurl . '/">', $html);
-            
-            // Processar formulários para adicionar campo oculto de oferta
-            $offer_name = basename($url);
-            $html = preg_replace('/<form([^>]*)>/i', '<form$1><input type="hidden" name="oferta" value="' . $offer_name . '">', $html);
-            
-            // Adicionar script de conversão se necessário
-            if (file_exists('scripts/conversion_tracker.js')) {
-                $script_content = file_get_contents('scripts/conversion_tracker.js');
-                if (strpos($html, '</body>') !== false) {
-                    $html = str_replace('</body>', '<script>' . $script_content . '</script></body>', $html);
-                } else {
-                    $html .= '<script>' . $script_content . '</script>';
-                }
-            }
-            
-            // Salvar no cache para uso futuro
-            save_cached_content($url, $html);
-            return $html;
+    
+    // Adiciona outros parâmetros importantes da URL original
+    foreach ($_GET as $key => $value) {
+        if (!isset($query_params[$key]) && $key != 'l') {
+            $query_params[$key] = $value;
         }
     }
     
-    // Método tradicional para casos onde o arquivo não existe diretamente
-    $fullpath = get_abs_from_rel($url);
-    $fpwqs = get_abs_from_rel($url,true);
-    
-    // Registro de depuração
-    error_log("Tentativa de carregar conteúdo: URL=$url, fullpath=$fullpath, fpwqs=$fpwqs");
-    
-    $html = get_html($fpwqs);
-    
-    if (empty($html)) {
-        error_log("Falha ao carregar conteúdo de $url");
-        // Retornar uma página de erro mais amigável
-        return "<html><head><title>Conteúdo não disponível</title></head><body>
-                <h1>Desculpe, este conteúdo não está disponível no momento</h1>
-                <p>Por favor, tente novamente mais tarde ou retorne para a <a href='/'>página inicial</a>.</p>
-                </body></html>";
+    // Se a página contém formulários de oferta, atualiza o action para preservar os parâmetros
+    if ($has_offer_form && !empty($query_params)) {
+        // Adiciona os parâmetros ao action dos formulários
+        $query_string = http_build_query($query_params);
+        $html = preg_replace('/(action="[^"]*send\.php)(")/i', '$1?' . $query_string . '$2', $html);
+        $html = preg_replace('/(action="[^"]*\/send\.php)(")/i', '$1?' . $query_string . '$2', $html);
     }
     
-    $html = remove_scrapbook($html);
-    $html = remove_from_html($html,'removeland.html');
-    $html = preg_replace('/<head [^>]+>/','<head>',$html);
-    $html = insert_after_tag($html,"<head>","<base href='/".$url."/'>");
-
-    if($black_land_use_custom_thankyou_page===true){
-        //меняем обработчик формы, чтобы у вайта и блэка была одна thankyou page
-        $send=" action=\"../send.php";
-        $query=http_build_query($_GET);
-        if ($query!=='') $send.="?".$query;
-        $send.="\"";
-        $html = preg_replace('/\saction=[\'\"]([^\'\"]*)[\'\"]/', $send, $html);
+    // Processa formulários e elementos específicos
+    if (!$has_offer_form) {
+        // Se não for um formulário de oferta, processa normalmente
+        $html = insert_subs_into_forms($html);
+        $html = insert_fbpixel_id($html);
     }
-
-    // Inserir subids nas formas
-    $html = insert_subs_into_forms($html);
-
-    //если мы будем подменять ленд при переходе на страницу Спасибо, то Спасибо надо открывать в новом окне
+    
+    $html = replace_city_macros($html);
+    $html = fix_phone_and_name($html);
+    $html = insert_phone_mask($html);
+    
+    if ($comebacker) {
+        $html = insert_comebacker($html);
+    }
+    
+    if ($callbacker) {
+        $html = insert_callbacker($html);
+    }
+    
+    if ($addedtocart) {
+        $html = insert_addedtocart($html);
+    }
+    
+    if($back_button_action=='replace'){
+        $html = fix_back_button($html);
+    }
+    
+    if($disable_text_copy){
+        $html = disable_copy($html);
+    }
+    
+    if($images_lazy_load){
+        $html = add_lazy_load($html);
+    }
+    
+    // Adiciona scripts para conversão baseada em cliques, se necessário
+    if ($black_land_log_conversions_on_button_click) {
+        $html = add_buttonclick_conversion($html);
+    }
+    
+    // Se estiver substituindo a landing page, redireciona
     if ($replace_landing) {
-        $replacelandurl = replace_all_macros($replace_landing_address);
-        $replacelandurl = add_subs_to_link($replacelandurl);
-        $html = insert_file_content_with_replace($html, 'replacelanding.js', '</body>', '{REDIRECT}', $replacelandurl);
+        return get_redirect_page($replace_landing_address);
     }
     
-    // Adicionar lazy loading de imagens se configurado
-    if ($images_lazy_load) {
-        $html = add_images_lazy_load($html);
-    }
-    
-    // Salvar no cache para uso futuro
-    save_cached_content($url, $html);
     return $html;
 }
 
@@ -591,24 +605,92 @@ function add_js_testcode($html)
 function insert_subs_into_forms($html)
 {
     global $sub_ids;
-    $all_subs = '';
-    $preset=['subid','prelanding','landing'];
-    foreach ($sub_ids as $sub) {
-    	$key = $sub["name"];
-        $value = $sub["rewrite"];
 
-        if (in_array($key,$preset)&& !empty(get_cookie($key))) {
-            $html = preg_replace('/(<input[^>]*name="'.$value.'"[^>]*>)/', "", $html);
-            $all_subs = $all_subs.'<input type="hidden" name="'.$value.'" value="'.get_cookie($key).'"/>';
-        } elseif (!empty($_GET[$key])) {
-            $html = preg_replace('/(<input[^>]*name="'.$value.'"[^>]*>)/', "", $html);
-            $all_subs = $all_subs.'<input type="hidden" name="'.$value.'" value="'.$_GET[$key].'"/>';
+    // Verifica se $sub_ids está definido e não é vazio
+    if (!isset($sub_ids) || empty($sub_ids)) {
+        return $html;
+    }
+
+    // Procura por todos os formulários na página
+    preg_match_all('/<form[^>]*>(.*?)<\/form>/is', $html, $forms, PREG_SET_ORDER);
+    
+    foreach ($forms as $form) {
+        $original_form = $form[0];
+        $form_content = $form[1];
+        
+        // Verifica se o formulário já tem o campo oferta, product ou price para evitar duplicações
+        if (strpos($form_content, 'name="oferta"') !== false || 
+            strpos($form_content, 'name="product"') !== false || 
+            strpos($form_content, 'name="price"') !== false) {
+            // Adicionar apenas parâmetros especiais como key=1 que não existem no formulário
+            $special_params = [];
+            
+            // Verificar se o parâmetro key existe na URL
+            if (isset($_GET['key']) && strpos($form_content, 'name="key"') === false) {
+                $special_params[] = '<input type="hidden" name="key" value="' . htmlspecialchars($_GET['key'], ENT_QUOTES, 'UTF-8') . '">';
+            }
+            
+            // Se houver parâmetros especiais para adicionar
+            if (!empty($special_params)) {
+                $hidden_fields = implode("\n", $special_params);
+                
+                // Encontrar um bom local para inserir os campos
+                $insert_pos = strrpos($form_content, '</input>');
+                if ($insert_pos === false) {
+                    $insert_pos = strrpos($form_content, '</button>');
+                }
+                
+                if ($insert_pos !== false) {
+                    // Inserir após o último input/button
+                    $new_form_content = substr_replace($form_content, $hidden_fields, $insert_pos + 8, 0);
+                    $new_form = str_replace($form_content, $new_form_content, $original_form);
+                    $html = str_replace($original_form, $new_form, $html);
+                }
+            }
+            
+            continue; // Pula o restante do processamento para este formulário
         }
+        
+        // Prepara campos hidden para cada sub_id
+        $hidden_fields = "";
+        foreach ($sub_ids as $sub) {
+            $name = $sub['name'];
+            $val = "";
+            if (isset($_GET[$name])) {
+                $val = htmlspecialchars($_GET[$name], ENT_QUOTES, 'UTF-8');
+            }
+            
+            // Verifica se o campo já existe no formulário
+            if (strpos($form_content, 'name="' . $name . '"') === false) {
+                $hidden_fields .= '<input type="hidden" name="' . $name . '" value="' . $val . '">';
+            }
+        }
+        
+        // Adicionar parâmetro key se existir na URL e ainda não existir no formulário
+        if (isset($_GET['key']) && strpos($form_content, 'name="key"') === false) {
+            $hidden_fields .= '<input type="hidden" name="key" value="' . htmlspecialchars($_GET['key'], ENT_QUOTES, 'UTF-8') . '">';
+        }
+        
+        // Insere os campos ocultos após o último input ou antes do </form>
+        $last_input_pos = strrpos($form_content, '</input>');
+        $last_button_pos = strrpos($form_content, '</button>');
+        
+        if ($last_input_pos !== false && $last_input_pos > $last_button_pos) {
+            // Insere após o último input
+            $new_form_content = substr_replace($form_content, $hidden_fields, $last_input_pos + 8, 0);
+        } elseif ($last_button_pos !== false) {
+            // Insere após o último botão
+            $new_form_content = substr_replace($form_content, $hidden_fields, $last_button_pos + 9, 0);
+        } else {
+            // Insere no início do formulário
+            $new_form_content = $hidden_fields . $form_content;
+        }
+        
+        // Substitui o formulário original pelo novo
+        $new_form = str_replace($form_content, $new_form_content, $original_form);
+        $html = str_replace($original_form, $new_form, $html);
     }
-    if (!empty($all_subs)) {
-        $needle = '<form';
-        return insert_after_tag($html, $needle, $all_subs);
-    }
+    
     return $html;
 }
 

@@ -55,12 +55,83 @@ function white($use_js_checks)
         }
     }
 
-    // Se for caminho raiz, redirecionar para a pasta white
+    // Se for caminho raiz e a ação for 'folder', carregar o conteúdo diretamente em vez de redirecionar
     if ($_SERVER['REQUEST_URI'] == '/' && $action == 'folder') {
         $selected_folder = select_item($folder_names, $save_user_flow, 'white', true);
         $folder = $selected_folder[0];
+        
+        // Carregar o conteúdo diretamente
+        $file_path = __DIR__ . '/' . $folder . '/index.html';
+        if (file_exists($file_path)) {
+            $html = file_get_contents($file_path);
+            
+            // Ajustar todos os links para serem relativos a partir da raiz (sem o ponto)
+            $html = preg_replace('/(href|src|action)="\/([^"]+)"/i', '$1="$2"', $html);
+            
+            // Ajustar links para recursos CSS e JS, garantindo que apontem para a pasta correta
+            $html = preg_replace('/(href|src)="(styles\.css|script\.js|css\/[^"]+|js\/[^"]+)"/i', '$1="' . $folder . '/$2"', $html);
+            
+            // Garantir que links para a raiz também sejam corretos
+            $html = preg_replace('/(href|src|action)="\/"/i', '$1="./"', $html);
+            
+            echo $html;
+            exit;
+        }
+        
+        // Se não conseguir carregar o arquivo, tenta redirecionar como fallback
         header('Location: /' . $folder . '/');
         exit;
+    }
+
+    // Se for caminho raiz com parâmetros (como key=1), mostrar o conteúdo diretamente
+    if (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) == '/' && !empty($_GET) && isset($_GET['key']) && $action == 'folder') {
+        // Verificar se foi especificada uma oferta na URL através do parâmetro "offer"
+        if (isset($_GET['offer']) && in_array('offer' . $_GET['offer'], $white_folder_names)) {
+            // Se houver um parâmetro "offer" válido, usar a oferta especificada
+            $folder = 'offer' . $_GET['offer'];
+            ywbsetcookie('landing', $folder, '/');
+            
+            // Carregar o arquivo diretamente
+            $file_path = __DIR__ . '/' . $folder . '/index.html';
+            if (file_exists($file_path)) {
+                $html = file_get_contents($file_path);
+                
+                // Ajustar todos os links para serem relativos a partir da raiz (sem o ponto)
+                $html = preg_replace('/(href|src|action)="\/([^"]+)"/i', '$1="$2"', $html);
+                
+                // Ajustar links para recursos CSS e JS, garantindo que apontem para a pasta correta da oferta
+                $html = preg_replace('/(href|src)="(styles\.css|script\.js|css\/[^"]+|js\/[^"]+)"/i', '$1="' . $folder . '/$2"', $html);
+                
+                // Garantir que links para a raiz também sejam corretos
+                $html = preg_replace('/(href|src|action)="\/"/i', '$1="./"', $html);
+                
+                // Ajustar formulários para apontar para send.php na raiz
+                $html = preg_replace('/action="([^"]*send\.php)(\?[^"]*)?"/i', 'action="send.php$2"', $html);
+                
+                // Garantir que o parâmetro key=1 seja preservado no formulário
+                if (strpos($html, 'name="key"') === false) {
+                    $html = preg_replace('/<form([^>]*)>/i', '<form$1><input type="hidden" name="key" value="1">', $html);
+                }
+                
+                // Adicionar o parâmetro "offer" ao formulário se não existir
+                if (strpos($html, 'name="offer"') === false) {
+                    $html = preg_replace('/<form([^>]*)>/i', '<form$1><input type="hidden" name="offer" value="' . $_GET['offer'] . '">', $html);
+                }
+                
+                echo $html;
+                exit;
+            }
+        } else {
+            $selected_folder = select_item($folder_names, $save_user_flow, 'white', true);
+            $folder = $selected_folder[0];
+            $html = load_white_content($folder, $use_js_checks);
+            
+            // Ajustar links para recursos CSS e JS, garantindo que apontem para a pasta correta
+            $html = preg_replace('/(href|src)="(styles\.css|script\.js|css\/[^"]+|js\/[^"]+)"/i', '$1="' . $folder . '/$2"', $html);
+            
+            echo $html;
+            exit;
+        }
     }
 
     //verificações de JavaScript
@@ -118,6 +189,142 @@ function black($clkrdetect)
 	$cursubid=set_subid();
     set_facebook_cookies();
 
+    // Tratar parâmetro key=1 na raiz
+    if (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) == '/' && isset($_GET['key']) && $_GET['key'] == '1' && $black_land_action == 'folder') {
+        // Verificar se já tem uma oferta associada ao cookie - para manter consistência no teste A/B
+        $landing = null;
+        $use_abtest = true;
+        
+        // Parâmetro de teste para forçar rotação de ofertas
+        $force_rotation = isset($_GET['rotate']) && $_GET['rotate'] == '1';
+        
+        // Se o parâmetro offer estiver presente, ele tem prioridade (para testes específicos)
+        if (isset($_GET['offer']) && in_array('offer' . $_GET['offer'], $black_land_folder_names)) {
+            $landing = 'offer' . $_GET['offer'];
+            $use_abtest = false; // Não usa A/B quando a oferta é especificada na URL
+        }
+        // Se o cookie 'landing' estiver definido E $save_user_flow for TRUE E não estamos forçando rotação
+        elseif ($save_user_flow && !$force_rotation && isset($_COOKIE['landing']) && in_array($_COOKIE['landing'], $black_land_folder_names)) {
+            $landing = $_COOKIE['landing'];
+            $use_abtest = false;
+        }
+        // Caso contrário, selecionar uma landing page aleatoriamente usando o teste A/B
+        else {
+            // Passamos true como último parâmetro para modo de teste quando force_rotation é true
+            $res = select_landing($save_user_flow, $black_land_folder_names, true, $force_rotation);
+            $landing = $res[0];
+            
+            // Log adicional para debug
+            if (defined('DEBUG_LOG') && DEBUG_LOG) {
+                error_log("Force rotation (main.php): " . ($force_rotation ? 'YES' : 'NO'));
+                error_log("Selected landing (main.php): $landing");
+            }
+        }
+        
+        // Registrar o clique para estatísticas (sempre)
+        add_black_click($cursubid, $clkrdetect, '', $landing);
+        
+        // Só armazena o cookie se $save_user_flow for true
+        if ($save_user_flow) {
+            ywbsetcookie('landing', $landing, '/');
+        }
+        
+        // Carregar o arquivo diretamente
+        $file_path = __DIR__ . '/' . $landing . '/index.html';
+        if (file_exists($file_path)) {
+            $html = file_get_contents($file_path);
+            
+            // Ajustar todos os links para serem relativos a partir da raiz (sem o ponto)
+            $html = preg_replace('/(href|src|action)="\/([^"]+)"/i', '$1="$2"', $html);
+            
+            // Ajustar links para recursos CSS e JS, garantindo que apontem para a pasta correta da oferta
+            $html = preg_replace('/(href|src)="(styles\.css|script\.js|css\/[^"]+|js\/[^"]+)"/i', '$1="' . $landing . '/$2"', $html);
+            
+            // Garantir que links para a raiz também sejam corretos
+            $html = preg_replace('/(href|src|action)="\/"/i', '$1="./"', $html);
+            
+            // Ajustar formulários para apontar para send.php na raiz
+            $html = preg_replace('/action="([^"]*send\.php)(\?[^"]*)?"/i', 'action="send.php$2"', $html);
+            
+            // Garantir que o parâmetro key=1 seja preservado no formulário
+            if (strpos($html, 'name="key"') === false) {
+                $html = preg_replace('/<form([^>]*)>/i', '<form$1><input type="hidden" name="key" value="1">', $html);
+            }
+            
+            // Adicionar o parâmetro "oferta" ao formulário para identificação
+            if (strpos($html, 'name="oferta"') === false) {
+                $html = preg_replace('/<form([^>]*)>/i', '<form$1><input type="hidden" name="oferta" value="' . $landing . '">', $html);
+            }
+            
+            echo $html;
+            return;
+        }
+        
+        // Se não conseguir carregar diretamente, usa o método padrão
+        echo load_landing($landing);
+        return;
+    }
+    
+    // Se for a raiz sem parâmetros e a ação for 'folder', carregar diretamente a landing page
+    if ($_SERVER['REQUEST_URI'] == '/' && $black_land_action == 'folder') {
+        // Verificar se já tem uma oferta associada ao cookie - para manter consistência no teste A/B
+        $landing = null;
+        $use_abtest = true;
+        
+        // Parâmetro de teste para forçar rotação de ofertas
+        $force_rotation = isset($_GET['rotate']) && $_GET['rotate'] == '1';
+        
+        // Se o cookie 'landing' estiver definido E $save_user_flow for TRUE E não estamos forçando rotação
+        if ($save_user_flow && !$force_rotation && isset($_COOKIE['landing']) && in_array($_COOKIE['landing'], $black_land_folder_names)) {
+            $landing = $_COOKIE['landing'];
+            $use_abtest = false;
+        }
+        // Caso contrário, selecionar uma landing page aleatoriamente usando o teste A/B
+        else {
+            // Passamos true como último parâmetro para modo de teste quando force_rotation é true
+            $res = select_landing($save_user_flow, $black_land_folder_names, true, $force_rotation);
+            $landing = $res[0];
+            
+            // Log adicional para debug
+            if (defined('DEBUG_LOG') && DEBUG_LOG) {
+                error_log("Force rotation (main.php): " . ($force_rotation ? 'YES' : 'NO'));
+                error_log("Selected landing (main.php): $landing");
+            }
+        }
+        
+        // Registrar o clique para estatísticas (sempre)
+        add_black_click($cursubid, $clkrdetect, '', $landing);
+        
+        // Só armazena o cookie se $save_user_flow for true
+        if ($save_user_flow) {
+            ywbsetcookie('landing', $landing, '/');
+        }
+        
+        // Carregar o arquivo diretamente
+        $file_path = __DIR__ . '/' . $landing . '/index.html';
+        if (file_exists($file_path)) {
+            $html = file_get_contents($file_path);
+            
+            // Ajustar todos os links para serem relativos a partir da raiz (sem o ponto)
+            $html = preg_replace('/(href|src|action)="\/([^"]+)"/i', '$1="$2"', $html);
+            
+            // Ajustar links para recursos CSS e JS, garantindo que apontem para a pasta correta da oferta
+            $html = preg_replace('/(href|src)="(styles\.css|script\.js|css\/[^"]+|js\/[^"]+)"/i', '$1="' . $landing . '/$2"', $html);
+            
+            // Garantir que links para a raiz também sejam corretos
+            $html = preg_replace('/(href|src|action)="\/"/i', '$1="./"', $html);
+            
+            // Ajustar formulários para apontar para send.php na raiz
+            $html = preg_replace('/action="([^"]*send\.php)(\?[^"]*)?"/i', 'action="send.php$2"', $html);
+            
+            echo $html;
+            return;
+        }
+        
+        // Se não conseguir carregar diretamente, usa o método padrão
+        echo load_landing($landing);
+        return;
+    }
 
 	$landings=[];
     $isfolderland=false;

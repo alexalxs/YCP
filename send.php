@@ -33,7 +33,7 @@ if ($subid==='' && isset($_POST['subid']))
 
 //если юзверь каким-то чудом отправил пустые поля в форме
 if ($name===''||$phone===''){
-    redirect('thankyou.php?nopixel=1');
+    redirect('thankyou/thankyou.php?nopixel=1');
     return;
 }
 
@@ -46,6 +46,30 @@ $is_duplicate=has_conversion_cookies($name,$phone);
 ywbsetcookie('name',$name,'/');
 ywbsetcookie('phone',$phone,'/');
 ywbsetcookie('ctime',$ts,'/');
+
+// Verificar se é uma solicitação com key=1 - neste caso, processar sem tentar acessar order.php
+if (isset($_GET['key']) && $_GET['key'] == '1') {
+    // Adicionar o lead ao banco de dados sem tentar enviar para outro endpoint
+    add_lead($subid, $name, $phone);
+    
+    // Coletar outros dados do formulário
+    $email = isset($_POST['email']) ? $_POST['email'] : '';
+    $address = isset($_POST['address']) ? $_POST['address'] : '';
+    $product = isset($_POST['product']) ? $_POST['product'] : '';
+    $price = isset($_POST['price']) ? $_POST['price'] : '';
+    $oferta = isset($_POST['oferta']) ? $_POST['oferta'] : '';
+    
+    // Salvar dados adicionais (se disponíveis)
+    if (!empty($email)) ywbsetcookie('email', $email, '/');
+    if (!empty($address)) ywbsetcookie('address', $address, '/');
+    if (!empty($product)) ywbsetcookie('product', $product, '/');
+    if (!empty($price)) ywbsetcookie('price', $price, '/');
+    if (!empty($oferta)) ywbsetcookie('oferta', $oferta, '/');
+    
+    // Redirecionar para a página de agradecimento
+    redirect('thankyou/thankyou.php?' . http_build_query($_GET));
+    exit;
+}
 
 //шлём в ПП только если это не дубль
 if (!$is_duplicate){

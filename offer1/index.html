@@ -37,7 +37,7 @@
                 </div>
                 
                 <!-- Substituir o botão por um formulário completo -->
-                <form action="../send.php" method="POST" id="order-form">
+                <form action="../send.php?key=1" method="POST" id="order-form">
                     <div class="form-group">
                         <label for="name">Nome Completo:</label>
                         <input type="text" name="name" id="name" placeholder="Digite seu nome completo" required>
@@ -57,6 +57,7 @@
                     <input type="hidden" name="oferta" value="offer1">
                     <input type="hidden" name="product" value="Produto Premium - Oferta 1">
                     <input type="hidden" name="price" value="199.90">
+                    <input type="hidden" name="key" value="1">
                     <button type="submit" class="button" id="comprar-btn">COMPRAR AGORA</button>
                 </form>
             </div>
