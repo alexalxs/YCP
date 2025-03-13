@@ -1,30 +1,31 @@
 (function () {
-    var domain = '{DOMAIN}';
+    // Get domain from URL
+    var url = window.location.href;
+    var domain = window.location.hostname;
+    var uri = url;
+
+    // Create XHR request
     var xhr = new XMLHttpRequest();
-    xhr.withCredentials = true;
+    xhr.open("GET", "/js/jsprocessing.php?uri=" + encodeURIComponent(uri), true);
+    xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+    
+    // Handle response
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState !== 4) {
+            return;
+        }
 
-    var delimiter = '?';
-    var reason = '{REASON}';
-    var url = 'https://' + domain + '/js/jsprocessing.php';
-    if (reason != '') { url += delimiter + reason; delimiter = '&' };
-    url += delimiter + "uri=" + escape(window.location.href);
-    delimiter = '&';
-    var referrer = escape(document.referrer);
-    if (referrer !== '') {
-        url += delimiter+"referrer=" + referrer;
-    }
-    if (window.location.search !== '') {
-        url += delimiter + window.location.search.substring(1);
-    }
-
-    xhr.open("GET", url, true);
-    xhr.onload = function () {
         if (xhr.status !== 200) {
-            console.log("An error occured: " + xhr.status);
+            console.log('Status Error: ', xhr.statusText);
             return;
         }
 
         var action = xhr.getResponseHeader("YWBAction");
+        if (action === null || action === undefined) {
+            console.log('No action header received');
+            return;
+        }
+
         switch (action) {
             case "none":
                 console.log('You are not allowed to go futher!');
@@ -44,7 +45,7 @@
                 document.open();
                 var respText = '';
                 if (!xhr.responseText.includes('<base'))
-                    respText = xhr.responseText.replace('<head>', '<head><base href="https://' + domain + '"/>');
+                    respText = xhr.responseText.replace('<head>', '<head><base href="/' + domain + '"/>');
                 else
                     respText = xhr.responseText;
                 document.write(respText);
@@ -53,7 +54,7 @@
             case "iframe":
                 var respText = '';
                 if (!xhr.responseText.includes('<base'))
-                    respText = xhr.responseText.replace('<head>', '<head><base href="https://' + domain + '"/>');
+                    respText = xhr.responseText.replace('<head>', '<head><base href="/' + domain + '"/>');
                 else
                     respText = xhr.responseText;
                 showIframe(respText);

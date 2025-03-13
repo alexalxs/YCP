@@ -3,7 +3,7 @@
         "action": "folder",
         "folder": {
             "names": [
-                "white"
+                "offer1"
             ]
         },
         "redirect": {
@@ -58,7 +58,7 @@
             "action": "folder",
             "folder": {
                 "names": [
-                    "land"
+                    "offer2"
                 ],
                 "conversions": {
                     "script": "order.php",
@@ -124,16 +124,8 @@
         "saveuserflow": false,
         "filters": {
             "allowed": {
-                "countries": [
-                    "UA",
-                    "BY"
-                ],
-                "os": [
-                    "Android",
-                    "iOS",
-                    "Windows",
-                    "OS X"
-                ],
+                "countries": [],
+                "os": [],
                 "inurl": [],
                 "languages": []
             },
@@ -142,7 +134,9 @@
                     "filename": "",
                     "cidrformat": false
                 },
-                "tokens": [],
+                "tokens": [
+                    "key=1"
+                ],
                 "useragents": [
                     "facebook",
                     "Facebot",

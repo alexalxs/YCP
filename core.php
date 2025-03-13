@@ -8,8 +8,37 @@ require 'bases/browser/Language.php';
 require 'bases/browser/LanguageDetector.php';
 require 'bases/iputils.php';
 require 'bases/ipcountry.php';
+require_once __DIR__.'/url.php';
+require_once __DIR__.'/db.php';
+
+// Carrega o autoloader do Composer apenas se existir
+$autoloadPath = __DIR__.'/vendor/autoload.php';
+if (file_exists($autoloadPath)) {
+    require_once $autoloadPath;
+}
+
 use Sinergi\BrowserDetector\Os;
 use Sinergi\BrowserDetector\Language;
+
+$OS_WHITE=array("Android","iOS","Windows","OS X","Linux","unknown");
+$TOKENS_BLACK=array("facebook","search","google","bing","yahoo");
+
+function getip(){
+	$client  = @$_SERVER['HTTP_CLIENT_IP'];
+	$forward = @$_SERVER['HTTP_X_FORWARDED_FOR'];
+	$remote  = @$_SERVER['REMOTE_ADDR'];
+	
+	if(filter_var($client, FILTER_VALIDATE_IP)){
+		$ip = $client;
+	}
+	elseif(filter_var($forward, FILTER_VALIDATE_IP)){
+		$ip = $forward;
+	}
+	else{
+		$ip = $remote;
+	}
+	return $ip;	
+}
 
 class Cloaker{
 	var $os_white;
@@ -25,6 +54,7 @@ class Cloaker{
     var $block_vpnandtor;
     var $isp_black;
     var $result=[];
+    public $detect;
 
 	public function __construct($os_white,$country_white,$lang_white,$ip_black_filename,$ip_black_cidr,$tokens_black,$url_should_contain,$ua_black,$isp_black,$block_without_referer,$referer_stopwords,$block_vpnandtor){
 		$this->os_white = $os_white;

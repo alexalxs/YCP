@@ -23,14 +23,14 @@ function white($use_js_checks)
     $curl_urls= $white_curl_urls;
     $error_codes= $white_error_codes;
 
-    //грязный хак для прокидывания реферера через куки
+    //gravar referrer nos cookies para uso futuro
     if ($use_js_checks && 
 		isset($_SERVER['HTTP_REFERER']) && 
         !empty($_SERVER['HTTP_REFERER'])){
         ywbsetcookie("referer",$_SERVER['HTTP_REFERER']);
     }
 
-    if ($white_use_domain_specific) { //если у нас под каждый домен свой вайт
+    if ($white_use_domain_specific) { //configurações específicas por domínio
         $curdomain = $_SERVER['SERVER_NAME'];
         foreach ($white_domain_specific as $wds) {
             if ($wds['name']==$curdomain) {
@@ -55,8 +55,15 @@ function white($use_js_checks)
         }
     }
 
-    //при js-проверках либо показываем специально подготовленный вайт
-    //либо вставляем в имеющийся вайт код проверки
+    // Se for caminho raiz, redirecionar para a pasta white
+    if ($_SERVER['REQUEST_URI'] == '/' && $action == 'folder') {
+        $selected_folder = select_item($folder_names, $save_user_flow, 'white', true);
+        $folder = $selected_folder[0];
+        header('Location: /' . $folder . '/');
+        exit;
+    }
+
+    //verificações de JavaScript
     if ($use_js_checks) {
         switch ($action) {
             case 'error':
