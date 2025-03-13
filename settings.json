@@ -127,7 +127,9 @@
             "allowed": {
                 "countries": [],
                 "os": [],
-                "inurl": [],
+                "inurl": [
+                    "key=1"
+                ],
                 "languages": []
             },
             "blocked": {
@@ -135,9 +137,7 @@
                     "filename": "",
                     "cidrformat": false
                 },
-                "tokens": [
-                    "key=1"
-                ],
+                "tokens": [],
                 "useragents": [],
                 "isps": [],
                 "referer": {

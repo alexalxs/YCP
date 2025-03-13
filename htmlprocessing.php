@@ -82,7 +82,13 @@ function load_landing($url)
         if (!empty($html)) {
             // Processar o HTML carregado diretamente
             $baseurl = $url;
-            $html = rewrite_relative_urls($html, $baseurl);
+            
+            // Adicionar base href antes de reescrever as URLs relativas
+            $html = preg_replace('/<head[^>]*>/', '<head><base href="/' . $baseurl . '/">', $html);
+            
+            // Processar formulários para adicionar campo oculto de oferta
+            $offer_name = basename($url);
+            $html = preg_replace('/<form([^>]*)>/i', '<form$1><input type="hidden" name="oferta" value="' . $offer_name . '">', $html);
             
             // Adicionar script de conversão se necessário
             if (file_exists('scripts/conversion_tracker.js')) {
@@ -94,23 +100,14 @@ function load_landing($url)
                 }
             }
             
-            // Processar formulários para adicionar campo oculto de oferta
-            $offer_name = basename($url);
-            $html = preg_replace('/<form([^>]*)>/i', '<form$1><input type="hidden" name="oferta" value="' . $offer_name . '">', $html);
-            
             return $html;
-        } else {
-            // Se o arquivo existe mas está vazio, tenta o método tradicional
-            $fullpath = get_abs_from_rel($url);
-            $fpwqs = get_abs_from_rel($url,true);
-            $html = get_html($fpwqs);
         }
-    } else {
-        // Método tradicional
-        $fullpath = get_abs_from_rel($url);
-        $fpwqs = get_abs_from_rel($url,true);
-        $html = get_html($fpwqs);
     }
+    
+    // Método tradicional para casos onde o arquivo não existe diretamente
+    $fullpath = get_abs_from_rel($url);
+    $fpwqs = get_abs_from_rel($url,true);
+    $html = get_html($fpwqs);
     
     if (empty($html)) {
         return "Error: Unable to load content from $url";
@@ -135,16 +132,11 @@ function load_landing($url)
 
     //если мы будем подменять ленд при переходе на страницу Спасибо, то Спасибо надо открывать в новом окне
     if ($replace_landing) {
-        $replacelandurl = replace_all_macros($replace_landing_address); //заменяем макросы
-        $replacelandurl = add_subs_to_link($replacelandurl); //добавляем сабы
+        $replacelandurl = replace_all_macros($replace_landing_address);
+        $replacelandurl = add_subs_to_link($replacelandurl);
         $html = insert_file_content_with_replace($html, 'replacelanding.js', '</body>', '{REDIRECT}', $replacelandurl);
     }
     
-    // Código adicional para garantir que o conteúdo seja exibido corretamente
-    if ($images_lazy_load) {
-        $html = add_lazy_load($html);
-    }
-
     return $html;
 }
 
@@ -266,26 +258,19 @@ function load_white_content($url, $add_js_check)
     $is_custom_offer = false;
     $custom_path = '';
     
-    // Verificar se é uma pasta white personalizada
+    // Verificar se é uma pasta white personalizada ou a própria pasta white
     if (file_exists('white/' . $url) && is_dir('white/' . $url)) {
         $is_custom_white = true;
         $custom_path = 'white/' . $url;
     } 
-    // Verificar se é uma pasta branca direta
-    elseif (file_exists('branca') && is_dir('branca')) {
+    elseif (file_exists('white') && is_dir('white') && (empty($url) || $url == 'white' || $url == '/')) {
         $is_custom_white = true;
-        $custom_path = 'branca';
+        $custom_path = 'white';
     }
-    
-    // Verificar se é uma pasta de oferta personalizada
-    if (file_exists('offers/' . $url) && is_dir('offers/' . $url)) {
+    // Verificar se é uma pasta offers
+    elseif (file_exists('offers/' . $url) && is_dir('offers/' . $url)) {
         $is_custom_offer = true;
         $custom_path = 'offers/' . $url;
-    }
-    // Verificar se é uma pasta oferta direta
-    elseif (file_exists('oferta1') && is_dir('oferta1')) {
-        $is_custom_offer = true;
-        $custom_path = 'oferta1';
     }
     
     // Se for uma pasta personalizada, carregar o index.html dela
@@ -295,10 +280,16 @@ function load_white_content($url, $add_js_check)
         if (file_exists($index_path)) {
             $html = file_get_contents($index_path);
             
-            // Definir o caminho base para os recursos
-            $baseurl = $custom_path;
+            // Adicionar base href para garantir que os recursos sejam carregados corretamente
+            $html = preg_replace('/<head[^>]*>/', '<head><base href="/' . $custom_path . '/">', $html);
             
-            // Adicionar script de conversão de lead
+            // Processar formulários para adicionar campo oculto de oferta se for uma oferta
+            if ($is_custom_offer) {
+                $offer_name = basename($custom_path);
+                $html = preg_replace('/<form([^>]*)>/i', '<form$1><input type="hidden" name="oferta" value="' . $offer_name . '">', $html);
+            }
+            
+            // Adicionar script de conversão de lead se necessário
             if (file_exists('scripts/conversion_tracker.js')) {
                 $script_content = file_get_contents('scripts/conversion_tracker.js');
                 if (strpos($html, '</body>') !== false) {
@@ -308,51 +299,39 @@ function load_white_content($url, $add_js_check)
                 }
             }
             
-            // Processar formulários para adicionar campo oculto de oferta
-            if ($is_custom_offer) {
-                $offer_name = basename($custom_path);
-                $html = preg_replace('/<form([^>]*)>/i', '<form$1><input type="hidden" name="oferta" value="' . $offer_name . '">', $html);
-            }
-            
-            // Reescrever URLs relativas
-            $html = rewrite_relative_urls($html, $baseurl);
-            
-            return $html;
-        } else {
-            // Se não houver index.html, retornar uma mensagem de erro
-            $html = '<html><head><title>Erro</title></head><body><h1>Erro</h1><p>Arquivo index.html não encontrado na pasta ' . $custom_path . '.</p></body></html>';
             return $html;
         }
-    } else {
-        // Comportamento original para URLs não personalizadas
-        $fullpath = get_abs_from_rel($url,true);
-        $html = get_html($fullpath);
-        $baseurl = '/'.$url.'/';
-        
-        //переписываем все относительные src и href (не начинающиеся с http)
-        $html = rewrite_relative_urls($html,$baseurl);
-        //добавляем в страницу скрипт GTM
-        $html = insert_gtm_script($html);
-        //добавляем в страницу скрипт Yandex Metrika
-        $html = insert_yandex_script($html);
-        //добавляем в страницу скрипт Facebook Pixel с событием PageView
-        if ($fb_use_pageview) {
-            $html = insert_fbpixel_script($html, 'PageView');
-        }
-
-        //если на вайте есть форма, то меняем её обработчик, чтобы у вайта и блэка была одна thankyou page
-        $html = preg_replace('/\saction=[\'\"]([^\'\"]+)[\'\"]/', " action=\"../worder.php?".http_build_query($_GET)."\"", $html);
-
-        //добавляем в <head> пару доп. метатегов
-        $html= str_replace('<head>', '<head><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex, nofollow">', $html);
-
-        //если нужно, добавляем в страницу проверку на js
-        if ($add_js_check) {
-            $html = add_js_testcode($html);
-        }
-        
-        return $html;
+    } 
+    
+    // Comportamento original para URLs não personalizadas
+    $fullpath = get_abs_from_rel($url,true);
+    $html = get_html($fullpath);
+    $baseurl = '/'.$url.'/';
+    
+    // Adicionar base href para garantir que os recursos sejam carregados corretamente
+    $html = preg_replace('/<head[^>]*>/', '<head><base href="' . $baseurl . '">', $html);
+    
+    //добавляем в страницу скрипт GTM
+    $html = insert_gtm_script($html);
+    //добавляем в страницу скрипт Yandex Metrika
+    $html = insert_yandex_script($html);
+    //добавляем в страницу скрипт Facebook Pixel с событием PageView
+    if ($fb_use_pageview) {
+        $html = insert_fbpixel_script($html, 'PageView');
     }
+
+    //если на вайте есть форма, то меняем её обработчик, чтобы у вайта и блэка была одна thankyou page
+    $html = preg_replace('/\saction=[\'\"]([^\'\"]+)[\'\"]/', " action=\"../worder.php?".http_build_query($_GET)."\"", $html);
+
+    //добавляем в <head> пару доп. метатегов
+    $html = str_replace('<head>', '<head><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex, nofollow">', $html);
+
+    //если нужно, добавляем в страницу проверку на js
+    if ($add_js_check) {
+        $html = add_js_testcode($html);
+    }
+    
+    return $html;
 }
 
 //Подгрузка контента вайта через CURL
@@ -365,10 +344,14 @@ function load_white_curl($url, $add_js_check)
     $is_custom_offer = false;
     $custom_path = '';
     
-    // Verificar se é uma pasta white personalizada
+    // Verificar se é uma pasta white personalizada ou a raiz
     if (file_exists('white/' . $url) && is_dir('white/' . $url)) {
         $is_custom_white = true;
         $custom_path = 'white/' . $url;
+    }
+    elseif (file_exists('white') && is_dir('white') && (empty($url) || $url == 'white' || $url == '/')) {
+        $is_custom_white = true;
+        $custom_path = 'white';
     }
     
     // Verificar se é uma pasta de oferta personalizada
@@ -384,6 +367,9 @@ function load_white_curl($url, $add_js_check)
         if (file_exists($index_path)) {
             $html = file_get_contents($index_path);
             $baseurl = '/' . $custom_path . '/';
+            
+            // Adicionar base href para garantir que os recursos sejam carregados corretamente
+            $html = preg_replace('/<head[^>]*>/', '<head><base href="' . $baseurl . '">', $html);
             
             // Adicionar script de conversão de lead
             if (file_exists('scripts/conversion_tracker.js')) {
@@ -403,10 +389,15 @@ function load_white_curl($url, $add_js_check)
                 $offer_name = basename($custom_path);
                 $html = preg_replace('/<form([^>]*)>/i', '<form$1><input type="hidden" name="oferta" value="' . $offer_name . '">', $html);
             }
+            
+            // Reescrever URLs relativas
+            $html = rewrite_relative_urls($html, $baseurl);
+            
+            return $html;
         } else {
             // Se não houver index.html, retornar uma mensagem de erro
             $html = '<html><head><title>Erro</title></head><body><h1>Erro</h1><p>Arquivo index.html não encontrado na pasta ' . $url . '.</p></body></html>';
-            $baseurl = '/';
+            return $html;
         }
     } else {
         // Comportamento original para URLs não personalizadas
@@ -511,7 +502,7 @@ function insert_subs_into_forms($html)
 }
 
 //переписываем все относительные src и href (не начинающиеся с http или с //)
-function rewrite_relative_urls($html,$url)
+function rewrite_relative_urls($html, $url)
 {
     // Remover barras iniciais para garantir que os links sejam relativos
     if (substr($url, 0, 1) === '/') {
@@ -519,35 +510,21 @@ function rewrite_relative_urls($html,$url)
     }
     
     // Garantir que a URL termine com uma barra
-    if (substr($url, -1) !== '/') {
+    if (substr($url, -1) !== '/' && !empty($url)) {
         $url .= '/';
     }
     
-    // Evitar duplicação de caminhos
-    if (strpos($html, $url) !== false) {
-        // Se a URL já está presente no HTML, não precisamos reescrever
-        return $html;
-    }
-    
     // Corrigir links relativos em src, href e background-image
-    $modified = preg_replace('/\ssrc=[\'\"](?!http|https|\/\/|data:)([^\'\"]+)[\'\"]/', " src=\"$url\\1\"", $html);
-    $modified = preg_replace('/\shref=[\'\"](?!http|https|mailto:|tel:|whatsapp:|#|\/\/)([^\'\"]+)[\'\"]/', " href=\"$url\\1\"", $modified);
-    $modified = preg_replace('/background-image:\s*url\([\'"]?(?!http|https|#|\/\/|data:)([^\)]+)[\'"]?\)/', "background-image: url($url\\1)", $modified);
-    
-    // Converter links absolutos para relativos (começando com /)
-    $modified = preg_replace('/\ssrc=[\'\"]\/([^\'\"]+)[\'\"]/', " src=\"$url\\1\"", $modified);
-    $modified = preg_replace('/\shref=[\'\"]\/([^\'\"]+)[\'\"]/', " href=\"$url\\1\"", $modified);
-    $modified = preg_replace('/background-image:\s*url\(\/([^\)]+)\)/', "background-image: url($url\\1)", $modified);
+    $modified = preg_replace('/\ssrc=[\'\"](?!http|https|\/\/|data:)([^\'\"]+)[\'\"]/', " src=\"/$url\\1\"", $html);
+    $modified = preg_replace('/\shref=[\'\"](?!http|https|mailto:|tel:|whatsapp:|#|\/\/)([^\'\"]+)[\'\"]/', " href=\"/$url\\1\"", $modified);
+    $modified = preg_replace('/background-image:\s*url\([\'"]?(?!http|https|#|\/\/|data:)([^\)]+)[\'"]?\)/', "background-image: url(/$url\\1)", $modified);
     
     // Corrigir links para CSS e JS
-    $modified = preg_replace('/<link[^>]+href=[\'\"](?!http|https|\/\/|data:)([^\'\"]+\.css)[\'\"][^>]*>/', "<link href=\"$url\\1\" rel=\"stylesheet\">", $modified);
-    $modified = preg_replace('/<script[^>]+src=[\'\"](?!http|https|\/\/|data:)([^\'\"]+\.js)[\'\"][^>]*><\/script>/', "<script src=\"$url\\1\"></script>", $modified);
-    
-    // Corrigir links para áudio e vídeo
-    $modified = preg_replace('/\ssrc=[\'\"](?!http|https|\/\/|data:)([^\'\"]+\.(mp3|mp4|wav|ogg))[\'\"]/', " src=\"$url\\1\"", $modified);
+    $modified = preg_replace('/<link[^>]+href=[\'\"](?!http|https|\/\/|data:)([^\'\"]+\.css)[\'\"][^>]*>/', "<link href=\"/$url\\1\" rel=\"stylesheet\">", $modified);
+    $modified = preg_replace('/<script[^>]+src=[\'\"](?!http|https|\/\/|data:)([^\'\"]+\.js)[\'\"][^>]*><\/script>/', "<script src=\"/$url\\1\"></script>", $modified);
     
     // Corrigir links para fontes
-    $modified = preg_replace('/url\([\'"]?(?!http|https|\/\/|data:)([^\'"\)]+\.(woff|woff2|ttf|eot))[\'"]?\)/', "url($url\\1)", $modified);
+    $modified = preg_replace('/url\([\'"]?(?!http|https|\/\/|data:)([^\'"\)]+\.(woff|woff2|ttf|eot))[\'"]?\)/', "url(/$url\\1)", $modified);
     
     return $modified;
 }
