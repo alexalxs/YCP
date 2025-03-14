@@ -205,7 +205,7 @@
                 "value": "Placement"
             }
         ],
-        "timezone": "Europe/Moscow"
+        "timezone": "America/Belem"
     },
     "postback": {
         "lead": "Lead",

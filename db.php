@@ -139,12 +139,45 @@ function email_exists_for_subid($subid)
 
 function add_email($subid, $email)
 {
+    if (defined('DEBUG_LOG') && DEBUG_LOG) {
+        error_log("Iniciando add_email para subid=$subid e email=$email");
+    }
+    
     $dataDir = __DIR__ . "/logs";
     $leadsStore = new Store("leads", $dataDir);
     $lead = $leadsStore->findOneBy([["subid", "=", $subid]]);
-    if ($lead === null) return;
-    $lead["email"] = $email;
-    $leadsStore->update($lead);
+    
+    if (defined('DEBUG_LOG') && DEBUG_LOG) {
+        error_log("Lead encontrado: " . ($lead === null ? "NULL" : json_encode($lead)));
+    }
+    
+    if ($lead === null) {
+        if (defined('DEBUG_LOG') && DEBUG_LOG) {
+            error_log("ERRO: Lead não encontrado para subid=$subid. Email não será salvo.");
+        }
+        return false;
+    }
+    
+    try {
+        $lead["email"] = $email;
+        $result = $leadsStore->update($lead);
+        
+        if (defined('DEBUG_LOG') && DEBUG_LOG) {
+            error_log("Resultado da atualização: " . ($result ? "SUCESSO" : "FALHA"));
+            
+            // Verificar se o email foi realmente salvo
+            $updatedLead = $leadsStore->findOneBy([["subid", "=", $subid]]);
+            error_log("Lead após atualização: " . json_encode($updatedLead));
+            error_log("Email foi salvo? " . (isset($updatedLead["email"]) && $updatedLead["email"] === $email ? "SIM" : "NÃO"));
+        }
+        
+        return $result;
+    } catch (Exception $e) {
+        if (defined('DEBUG_LOG') && DEBUG_LOG) {
+            error_log("ERRO ao salvar email: " . $e->getMessage());
+        }
+        return false;
+    }
 }
 
 function add_lpctr($subid, $preland)

@@ -1,7 +1,8 @@
 # Processamento de Leads por Email
 
 ## To Fix (deve alterar a funcionalidade pois está incorreta):
-
+- **Armazenamento Local**: Registra o email no banco de dados usando a função
+  `add_email()`
 ## To Do (deve criar a funcionalidade pois está faltando):
 
 ## Test (não deve alterar a funcionalidade pois está em fase de teste pelo usuário):
@@ -21,8 +22,6 @@
 - **Validação de Email**: Verifica se o email recebido é válido utilizando
   `filter_var()`
 - **Gestão de SubID**: Usa o SubID existente ou gera um novo se necessário
-- **Armazenamento Local**: Registra o email no banco de dados usando a função
-  `add_email()`
 - **Proxy para Webhook**: Envia os dados para o webhook externo do Autonami via
   cURL
 - **CORS Habilitado**: Configurado para permitir solicitações de diferentes

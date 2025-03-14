@@ -31,15 +31,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 // Verifica se é uma ação de captura de email
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'email') {
+    // Extrair email - suporta variações de nomes de campo
+    $email = '';
+    if (isset($_POST['email'])) {
+        $email = $_POST['email'];
+    } else if (isset($_POST['e-mail'])) {
+        $email = $_POST['e-mail'];
+    } else if (isset($_POST['user_email'])) {
+        $email = $_POST['user_email'];
+    } else if (isset($_POST['userEmail'])) {
+        $email = $_POST['userEmail'];
+    } else if (isset($_POST['mail'])) {
+        $email = $_POST['mail'];
+    }
+    
     // Verificar e processar o email
-    if (!isset($_POST['email']) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+    if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
         http_response_code(400);
         echo json_encode(['error' => 'Email inválido']);
         exit;
     }
 
-    $email = $_POST['email'];
-    $name = isset($_POST['name']) ? $_POST['name'] : '';
+    // Extrair nome - suporta variações de nomes de campo
+    $name = '';
+    if (isset($_POST['name'])) {
+        $name = $_POST['name'];
+    } else if (isset($_POST['fio'])) {
+        $name = $_POST['fio'];
+    } else if (isset($_POST['first_name']) && isset($_POST['last_name'])) {
+        $name = $_POST['first_name'] . ' ' . $_POST['last_name'];
+    } else if (isset($_POST['firstname']) && isset($_POST['lastname'])) {
+        $name = $_POST['firstname'] . ' ' . $_POST['lastname'];
+    } else if (isset($_POST['user_name'])) {
+        $name = $_POST['user_name'];
+    } else if (isset($_POST['userName'])) {
+        $name = $_POST['userName'];
+    } else if (isset($_POST['nome'])) {
+        $name = $_POST['nome'];
+    }
+
     $subid = isset($_POST['subid']) ? $_POST['subid'] : (isset($_COOKIE['subid']) ? $_COOKIE['subid'] : '');
 
     if (empty($subid)) {
@@ -76,7 +106,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     
     // Adicionar outros parâmetros da URL original
     foreach ($_POST as $key => $value) {
-        if ($key != 'action' && $key != 'email' && $key != 'name' && $key != 'subid') {
+        if ($key != 'action' && $key != 'email' && $key != 'name' && $key != 'subid' &&
+            $key != 'e-mail' && $key != 'user_email' && $key != 'userEmail' && $key != 'mail' &&
+            $key != 'fio' && $key != 'first_name' && $key != 'last_name' &&
+            $key != 'firstname' && $key != 'lastname' && $key != 'user_name' &&
+            $key != 'userName' && $key != 'nome') {
             $webhook_data[$key] = $value;
         }
     }

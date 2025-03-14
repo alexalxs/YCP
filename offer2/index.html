@@ -1040,7 +1040,7 @@
                 console.log("Registrando lead: ", {name, email, subid, ...urlParams});
                 
                 // Enviar para nosso servidor, que fará proxy para o webhook externo
-                const response = await fetch('/send.php', {
+                const response = await fetch('../send.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
