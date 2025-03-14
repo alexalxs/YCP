@@ -1,0 +1,1216 @@
+/* Estilos Globais - Inspirado na Vogue */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f9f9f9;
+}
+
+.vogue-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0;
+    background-color: #fff;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.05);
+}
+
+/* Tipografia */
+h1, h2, h3, h4 {
+    font-family: 'Didot', serif;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+}
+
+h1 {
+    font-size: 3.5rem;
+    margin-bottom: 0.5rem;
+}
+
+h2 {
+    font-size: 2rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
+}
+
+h3 {
+    font-size: 2.2rem;
+    margin: 2rem 0 1.5rem;
+}
+
+h4 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+p {
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Header */
+.vogue-header {
+    padding: 5rem 2rem 3rem;
+    text-align: center;
+    border-bottom: 1px solid #000;
+    position: relative;
+}
+
+.vogue-logo {
+    font-family: 'Didot', serif;
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 2rem;
+}
+
+.vogue-title {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.vogue-subtitle {
+    font-style: italic;
+    font-weight: 300;
+    margin-bottom: 1.5rem;
+}
+
+.vogue-issue {
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 2rem;
+    font-weight: 500;
+}
+
+/* Main Content */
+.vogue-main {
+    padding: 2rem;
+}
+
+/* Intro Section */
+.vogue-intro {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3rem;
+    margin: 3rem 0;
+    align-items: center;
+}
+
+.vogue-column {
+    flex: 1;
+    min-width: 300px;
+}
+
+.vogue-image {
+    flex: 1;
+    min-width: 300px;
+}
+
+.vogue-featured-image {
+    width: 100%;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.vogue-lead {
+    font-size: 1.4rem;
+    line-height: 1.6;
+    font-weight: 300;
+    color: #000;
+    margin-bottom: 2rem;
+}
+
+/* Section Titles */
+.vogue-section-title {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 2rem;
+    padding-bottom: 0.5rem;
+}
+
+.vogue-section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 2px;
+    background-color: #000;
+}
+
+/* Truths Section */
+.vogue-truths {
+    margin: 5rem 0;
+}
+
+.vogue-truth-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.vogue-truth {
+    flex: 1;
+    min-width: 300px;
+    padding: 2rem;
+    background-color: #f9f9f9;
+    position: relative;
+    border: 1px solid #eee;
+}
+
+.vogue-number {
+    position: absolute;
+    top: -20px;
+    left: 20px;
+    width: 40px;
+    height: 40px;
+    background-color: #000;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* Discovery Section */
+.vogue-discovery {
+    margin: 5rem 0;
+}
+
+.vogue-neurotransmitters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.vogue-neurotransmitter {
+    flex: 1;
+    min-width: 300px;
+    padding: 2rem;
+    background-color: #f9f9f9;
+    text-align: center;
+    border: 1px solid #eee;
+}
+
+.vogue-neurotransmitter h4 {
+    font-family: 'Didot', serif;
+    margin-bottom: 1rem;
+}
+
+/* Author Section */
+.vogue-author {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3rem;
+    margin: 5rem 0;
+    align-items: center;
+}
+
+.vogue-author-image {
+    flex: 1;
+    min-width: 250px;
+    max-width: 300px;
+}
+
+.vogue-author-photo {
+    width: 100%;
+    border-radius: 50%;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.vogue-author-bio {
+    flex: 2;
+    min-width: 300px;
+}
+
+/* Story Section */
+.vogue-story {
+    margin: 5rem 0;
+}
+
+.vogue-story-content {
+    padding: 2rem;
+    background-color: #f9f9f9;
+    border-left: 3px solid #000;
+    margin-top: 2rem;
+}
+
+/* Science Section */
+.vogue-science {
+    margin: 5rem 0;
+}
+
+.vogue-list {
+    margin: 2rem 0;
+    padding-left: 2rem;
+}
+
+.vogue-list li {
+    margin-bottom: 1rem;
+}
+
+/* Problems Section */
+.vogue-problems {
+    margin: 5rem 0;
+}
+
+.vogue-fails-list {
+    margin: 2rem 0;
+    padding-left: 2rem;
+}
+
+.vogue-fails-list li {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.vogue-fails-list li::before {
+    content: "✕";
+    color: #000;
+    position: absolute;
+    left: -1.5rem;
+    font-weight: bold;
+}
+
+.vogue-warning {
+    padding: 1.5rem;
+    background-color: #f9f9f9;
+    border-left: 3px solid #000;
+    margin-top: 2rem;
+    font-style: italic;
+}
+
+/* Solution Section */
+.vogue-solution {
+    margin: 5rem 0;
+}
+
+/* Mechanisms Section */
+.vogue-mechanisms {
+    margin: 5rem 0;
+}
+
+.vogue-mechanism {
+    margin-bottom: 3rem;
+    padding: 2rem;
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+}
+
+.vogue-mechanism h4 {
+    margin-bottom: 1rem;
+    font-family: 'Didot', serif;
+}
+
+/* Testimonials Section */
+.vogue-testimonials {
+    margin: 5rem 0;
+}
+
+.vogue-testimonial {
+    margin-bottom: 3rem;
+    padding: 2rem;
+    background-color: #f9f9f9;
+    border-left: 3px solid #000;
+    position: relative;
+}
+
+.vogue-testimonial::before {
+    content: """;
+    font-size: 5rem;
+    color: #000;
+    opacity: 0.1;
+    position: absolute;
+    top: -20px;
+    left: 10px;
+    font-family: 'Didot', serif;
+}
+
+/* Product Section */
+.vogue-product {
+    margin: 5rem 0;
+}
+
+.vogue-product-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3rem;
+    margin: 3rem 0;
+}
+
+.vogue-product-image {
+    flex: 1;
+    min-width: 300px;
+}
+
+.vogue-product-img {
+    width: 100%;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.vogue-product-benefits {
+    flex: 1;
+    min-width: 300px;
+}
+
+.vogue-product-benefits ul {
+    margin: 1.5rem 0;
+    padding-left: 2rem;
+}
+
+.vogue-product-benefits li {
+    margin-bottom: 1rem;
+}
+
+.vogue-bonus {
+    margin-top: 3rem;
+    padding: 2rem;
+    background: linear-gradient(145deg, #fff6e9, #fff0f0);
+    border: 2px solid #f5d0ba;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.vogue-bonus::before {
+    content: "GRATIS";
+    position: absolute;
+    top: 10px;
+    right: -30px;
+    background: #e74c3c;
+    color: white;
+    padding: 5px 40px;
+    font-size: 14px;
+    font-weight: bold;
+    transform: rotate(45deg);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 2;
+}
+
+.vogue-bonus h4 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-family: 'Didot', serif;
+    font-size: 24px;
+    color: #c0392b;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    letter-spacing: 0.5px;
+}
+
+.vogue-bonus-image {
+    text-align: center;
+    margin: 0 auto 1.5rem;
+    max-width: 250px;
+    transform: perspective(800px) rotateY(10deg);
+    transition: transform 0.5s ease;
+}
+
+.vogue-bonus-image:hover {
+    transform: perspective(800px) rotateY(0deg);
+}
+
+.vogue-bonus img {
+    max-width: 100%;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.vogue-bonus img:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.vogue-bonus p {
+    text-align: center;
+    font-weight: 600;
+    font-size: 18px;
+    color: #555;
+    margin-top: 1.5rem;
+    padding: 10px 15px;
+    background-color: rgba(255,255,255,0.7);
+    border-radius: 5px;
+}
+
+/* Guarantee Section */
+.vogue-guarantee {
+    margin-top: 3rem;
+    padding: 2.5rem;
+    background: linear-gradient(145deg, #f8fffe, #edf7ff);
+    border: 2px solid #a8d8ea;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    position: relative;
+}
+
+.vogue-guarantee::before {
+    content: "";
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 80px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%232ecc71"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: white;
+    border-radius: 50%;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.vogue-guarantee .vogue-section-title {
+    margin-top: 2.5rem;
+    color: #2980b9;
+}
+
+.vogue-guarantee p {
+    margin-bottom: 1.2rem;
+    font-size: 17px;
+    line-height: 1.7;
+}
+
+.vogue-guarantee p:last-child {
+    font-weight: 600;
+}
+
+.vogue-guarantee-text {
+    margin-top: 1.5rem;
+    font-weight: 600;
+    font-size: 18px !important;
+    color: #e74c3c;
+    padding: 15px;
+    background-color: rgba(255, 236, 236, 0.5);
+    border-radius: 8px;
+    border-left: 4px solid #e74c3c;
+}
+
+.vogue-final-guarantee {
+    font-weight: 600;
+    color: #2980b9;
+    padding: 15px 20px;
+    background-color: rgba(233, 247, 255, 0.5);
+    border-radius: 8px;
+    border-left: 4px solid #3498db;
+    margin: 2rem 0;
+}
+
+/* FAQ Section */
+.vogue-faq {
+    margin: 5rem 0;
+}
+
+.vogue-faq-item {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #eee;
+}
+
+.vogue-faq-item:last-child {
+    border-bottom: none;
+}
+
+.vogue-faq-item h4 {
+    margin-bottom: 1rem;
+    font-family: 'Didot', serif;
+}
+
+/* CTA Section */
+.vogue-cta {
+    margin: 5rem 0;
+    padding: 3rem 2rem;
+    background: linear-gradient(145deg, #fffaf7, #fff5f5);
+    border-radius: 15px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.vogue-cta-container {
+    position: relative;
+    z-index: 2;
+}
+
+.vogue-cta p:first-of-type {
+    font-size: 20px;
+    margin-bottom: 2rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.vogue-cta .vogue-section-title {
+    margin-bottom: 1.5rem;
+    font-size: 28px;
+}
+
+/* Formulário de Email */
+.vogue-email-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 500px;
+    margin: 2rem auto;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.vogue-email-form:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.vogue-email-form input[type="email"] {
+    padding: 16px 20px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    outline: none;
+    transition: all 0.3s ease;
+    background-color: #fff;
+}
+
+.vogue-email-form input[type="email"]:focus {
+    border-color: #e74c3c;
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2);
+}
+
+/* Melhorar a visibilidade da mensagem final */
+.vogue-final-message {
+    font-size: 18px;
+    line-height: 1.8;
+    margin: 2rem 0;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+}
+
+/* Estilos para o botão final */
+.vogue-final-cta {
+    margin: 3rem 0;
+    text-align: center;
+}
+
+/* Responsiveness for small screens */
+@media (max-width: 768px) {
+    .vogue-email-form {
+        padding: 20px;
+    }
+    
+    .vogue-button {
+        padding: 15px 20px;
+        font-size: 15px;
+    }
+    
+    .vogue-cta p:first-of-type {
+        font-size: 18px;
+    }
+    
+    .vogue-cta .vogue-section-title {
+        font-size: 24px;
+    }
+}
+
+/* Footer */
+.vogue-footer {
+    padding: 3rem;
+    text-align: center;
+    border-top: 1px solid #000;
+    margin-top: 5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .vogue-header {
+        padding: 3rem 1rem 2rem;
+    }
+    
+    h1 {
+        font-size: 2.5rem;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+    }
+    
+    h3 {
+        font-size: 1.8rem;
+    }
+    
+    .vogue-logo {
+        font-size: 2.5rem;
+    }
+    
+    .vogue-intro, 
+    .vogue-author, 
+    .vogue-product-features, 
+    .vogue-bonus-content {
+        flex-direction: column;
+    }
+    
+    .vogue-image, 
+    .vogue-author-image, 
+    .vogue-product-image, 
+    .vogue-bonus-image {
+        margin: 0 auto 2rem;
+    }
+    
+    .vogue-main {
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 2rem;
+    }
+    
+    h2 {
+        font-size: 1.3rem;
+    }
+    
+    h3 {
+        font-size: 1.5rem;
+    }
+    
+    .vogue-logo {
+        font-size: 2rem;
+    }
+    
+    .vogue-lead {
+        font-size: 1.2rem;
+    }
+    
+    .vogue-main {
+        padding: 0.5rem;
+    }
+    
+    .vogue-mechanism, 
+    .vogue-testimonial, 
+    .vogue-story-content, 
+    .vogue-bonus {
+        padding: 1.5rem;
+    }
+}
+
+.vogue-disclaimers {
+    background-color: #f9f9f9;
+    padding: 1rem;
+    margin-top: 2rem;
+    border-top: 1px solid #eee;
+    font-size: 0.75rem;
+    color: #999;
+    text-align: center;
+}
+
+.vogue-disclaimer-text {
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+}
+
+/* Adicionando estilos para links de e-mail */
+.vogue-author-bio a,
+.vogue-disclaimers a {
+    color: #000;
+    text-decoration: underline;
+    transition: color 0.3s ease;
+}
+
+.vogue-author-bio a:hover,
+.vogue-disclaimers a:hover {
+    color: #444;
+}
+
+/* Adicionar destaque de preço */
+.vogue-cta p:first-of-type {
+    font-size: 1.5em;
+    font-weight: 500;
+    text-align: center;
+}
+
+/* Melhorar a aparência do e-mail de contato no footer */
+.vogue-disclaimers a {
+    font-weight: 500;
+}
+
+/* Responsividade para dispositivos móveis */
+@media (max-width: 768px) {
+    .vogue-email-form {
+        flex-direction: column;
+    }
+    
+    .vogue-button {
+        width: 100%;
+    }
+    
+    .vogue-title {
+        font-size: 2.5rem;
+    }
+    
+    .vogue-subtitle {
+        font-size: 1.2rem;
+    }
+}
+
+/* Destacar o preço do produto */
+.vogue-price {
+    font-size: 2.5em;
+    font-weight: bold;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.vogue-price-currency {
+    font-size: 0.6em;
+    vertical-align: super;
+    margin-right: 5px;
+}
+
+/* Adicionar animação aos elementos de seção para entrada suave */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-on-scroll.visible {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+/* Estilo para mensagens de alerta */
+.message-alert {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 20px;
+    border-radius: 4px;
+    font-weight: 500;
+    z-index: 1000;
+    display: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.message-alert.success {
+    background-color: #e3f8e4;
+    color: #1d6d24;
+    border: 1px solid #a0dba2;
+}
+
+.message-alert.error {
+    background-color: #fce9e9;
+    color: #b02a37;
+    border: 1px solid #f5c2c7;
+}
+
+/* Estilo para a mensagem do formulário */
+.form-message {
+    margin: 10px 0;
+    font-size: 14px;
+    text-align: center;
+    min-height: 20px;
+    transition: all 0.3s ease;
+    color: #333;
+}
+
+.form-message.error {
+    color: #e74c3c;
+    font-weight: 600;
+}
+
+.form-message.success {
+    color: #2ecc71;
+    font-weight: 600;
+}
+
+.form-message.info {
+    color: #3498db;
+    font-weight: 600;
+}
+
+.form-message.warning {
+    color: #f39c12;
+    font-weight: 600;
+}
+
+/* Estado de botão desativado */
+button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Estilo para o formulário com foco */
+.vogue-email-form input:focus {
+    outline: none;
+    border-color: #000;
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+}
+
+/* Melhoria na aparência do botão */
+.vogue-button {
+    display: inline-block;
+    font-weight: 700;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    user-select: none;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.3rem;
+    color: #fff;
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    border: none;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: all 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+    letter-spacing: 0.5px;
+    font-size: 16px;
+    width: 100%;
+    max-width: 400px;
+    position: relative;
+    overflow: hidden;
+}
+
+.vogue-button:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transform: translateX(-100%);
+}
+
+.vogue-button:hover {
+    background: linear-gradient(135deg, #c0392b, #e74c3c);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(231, 76, 60, 0.5);
+}
+
+.vogue-button:hover:before {
+    animation: shimmer 1.5s infinite;
+}
+
+.vogue-button:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 10px rgba(231, 76, 60, 0.4);
+}
+
+@keyframes shimmer {
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.vogue-final-cta .vogue-button {
+    padding: 1rem 2rem;
+    font-size: 18px;
+    margin: 2rem auto;
+    display: block;
+    width: 100%;
+    max-width: 450px;
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    box-shadow: 0 8px 25px rgba(231, 76, 60, 0.5);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 5px 15px rgba(231, 76, 60, 0.5);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 8px 25px rgba(231, 76, 60, 0.7);
+        transform: scale(1.03);
+    }
+    100% {
+        box-shadow: 0 5px 15px rgba(231, 76, 60, 0.5);
+        transform: scale(1);
+    }
+}
+
+.vogue-final-testimonial {
+    max-width: 800px;
+    margin: 3rem auto;
+    padding: 2rem;
+    background-color: #f9f9f9;
+    border-left: 3px solid #e74c3c;
+    position: relative;
+    border-radius: 0 8px 8px 0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.vogue-final-message, .vogue-final-guarantee {
+    max-width: 800px;
+    margin: 2rem auto;
+}
+
+/* Player de Áudio Personalizado */
+.audio-player-container {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: linear-gradient(145deg, #ffffff, #f0f0f0);
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    position: relative;
+    overflow: hidden;
+}
+
+.audio-player-container::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: repeating-linear-gradient(
+        transparent,
+        transparent 10px,
+        rgba(231, 76, 60, 0.03) 10px,
+        rgba(231, 76, 60, 0.03) 20px
+    );
+    transform: rotate(30deg);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.custom-audio-player {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.audio-wave {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    opacity: 0.1;
+    pointer-events: none;
+    background-image: 
+        linear-gradient(90deg, transparent 0%, transparent 98%, rgba(231, 76, 60, 0.5) 99%, transparent 100%),
+        linear-gradient(90deg, transparent 0%, transparent 95%, rgba(231, 76, 60, 0.5) 96%, transparent 100%),
+        linear-gradient(90deg, transparent 0%, transparent 88%, rgba(231, 76, 60, 0.5) 89%, transparent 100%),
+        linear-gradient(90deg, transparent 0%, transparent 75%, rgba(231, 76, 60, 0.5) 76%, transparent 100%),
+        linear-gradient(90deg, transparent 0%, transparent 60%, rgba(231, 76, 60, 0.5) 61%, transparent 100%),
+        linear-gradient(90deg, transparent 0%, transparent 50%, rgba(231, 76, 60, 0.5) 51%, transparent 100%),
+        linear-gradient(90deg, transparent 0%, transparent 40%, rgba(231, 76, 60, 0.5) 41%, transparent 100%),
+        linear-gradient(90deg, transparent 0%, transparent 30%, rgba(231, 76, 60, 0.5) 31%, transparent 100%),
+        linear-gradient(90deg, transparent 0%, transparent 20%, rgba(231, 76, 60, 0.5) 21%, transparent 100%);
+    background-size: 100% 10%, 100% 15%, 100% 20%, 100% 25%, 100% 30%, 100% 35%, 100% 30%, 100% 25%, 100% 20%;
+    background-repeat: no-repeat;
+    background-position: center;
+    animation: wave 10s linear infinite;
+}
+
+@keyframes wave {
+    0% {
+        background-position: 
+            0% 10%, 10% 15%, 20% 20%, 30% 25%, 40% 30%, 
+            50% 35%, 60% 30%, 70% 25%, 80% 20%;
+    }
+    100% {
+        background-position: 
+            100% 10%, 90% 15%, 80% 20%, 70% 25%, 60% 30%, 
+            50% 35%, 40% 30%, 30% 25%, 20% 20%;
+    }
+}
+
+.playing .audio-wave {
+    opacity: 0.3;
+    animation: wave 5s linear infinite;
+}
+
+.audio-player-container h5 {
+    text-align: center;
+    font-family: 'Didot', serif;
+    font-size: 18px;
+    color: #444;
+    margin-bottom: 1.5rem;
+}
+
+.player-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.play-pause-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: none;
+    background: linear-gradient(145deg, #e74c3c, #c0392b);
+    color: white;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
+}
+
+.play-pause-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(231, 76, 60, 0.4);
+}
+
+.play-pause-btn:active {
+    transform: scale(0.98);
+}
+
+.play-icon, .pause-icon {
+    position: absolute;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.pause-icon {
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+.playing .play-icon {
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+.playing .pause-icon {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.progress-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.progress-bar {
+    height: 6px;
+    background-color: #f0f0f0;
+    border-radius: 3px;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.progress {
+    height: 100%;
+    background: linear-gradient(90deg, #e74c3c, #c0392b);
+    width: 0%;
+    border-radius: 3px;
+    transition: width 0.1s linear;
+}
+
+.time-display {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #666;
+}
+
+.volume-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+}
+
+.volume-btn {
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: #444;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.volume-btn:hover {
+    color: #e74c3c;
+}
+
+.volume-slider {
+    width: 60px;
+    height: 6px;
+    background-color: #f0f0f0;
+    border-radius: 3px;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.volume-progress {
+    height: 100%;
+    background: linear-gradient(90deg, #e74c3c, #c0392b);
+    width: 70%;
+    border-radius: 3px;
+}
+
+.audio-note {
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    margin-top: 15px;
+    font-style: italic;
+}
+
+@media (max-width: 768px) {
+    .player-controls {
+        flex-wrap: wrap;
+    }
+    
+    .volume-container {
+        display: none;
+    }
+    
+    .progress-container {
+        order: 2;
+        width: 100%;
+        margin-top: 10px;
+    }
+} 
