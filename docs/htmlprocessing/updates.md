@@ -70,3 +70,66 @@ Para ajustar o tempo de expiração do cache, modifique o parâmetro
 - O sistema verifica automaticamente a validade do cache com base no tempo de
   modificação do arquivo
 - O diretório de cache é criado automaticamente se não existir
+
+## Diagrama de Sequência - Sistema de Cache e Processamento de Conteúdo
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant Handler as Content Handler
+    participant Cache as Cache System
+    participant FileSystem as File System
+    participant Processor as HTML Processor
+    participant Storage as Cache Storage
+
+    User->>Handler: Requisita Conteúdo
+    
+    Handler->>Cache: get_cached_content(url)
+    
+    alt Conteúdo em Cache
+        Cache->>Storage: Verifica MD5(url)
+        Storage-->>Cache: Retorna Conteúdo Cached
+        Cache-->>Handler: Retorna Conteúdo
+    else Cache Miss
+        Cache-->>Handler: Cache Miss
+        Handler->>FileSystem: Carrega Conteúdo
+        FileSystem-->>Handler: Conteúdo Raw
+        
+        Handler->>Processor: Processa HTML
+        Processor->>Processor: Ajusta Links
+        Processor->>Processor: Corrige Resources
+        Processor-->>Handler: HTML Processado
+        
+        Handler->>Storage: save_cached_content(url, content)
+        Storage-->>Handler: Cache Saved
+    end
+    
+    Handler-->>User: Retorna Conteúdo Processado
+```
+
+## Estados do Sistema Durante o Processamento
+
+1. **Estado Inicial**
+   - Sistema recebe requisição
+   - Cache não verificado
+   - Conteúdo não processado
+
+2. **Estado de Verificação de Cache**
+   - Verificando existência no cache
+   - Validando tempo de expiração
+   - Checando integridade do arquivo
+
+3. **Estado de Processamento**
+   - Carregando conteúdo do sistema de arquivos
+   - Processando HTML
+   - Ajustando links e recursos
+
+4. **Estado de Armazenamento**
+   - Salvando conteúdo processado
+   - Atualizando cache
+   - Definindo tempo de expiração
+
+5. **Estado Final**
+   - Conteúdo processado
+   - Cache atualizado
+   - Resposta enviada ao usuário

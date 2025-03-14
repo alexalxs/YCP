@@ -2,8 +2,6 @@
 
 ## To Fix (deve alterar a funcionalidade pois está incorreta):
 
-
-
 ## To Do (deve criar a funcionalidade pois está faltando):
 
 ## Test (não deve alterar a funcionalidade pois está em fase de teste pelo usuário):
@@ -31,6 +29,7 @@
   habilitado
 - **Armazenamento Local**: Registra o email no banco de dados usando a função
   `add_email()`
+
 ### Fluxo de Operação
 
 1. Frontend envia solicitação POST para `/send.php` com action=email
