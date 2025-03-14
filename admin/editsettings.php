@@ -1988,6 +1988,51 @@ a <pre>&lt;input type="hidden" name="utm_campaign" value="MyCampaign"/&gt;</pre>
 </div>
 
 <hr>
+<h4>#10 Configurações de Desenvolvimento</h4>
+<div class="form-group-inner">
+    <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+            <label class="login2 pull-left pull-left-pro">Cache de Páginas: </label>
+        </div>
+        <div class="col-lg-9 col-md-6 col-sm-6 col-xs-12">
+            <div class="bt-df-checkbox pull-left">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="i-checks pull-left">
+                            <label>
+                                <input type="radio" <?=!$conf->get('debug.disable_cache', false)?'checked':''?> value="false" name="debug.disable_cache">
+                                <i></i> Ativado (recomendado para produção)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="i-checks pull-left">
+                            <label>
+                                <input type="radio" <?=$conf->get('debug.disable_cache', false)?'checked':''?> value="true" name="debug.disable_cache"> 
+                                <i></i> Desativado (para desenvolvimento)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <p class="help-block">
+                            <small>Quando desativado, as páginas não serão cacheadas. Use durante o desenvolvimento para ver alterações em tempo real.</small>
+                        </p>
+                        <p>
+                            <a href="../clear_cache.php" target="_blank" class="btn btn-xs btn-warning">Limpar Cache</a>
+                            <small class="help-block">Clique para limpar o cache manualmente (útil quando você ativa o cache novamente).</small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr>
 <div class="form-group-inner">
 <div class="login-btn-inner">
 <div class="row">
@@ -1999,18 +2044,7 @@ a <pre>&lt;input type="hidden" name="utm_campaign" value="MyCampaign"/&gt;</pre>
 </div>
 </div>
 </div>
-</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    </div>
+
 </form>
 
 </div>

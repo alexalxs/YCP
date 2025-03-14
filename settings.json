@@ -59,7 +59,7 @@
             "folder": {
                 "names": [
                     "offer1",
-                    "offer2"
+                    "offer1"
                 ],
                 "conversions": {
                     "script": "send.php",
@@ -222,5 +222,11 @@
                 ]
             }
         ]
+    },
+    "debug": {
+        "disable_cache": false,
+        "disable": {
+            "cache": true
+        }
     }
 }

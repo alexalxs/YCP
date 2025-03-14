@@ -115,4 +115,11 @@ if (!defined('DEBUG_LOG')) {
     define('DEBUG_LOG', true);
 }
 
+// Adiciona constante para desabilitar cache durante desenvolvimento
+if (!defined('DEBUG_DISABLE_CACHE')) {
+    // Carrega a configuração do settings.json, com fallback para false
+    $disable_cache = $conf->get('debug.disable_cache', false);
+    define('DEBUG_DISABLE_CACHE', $disable_cache);
+}
+
 ?>

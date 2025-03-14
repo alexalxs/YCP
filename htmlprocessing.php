@@ -7,6 +7,11 @@ require_once 'htmlinject.php';
 require_once 'url.php';
 require_once 'cookies.php';
 
+// Defina como true para desabilitar o cache durante o desenvolvimento
+if (!defined('DEBUG_DISABLE_CACHE')) {
+    define('DEBUG_DISABLE_CACHE', false);
+}
+
 //Подгрузка контента блэк проклы из другой папки через CURL
 function load_prelanding($url, $land_number)
 {
@@ -821,6 +826,11 @@ function add_lazy_load($html) {
 
 // Funções de cache para conteúdo
 function get_cached_content($url, $cache_duration = 3600) {
+    // Se DEBUG_DISABLE_CACHE estiver ativado, sempre retorna false para forçar regeneração
+    if (defined('DEBUG_DISABLE_CACHE') && DEBUG_DISABLE_CACHE === true) {
+        return false;
+    }
+    
     $cache_dir = __DIR__ . '/cache';
     $cache_file = $cache_dir . '/' . md5($url) . '.html';
     
@@ -838,6 +848,11 @@ function get_cached_content($url, $cache_duration = 3600) {
 }
 
 function save_cached_content($url, $content) {
+    // Se DEBUG_DISABLE_CACHE estiver ativado, não salva o cache
+    if (defined('DEBUG_DISABLE_CACHE') && DEBUG_DISABLE_CACHE === true) {
+        return;
+    }
+    
     $cache_dir = __DIR__ . '/cache';
     $cache_file = $cache_dir . '/' . md5($url) . '.html';
     
