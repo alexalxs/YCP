@@ -65,11 +65,17 @@ function white($use_js_checks)
         if (file_exists($file_path)) {
             $html = file_get_contents($file_path);
             
+            // Adicionar base href para garantir que todos os recursos relativos funcionem
+            if (strpos($html, '<base href=') === false) {
+                $html = preg_replace('/<head>(.*?)/is', '<head><base href="/' . $folder . '/">\1', $html);
+            }
+            
             // Ajustar todos os links para serem relativos a partir da raiz (sem o ponto)
             $html = preg_replace('/(href|src|action)="\/([^"]+)"/i', '$1="$2"', $html);
             
-            // Ajustar links para recursos CSS e JS, garantindo que apontem para a pasta correta
-            $html = preg_replace('/(href|src)="(styles\.css|script\.js|css\/[^"]+|js\/[^"]+)"/i', '$1="' . $folder . '/$2"', $html);
+            // Corrigir referências de CSS e JS para usar caminhos absolutos
+            $html = preg_replace('/<link([^>]*)href="(styles\.css|css\/[^"]+)"([^>]*)>/i', '<link$1href="/' . $folder . '/$2"$3>', $html);
+            $html = preg_replace('/<script([^>]*)src="(script\.js|js\/[^"]+)"([^>]*)>/i', '<script$1src="/' . $folder . '/$2"$3>', $html);
             
             // Garantir que links para a raiz também sejam corretos
             $html = preg_replace('/(href|src|action)="\/"/i', '$1="./"', $html);
@@ -96,11 +102,17 @@ function white($use_js_checks)
             if (file_exists($file_path)) {
                 $html = file_get_contents($file_path);
                 
+                // Adicionar base href para garantir que todos os recursos relativos funcionem
+                if (strpos($html, '<base href=') === false) {
+                    $html = preg_replace('/<head>(.*?)/is', '<head><base href="/' . $folder . '/">\1', $html);
+                }
+                
                 // Ajustar todos os links para serem relativos a partir da raiz (sem o ponto)
                 $html = preg_replace('/(href|src|action)="\/([^"]+)"/i', '$1="$2"', $html);
                 
-                // Ajustar links para recursos CSS e JS, garantindo que apontem para a pasta correta da oferta
-                $html = preg_replace('/(href|src)="(styles\.css|script\.js|css\/[^"]+|js\/[^"]+)"/i', '$1="' . $folder . '/$2"', $html);
+                // Corrigir referências de CSS e JS para usar caminhos absolutos
+                $html = preg_replace('/<link([^>]*)href="(styles\.css|css\/[^"]+)"([^>]*)>/i', '<link$1href="/' . $folder . '/$2"$3>', $html);
+                $html = preg_replace('/<script([^>]*)src="(script\.js|js\/[^"]+)"([^>]*)>/i', '<script$1src="/' . $folder . '/$2"$3>', $html);
                 
                 // Garantir que links para a raiz também sejam corretos
                 $html = preg_replace('/(href|src|action)="\/"/i', '$1="./"', $html);
@@ -126,8 +138,14 @@ function white($use_js_checks)
             $folder = $selected_folder[0];
             $html = load_white_content($folder, $use_js_checks);
             
-            // Ajustar links para recursos CSS e JS, garantindo que apontem para a pasta correta
-            $html = preg_replace('/(href|src)="(styles\.css|script\.js|css\/[^"]+|js\/[^"]+)"/i', '$1="' . $folder . '/$2"', $html);
+            // Adicionar base href para garantir que todos os recursos relativos funcionem
+            if (strpos($html, '<base href=') === false) {
+                $html = preg_replace('/<head>(.*?)/is', '<head><base href="/' . $folder . '/">\1', $html);
+            }
+            
+            // Corrigir referências de CSS e JS para usar caminhos absolutos
+            $html = preg_replace('/<link([^>]*)href="(styles\.css|css\/[^"]+)"([^>]*)>/i', '<link$1href="/' . $folder . '/$2"$3>', $html);
+            $html = preg_replace('/<script([^>]*)src="(script\.js|js\/[^"]+)"([^>]*)>/i', '<script$1src="/' . $folder . '/$2"$3>', $html);
             
             echo $html;
             exit;
